@@ -20,3 +20,4 @@ Integrate
 frontend
 with
 backend
+OAuth2
