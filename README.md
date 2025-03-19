@@ -9,3 +9,4 @@ login
 success
 handler
 for
+post-authentication
