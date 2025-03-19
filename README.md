@@ -6,3 +6,4 @@ CSRF
 protection
 Customize
 login
+success
