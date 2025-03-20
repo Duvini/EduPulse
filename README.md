@@ -1,2 +1,3 @@
 Implement
 logout
+functionality
