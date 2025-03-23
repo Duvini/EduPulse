@@ -32,3 +32,4 @@ session
 timeout
 settings
 Enhance
+logging
