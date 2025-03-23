@@ -31,3 +31,4 @@ Configure
 session
 timeout
 settings
+Enhance
