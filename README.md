@@ -38,3 +38,4 @@ authentication
 processes
 Implement
 logout
+functionality
