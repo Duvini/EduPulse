@@ -37,3 +37,4 @@ for
 authentication
 processes
 Implement
+logout
