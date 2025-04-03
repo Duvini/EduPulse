@@ -1,0 +1,169 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #4937ce;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+  .sidebar-header {
+    padding: 20px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-letter {
+    background-color: white;
+    color: #4937ce;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  
+  .logo-text {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .search-container {
+    padding: 0 20px;
+    margin-bottom: 20px;
+  }
+  
+  .search-box {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-icon {
+    margin-right: 10px;
+    font-size: 14px;
+  }
+  
+  .search-input {
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    width: 100%;
+  }
+  
+  .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .sidebar-nav {
+    flex: 1;
+  }
+  
+  .sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-item.active {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  .nav-icon {
+    margin-right: 12px;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+  }
+  
+  .nav-text {
+    flex: 1;
+  }
+  
+  .nav-badge {
+    background-color: white;
+    color: #4937ce;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .sidebar-footer {
+    padding: 20px;
+  }
+  
+  .pro-button {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .go-pro-btn {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .user-profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    margin-right: 10px;
+  }
+  
+  .avatar-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .user-info {
+    flex: 1;
+  }
+  
+  .username {
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .user-role {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+  
+  .menu-icon {
+    margin-left: 10px;
+  }
