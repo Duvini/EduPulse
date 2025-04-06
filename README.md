@@ -27,3 +27,4 @@ functionality
 with
 CSRF
 protection
+Configure
