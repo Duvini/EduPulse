@@ -30,3 +30,4 @@ protection
 Configure
 session
 timeout
+settings
