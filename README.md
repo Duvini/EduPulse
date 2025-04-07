@@ -29,3 +29,4 @@ CSRF
 protection
 Configure
 session
+timeout
