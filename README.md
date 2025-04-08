@@ -28,3 +28,4 @@ with
 CSRF
 protection
 Configure
+session
