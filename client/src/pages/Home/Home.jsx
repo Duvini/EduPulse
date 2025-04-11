@@ -32,7 +32,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="feed-contaner">
+    <div className="feed-container">
       {posts.map(post => (
         <PostCard 
           key={post.id}
