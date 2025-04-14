@@ -30,13 +30,6 @@
         <java.version>17</java.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -70,7 +63,7 @@
                 <artifactId>mongodb-driver-sync</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.paulschwarz</groupId>
+            <groupId>me.paulschwarz</groupId>
             <artifactId>spring-dotenv</artifactId>
             <version>2.5.4</version>
         </dependency>
