@@ -19,12 +19,11 @@ public class SkillPostController {
 
     @PostMapping
     public ResponseDto createPost(@RequestParam String userId,
-                                  @RequestParam String userName,
                                   @RequestParam String profilePhotoUrl,
                                   @RequestParam String description,
                                   @RequestParam List<String> tags,
                                   @RequestParam("mediaFiles") MultipartFile[] files) {
-        return service.createSkillPost(userId, userName, profilePhotoUrl, description, tags, files);
+        return service.createSkillPost(userId, profilePhotoUrl, description, tags, files);
     }
 
     @GetMapping("/user/{userId}")
@@ -34,7 +33,7 @@ public class SkillPostController {
 
     @PostMapping("/followed")
     public ResponseDto getFollowedPosts(@RequestBody List<String> userIds) {
-        return service.getPostsByFollowedUsers(userIds);
+        return service.getPostsByFollowedUserIds(userIds);
     }
 
     @PutMapping("/{id}")
