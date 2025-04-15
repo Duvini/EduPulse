@@ -17,18 +17,20 @@ public class Comment {
     @Id
     private String id;
     private String postId;     // ID of the post being commented on
+    private String userId;     // ID of user who made the comment
     private String userName;   // Display name
     private String content;    // Comment text
     
-    @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private LocalDateTime createdAt;
     
-    @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private LocalDateTime updatedAt;
     
     // Custom constructor for convenience
-    public Comment(String postId, String userName, String content) {
+    public Comment(String postId, String userId, String userName, String content) {
         this.postId = postId;
+        this.userId = userId;
         this.userName = userName;
         this.content = content;
         this.createdAt = LocalDateTime.now();

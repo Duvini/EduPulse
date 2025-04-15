@@ -19,10 +19,11 @@ public class CommentController {
     @PostMapping
     public ResponseDto createComment(@RequestBody Map<String, String> payload) {
         String postId = payload.get("postId");
+        String userId = payload.get("userId");
         String userName = payload.get("userName");
         String content = payload.get("content");
         
-        Comment comment = new Comment(postId, userName, content);
+        Comment comment = new Comment(postId, userId, userName, content);
         return commentService.addComment(comment);
     }
 
