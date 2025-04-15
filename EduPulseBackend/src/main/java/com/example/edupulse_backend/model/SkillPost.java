@@ -6,16 +6,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Document("skill_posts")
 public class SkillPost {
     @Id
     private String id;
     private String userId;
+    private String userName;
     private String profilePhotoUrl;
     private String description;
     private List<String> mediaUrls;
