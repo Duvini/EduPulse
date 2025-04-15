@@ -1,4 +1,4 @@
-package com.example.edupulse_backend.playload.response;
+package com.example.edupulse_backend.payload.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
