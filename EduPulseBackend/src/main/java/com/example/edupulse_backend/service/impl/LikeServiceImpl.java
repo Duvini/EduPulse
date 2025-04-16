@@ -1,9 +1,12 @@
 package com.example.edupulse_backend.service.impl;
 
 import com.example.edupulse_backend.model.Like;
+import com.example.edupulse_backend.model.SkillPost;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.repository.LikeRepository;
+import com.example.edupulse_backend.repository.SkillPostRepository;
 import com.example.edupulse_backend.service.LikeService;
+import com.example.edupulse_backend.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,9 +22,15 @@ import java.util.Optional;
 public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
+    private final SkillPostRepository skillPostRepository;
+    private final NotificationService notificationService;
 
     @Override
     public ResponseDto toggleLike(String postId, String userId, String userName) {
+        if (postId == null || userId == null) {
+            return new ResponseDto(true, "Post ID and User ID cannot be null");
+        }
+        
         log.info("toggleLike for postId {} and userId {}: started", postId, userId);
         
         boolean liked = false;
@@ -38,6 +47,19 @@ public class LikeServiceImpl implements LikeService {
             likeRepository.save(like);
             liked = true;
             log.info("toggleLike: User {} liked post {}", userId, postId);
+            
+            // Get post details to find post owner for notification
+            Optional<SkillPost> postOpt = skillPostRepository.findById(postId);
+            if (postOpt.isPresent()) {
+                SkillPost post = postOpt.get();
+                // Create notification for post owner
+                notificationService.createLikeNotification(
+                    postId,
+                    userId,
+                    userName,
+                    post.getUserId()
+                );
+            }
         }
         
         // Return current like status and count
@@ -52,6 +74,10 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public ResponseDto getLikesByPost(String postId) {
+        if (postId == null) {
+            return new ResponseDto(true, "Post ID cannot be null");
+        }
+        
         log.info("getLikesByPost for postId {}: started", postId);
         List<Like> likes = likeRepository.findByPostId(postId);
         long likeCount = likes.size();
@@ -66,6 +92,10 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public ResponseDto getLikeStatus(String postId, String userId) {
+        if (postId == null || userId == null) {
+            return new ResponseDto(true, "Post ID and User ID cannot be null");
+        }
+        
         log.info("getLikeStatus for postId {} and userId {}: started", postId, userId);
         boolean liked = likeRepository.existsByPostIdAndUserId(postId, userId);
         log.info("getLikeStatus: ended with status {}", liked);
@@ -74,6 +104,10 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public ResponseDto getLikeCount(String postId) {
+        if (postId == null) {
+            return new ResponseDto(true, "Post ID cannot be null");
+        }
+        
         log.info("getLikeCount for postId {}: started", postId);
         long count = likeRepository.countByPostId(postId);
         log.info("getLikeCount: ended with count {}", count);
