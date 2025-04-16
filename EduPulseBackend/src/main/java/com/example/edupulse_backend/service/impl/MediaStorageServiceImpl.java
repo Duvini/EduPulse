@@ -8,7 +8,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
@@ -64,6 +63,7 @@ public class MediaStorageServiceImpl implements MediaStorageService {
                     "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", tempFile.toString())
                     .redirectErrorStream(true)
                     .start();
+            @SuppressWarnings("resource")
             Scanner scanner = new Scanner(process.getInputStream());
             if (scanner.hasNext()) {
                 double duration = Double.parseDouble(scanner.next().trim());
