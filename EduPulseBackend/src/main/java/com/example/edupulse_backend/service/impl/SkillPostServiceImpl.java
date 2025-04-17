@@ -21,13 +21,14 @@ public class SkillPostServiceImpl implements SkillPostService {
     private final MediaStorageService mediaStorageService;
 
     @Override
-    public ResponseDto createSkillPost(String userId, String profilePhotoUrl, String description, List<String> tags, MultipartFile[] files) {
+    public ResponseDto createSkillPost(String userId, String userName, String profilePhotoUrl, String description, List<String> tags, MultipartFile[] files) {
         log.info("createSkillPost: started");
 
         List<String> mediaUrls = mediaStorageService.saveMediaFiles(files);
 
         SkillPost post = SkillPost.builder()
                 .userId(userId)
+                .userName(userName)
                 .profilePhotoUrl(profilePhotoUrl)
                 .description(description)
                 .tags(tags)

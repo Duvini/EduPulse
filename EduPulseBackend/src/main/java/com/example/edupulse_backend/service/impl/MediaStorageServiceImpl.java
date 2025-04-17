@@ -1,6 +1,6 @@
 package com.example.edupulse_backend.service.impl;
 import com.example.edupulse_backend.config.FileStorageConfig;
-import com.example.edupulse_backend.exception.FileStorageException;
+import com.example.edupulse_backend.exception.FileValidationException;
 import com.example.edupulse_backend.service.MediaStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class MediaStorageServiceImpl implements MediaStorageService {
     @Override
     public List<String> saveMediaFiles(MultipartFile[] files) {
         if (files.length > 3) {
-            throw new FileStorageException("Maximum 3 media files are allowed.");
+            throw new FileValidationException("Maximum 3 media files are allowed.");
         }
 
         List<String> mediaPaths = new ArrayList<>();
@@ -39,7 +39,7 @@ public class MediaStorageServiceImpl implements MediaStorageService {
                 folder = fileStorageConfig.getVideoFolder();
                 validateVideoDuration(file);
             } else {
-                throw new FileStorageException("Unsupported file type: " + ext);
+                throw new FileValidationException("Unsupported file type: " + ext);
             }
 
             String fileName = UUID.randomUUID() + "." + ext;
@@ -49,7 +49,7 @@ public class MediaStorageServiceImpl implements MediaStorageService {
                 Files.write(path, file.getBytes());
                 mediaPaths.add("/" + path.toString());
             } catch (IOException e) {
-                throw new FileStorageException("Failed to store file " + fileName, e);
+                throw new FileValidationException("Failed to store file " + fileName, e);
             }
         }
         return mediaPaths;
@@ -68,12 +68,12 @@ public class MediaStorageServiceImpl implements MediaStorageService {
             if (scanner.hasNext()) {
                 double duration = Double.parseDouble(scanner.next().trim());
                 if (duration > 30.0) {
-                    throw new FileStorageException("Video must be less than 30 seconds.");
+                    throw new FileValidationException("Video must be less than 30 seconds.");
                 }
             }
             Files.deleteIfExists(tempFile);
         } catch (IOException e) {
-            throw new FileStorageException("Video duration validation failed.", e);
+            throw new FileValidationException("Video duration validation failed.", e);
         }
     }
 }

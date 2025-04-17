@@ -1,6 +1,5 @@
 package com.example.edupulse_backend.controller;
 
-import com.example.edupulse_backend.model.SkillPost;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.service.SkillPostService;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +17,15 @@ public class SkillPostController {
     private final SkillPostService service;
 
     @PostMapping
-    public ResponseDto createPost(@RequestParam String userId,
-                                  @RequestParam String profilePhotoUrl,
-                                  @RequestParam String description,
-                                  @RequestParam List<String> tags,
-                                  @RequestParam("mediaFiles") MultipartFile[] files) {
-        return service.createSkillPost(userId, profilePhotoUrl, description, tags, files);
+    public ResponseDto createPost(
+            @RequestParam String userId,
+            @RequestParam String userName,
+            @RequestParam String profilePhotoUrl,
+            @RequestParam String description,
+            @RequestParam List<String> tags,
+            @RequestParam("mediaFiles") MultipartFile[] mediaFiles
+    ) {
+        return service.createSkillPost(userId, userName, profilePhotoUrl, description, tags, mediaFiles);
     }
 
     @GetMapping("/user/{userId}")
@@ -37,7 +39,7 @@ public class SkillPostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseDto updatePost(@PathVariable String id, @RequestBody SkillPost post) {
+    public ResponseDto updatePost(@PathVariable String id, @RequestBody com.example.edupulse_backend.model.SkillPost post) {
         return service.updateSkillPost(id, post);
     }
 
