@@ -1,70 +1,50 @@
 package com.example.edupulse_backend.controller;
 
-import com.example.edupulse_backend.model.SkillPost;
+import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.service.SkillPostService;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/skillposts")
 @CrossOrigin
+@RequiredArgsConstructor
 public class SkillPostController {
 
-    @Autowired
-    private SkillPostService service;
-
-    private final String uploadDir = "uploads/";
+    private final SkillPostService service;
 
     @PostMapping
-    public SkillPost createPost(@RequestParam String userName,
-                                @RequestParam String profilePhotoUrl,
-                                @RequestParam String description,
-                                @RequestParam List<String> tags,
-                                @RequestParam("mediaFiles") MultipartFile[] files) throws Exception {
-
-        if (files.length > 3)
-            throw new RuntimeException("Only up to 3 media files allowed.");
-
-        List<String> mediaPaths = new ArrayList<>();
-        for (MultipartFile file : files) {
-            String ext = FilenameUtils.getExtension(file.getOriginalFilename());
-            String fileName = UUID.randomUUID() + "." + ext;
-            Path path = Paths.get(uploadDir + fileName);
-            Files.createDirectories(path.getParent());
-            Files.write(path, file.getBytes());
-            mediaPaths.add("/" + path.toString());
-        }
-
-        SkillPost post = new SkillPost();
-        post.setUserName(userName);
-        post.setProfilePhotoUrl(profilePhotoUrl);
-        post.setDescription(description);
-        post.setTags(tags);
-        post.setMediaUrls(mediaPaths);
-
-        return service.save(post);
+    public ResponseDto createPost(
+            @RequestParam String userId,
+            @RequestParam String userName,
+            @RequestParam String profilePhotoUrl,
+            @RequestParam String description,
+            @RequestParam List<String> tags,
+            @RequestParam("mediaFiles") MultipartFile[] mediaFiles
+    ) {
+        return service.createSkillPost(userId, userName, profilePhotoUrl, description, tags, mediaFiles);
     }
 
-    @GetMapping
-    public List<SkillPost> getAllPosts() {
-        return service.getAll();
+    @GetMapping("/user/{userId}")
+    public ResponseDto getUserPosts(@PathVariable String userId) {
+        return service.getPostsByUserId(userId);
+    }
+
+    @PostMapping("/followed")
+    public ResponseDto getFollowedPosts(@RequestBody List<String> userIds) {
+        return service.getPostsByFollowedUserIds(userIds);
     }
 
     @PutMapping("/{id}")
-    public SkillPost updatePost(@PathVariable String id, @RequestBody SkillPost post) {
-        return service.update(id, post);
+    public ResponseDto updatePost(@PathVariable String id, @RequestBody com.example.edupulse_backend.model.SkillPost post) {
+        return service.updateSkillPost(id, post);
     }
 
     @DeleteMapping("/{id}")
-    public void deletePost(@PathVariable String id) {
-        service.delete(id);
+    public ResponseDto deletePost(@PathVariable String id) {
+        return service.deleteSkillPost(id);
     }
 }
