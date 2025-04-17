@@ -1,29 +1,47 @@
-import React from 'react';
-import './commentInput.css';
+import React, { useState } from 'react';
+import { FiPaperclip, FiSmile, FiSend } from 'react-icons/fi';
+import { useStore } from '../../../store';
 
-const CommentInput = () => {
+const CommentInput = ({ postId }) => {
+  const [comment, setComment] = useState('');
+  const addComment = useStore();
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (comment.trim()) {
+      addComment(postId, comment);
+      setComment('');
+    }
+  };
+  
   return (
-    <div className="comment-input-container">
-      <img src="/api/placeholder/36/36" alt="User" className="user-avatar" />
-      <div className="comment-input-wrapper">
+    <form onSubmit={handleSubmit} className="flex items-center py-2 w-full">
+      <img src="/api/placeholder/36/36" alt="User" className="w-8 h-8 rounded-full mr-2 object-cover" />
+      <div className="flex-1 relative">
         <input 
           type="text" 
-          className="comment-input" 
+          className="w-full py-2 px-3 border border-gray-200 rounded-full bg-gray-100 text-sm outline-none" 
           placeholder="Write your comment..." 
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
         />
       </div>
-      <div className="comment-actions">
-        <button className="comment-action-btn">
-          <i className="attachment-icon">📎</i>
+      <div className="flex items-center ml-2">
+        <button type="button" className="bg-transparent border-none cursor-pointer p-1.5 text-gray-500 hover:bg-gray-100 rounded-full">
+          <FiPaperclip className="text-lg" />
         </button>
-        <button className="comment-action-btn">
-          <i className="emoji-icon">😊</i>
+        <button type="button" className="bg-transparent border-none cursor-pointer p-1.5 text-gray-500 hover:bg-gray-100 rounded-full">
+          <FiSmile className="text-lg" />
         </button>
-        <button className="comment-send-btn">
-          <i className="send-icon">➤</i>
+        <button 
+          type="submit" 
+          className="bg-transparent border-none cursor-pointer p-1.5 text-gray-500 hover:bg-gray-100 rounded-full"
+          disabled={!comment.trim()}
+        >
+          <FiSend className={`text-lg ${comment.trim() ? 'text-blue-500' : ''}`} />
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
