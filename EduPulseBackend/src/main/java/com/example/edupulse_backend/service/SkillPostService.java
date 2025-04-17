@@ -1,37 +1,19 @@
 package com.example.edupulse_backend.service;
 
+import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.model.SkillPost;
-import com.example.edupulse_backend.repository.SkillPostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class SkillPostService {
+public interface SkillPostService {
+    ResponseDto createSkillPost(String userId, String userName, String profilePhotoUrl, String description, List<String> tags, MultipartFile[] files);
 
-    @Autowired
-    private SkillPostRepository repository;
+    ResponseDto getPostsByUserId(String userId);
 
-    public SkillPost save(SkillPost post) {
-        return repository.save(post);
-    }
+    ResponseDto getPostsByFollowedUserIds(List<String> userIds);
 
-    public List<SkillPost> getAll() {
-        return repository.findAll();
-    }
+    ResponseDto updateSkillPost(String id, SkillPost post);
 
-    public Optional<SkillPost> getById(String id) {
-        return repository.findById(id);
-    }
-
-    public void delete(String id) {
-        repository.deleteById(id);
-    }
-
-    public SkillPost update(String id, SkillPost updated) {
-        updated.setId(id);
-        return repository.save(updated);
-    }
+    ResponseDto deleteSkillPost(String id);
 }
