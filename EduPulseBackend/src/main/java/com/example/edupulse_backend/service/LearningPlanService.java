@@ -1,73 +1,22 @@
 package com.example.edupulse_backend.service;
 
 import com.example.edupulse_backend.model.LearningPlan;
-import com.example.edupulse_backend.repository.LearningPlanRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.edupulse_backend.payload.response.ResponseDto;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+public interface LearningPlanService {
 
-@Service
-@RequiredArgsConstructor
-public class LearningPlanService {
+    ResponseDto createLearningPlan(LearningPlan learningPlan);
 
-    @Autowired
-    private final LearningPlanRepository learningPlanRepository;
+    ResponseDto getLearningPlan(String planId);
 
-    //create a new plan
-    public LearningPlan create(LearningPlan plan){
-        return learningPlanRepository.save(plan);
-    }
+    ResponseDto getAllLearningPlans();
 
-    //get all learning plans
-    public List<LearningPlan> getAll(){
-        return learningPlanRepository.findAll();
-    }
+    ResponseDto updateLearningPLan(String planId, LearningPlan plan );
 
-    //get a single plan
-    public Optional<LearningPlan> getById(String id){
-        return learningPlanRepository.findById(id);
-    }
+    ResponseDto deleteLearningPlan(String planId);
 
-    //update task status
-    public Optional<LearningPlan> updateTaskStatus(String planId, int taskIndex, boolean isCompleted){
-        Optional<LearningPlan> optional = learningPlanRepository.findById(planId);
-        if(optional.isPresent()){
-            LearningPlan plan = optional.get();
-            plan.getTasks().get(taskIndex).setCompleted(isCompleted);
-            return Optional.of(learningPlanRepository.save(plan));
-        }
-        return Optional.empty();
-    }
+    ResponseDto updateTaskStatus(String planId, int taskIndex, boolean isCompleted);
 
-    //update a learning plan
-    public Optional<LearningPlan> updatePlan(String planId, LearningPlan plan){
-        Optional<LearningPlan> optional = learningPlanRepository.findById(planId);
-        if(optional.isPresent()){
+    ResponseDto getLearningPlanOfUser(String userId);
 
-            LearningPlan original = optional.get();
-
-            if(plan.getTitle() != null){
-                original.setTitle(plan.getTitle());
-            }
-            if(plan.getDescription() != null){
-                original.setDescription(plan.getDescription());
-            }
-            if(plan.getTasks() != null){
-                original.setTasks(plan.getTasks());
-            }
-
-            return Optional.of(learningPlanRepository.save(original));
-        }
-        return Optional.empty();
-    }
-
-    //delete a plan
-    public void delete(String planId){
-        learningPlanRepository.deleteById(planId);
-
-    }
 }
