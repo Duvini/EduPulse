@@ -5,7 +5,8 @@ import Home from '../pages/Home/Home';
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<div> Root Layout add sign in later </div>} /> 
+      <Route path="/feed" element={<Home />} />
     </Routes>
   );
 };
