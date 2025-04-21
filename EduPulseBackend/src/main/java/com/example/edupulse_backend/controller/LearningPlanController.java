@@ -24,58 +24,66 @@ public class LearningPlanController {
 
     //create a learning plan
     @PostMapping("/create")
-    public ResponseDto createPlan(@RequestBody LearningPlan plan) {
-        return service.createLearningPlan(plan);
+    public ResponseEntity<ResponseDto> createPlan(@RequestBody LearningPlan plan) {
+
+        ResponseDto response = service.createLearningPlan(plan);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     //Get All Learning plans
     @GetMapping
-    public ResponseDto getPlans() {
-        return service.getAllLearningPlans();
+    public ResponseEntity<ResponseDto> getPlans() {
+        ResponseDto response = service.getAllLearningPlans();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //Get learning plans on creator id
-    @GetMapping("{userid}/plans")
-    public ResponseDto getLearningPlanOfUser(
+    @GetMapping("/user/{userid}")
+    public ResponseEntity<ResponseDto> getLearningPlanOfUser(
             @PathVariable String userid
     ) {
-        return service.getLearningPlanOfUser(userid);
+        ResponseDto response = service.getLearningPlanOfUser(userid);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     //Get a single learning plan
     @GetMapping("/{planId}")
-    public ResponseDto getPlan(
+    public ResponseEntity<ResponseDto> getPlan(
             @PathVariable String planId
     ) {
-        return service.getLearningPlan(planId);
+        ResponseDto response = service.getLearningPlan(planId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //Update learning plans
     @PatchMapping("/update/{planId}")
-    public ResponseDto updateLearningPlan(
+    public ResponseEntity<ResponseDto> updateLearningPlan(
             @PathVariable String planId,
             @RequestBody LearningPlan planUpdates
     ){
-            return service.updateLearningPLan(planId, planUpdates);
+            ResponseDto response = service.updateLearningPLan(planId, planUpdates);
+            return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //delete a learning plan
     @DeleteMapping("/delete/{planId}")
-    public ResponseDto deletePlan(
+    public ResponseEntity<ResponseDto> deletePlan(
             @PathVariable String planId
     ){
-        return service.deleteLearningPlan(planId);
+        ResponseDto response = service.deleteLearningPlan(planId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //update task status
     @PutMapping("/{planId}/tasks/{index}")
-    public ResponseDto updateTaskStatus(
+    public ResponseEntity<ResponseDto> updateTaskStatus(
             @PathVariable String planId,
             @PathVariable int index,
             @RequestParam boolean isCompleted
     ){
-        return service.updateTaskStatus(planId, index, isCompleted);
+        ResponseDto response = service.updateTaskStatus(planId, index, isCompleted);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
