@@ -16,44 +16,41 @@ public class ProgressUpdateController {
 
     private final ProgressUpdateService progressUpdateService;
 
-    @RequestMapping
-    public String listProgress() {
-        return "Listing progress updates";
-    }
 
     @RequestMapping("/user/{userId}")
-    public ResponseDto getProgressByUser(
+    public ResponseEntity<ResponseDto> getProgressByUser(
             @PathVariable String userId
 
     ) {
-
-        return progressUpdateService.getProgressByUser(userId);
+        ResponseDto response = progressUpdateService.getProgressByUser(userId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping("/progress/{progressId}")
-    public ResponseDto getProgressById(@PathVariable String progressId) {
-
-        return progressUpdateService.getProgressById(progressId);
+    public ResponseEntity<ResponseDto> getProgressById(@PathVariable String progressId) {
+        ResponseDto response = progressUpdateService.getProgressById(progressId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseDto createProgress(@RequestBody ProgressUpdate progressUpdate) {
-
-        return progressUpdateService.createProgress(progressUpdate);
+    public ResponseEntity<ResponseDto> createProgress(@RequestBody ProgressUpdate progressUpdate) {
+        ResponseDto response = progressUpdateService.createProgress(progressUpdate);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{progressId}")
-    public ResponseDto updateProgress(
+    public ResponseEntity<ResponseDto> updateProgress(
             @PathVariable String progressId,
             @RequestBody ProgressUpdate progressUpdate
     ) {
-
-        return progressUpdateService.updateProgress(progressId, progressUpdate);
+        ResponseDto response = progressUpdateService.updateProgress(progressId, progressUpdate);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{progressId}")
-    public ResponseDto deleteProgress(@PathVariable String progressId) {
-        return new ResponseDto(false, progressUpdateService.deleteProgress(progressId));
+    public ResponseEntity<ResponseDto> deleteProgress(@PathVariable String progressId) {
+        ResponseDto response = progressUpdateService.deleteProgress(progressId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
