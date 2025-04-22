@@ -4,6 +4,9 @@ import com.example.edupulse_backend.model.SkillPost;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.service.SkillPostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +22,8 @@ public class SkillPostController {
 
     private final SkillPostService service;
 
-    // Create a skill post
     @PostMapping
-    public ResponseEntity<ResponseDto> createPost(
+    public ResponseEntity<EntityModel<ResponseDto>> createPost(
             @RequestParam String userId,
             @RequestParam String userName,
             @RequestParam String profilePhotoUrl,
@@ -30,34 +32,37 @@ public class SkillPostController {
             @RequestParam("mediaFiles") MultipartFile[] mediaFiles
     ) {
         ResponseDto response = service.createSkillPost(userId, userName, profilePhotoUrl, description, tags, mediaFiles);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        EntityModel<ResponseDto> resource = EntityModel.of(response);
+        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SkillPostController.class)
+                .getUserPosts(userId)).withRel("user-posts"));
+        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SkillPostController.class)
+                .deletePost(((SkillPost) response.getData()).getId())).withRel("delete-post"));
+
+        return new ResponseEntity<>(resource, HttpStatus.CREATED);
     }
 
-    // Get all skill posts by user ID
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ResponseDto> getUserPosts(@PathVariable String userId) {
+    public ResponseEntity<EntityModel<ResponseDto>> getUserPosts(@PathVariable String userId) {
         ResponseDto response = service.getPostsByUserId(userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        EntityModel<ResponseDto> resource = EntityModel.of(response);
+        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SkillPostController.class)
+                .createPost(null, null, null, null, null, null)).withRel("create-post"));
+        return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
-    // Get posts from followed users
     @PostMapping("/followed")
     public ResponseEntity<ResponseDto> getFollowedPosts(@RequestBody List<String> userIds) {
         ResponseDto response = service.getPostsByFollowedUserIds(userIds);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // Update a skill post
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseDto> updatePost(
-            @PathVariable String id,
-            @RequestBody SkillPost post
-    ) {
+    public ResponseEntity<ResponseDto> updatePost(@PathVariable String id, @RequestBody SkillPost post) {
         ResponseDto response = service.updateSkillPost(id, post);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // Delete a skill post
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDto> deletePost(@PathVariable String id) {
         ResponseDto response = service.deleteSkillPost(id);
