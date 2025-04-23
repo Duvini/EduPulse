@@ -21,8 +21,6 @@ public class LearningPlanController {
 
     @Autowired
     private final LearningPlanService service;
-    @Autowired
-    private LearningPlanService learningPlanService;
 
     //create a learning plan
     @PostMapping("/create")
