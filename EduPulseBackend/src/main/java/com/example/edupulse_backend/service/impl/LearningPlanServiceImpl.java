@@ -27,13 +27,9 @@ public class LearningPlanServiceImpl implements LearningPlanService {
     }
 
     @Override
-    public ResponseDto getLearningPlan(String planId) {
-        Optional<LearningPlan> plan = learningPlanRepository.findById(planId);
-        if (plan.isPresent()) {
-            log.info("Retrieved learning plan");
-            return new ResponseDto(false, plan.get());
-        }
-        return new ResponseDto(true, "Learning plan not found");
+    public LearningPlan getLearningPlan(String planId) {
+        return learningPlanRepository.findById(planId)
+                .orElseThrow(()-> new RuntimeException("Learning plan not found"));
     }
 
     @Override
