@@ -52,8 +52,19 @@ public class LearningPlanController {
     public ResponseEntity<ResponseDto> getPlan(
             @PathVariable String planId
     ) {
-        ResponseDto response = service.getLearningPlan(planId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        LearningPlan plan = service.getLearningPlan(planId);
+
+        EntityModel<LearningPlan> model = EntityModel.of(plan,
+                linkTo(methodOn(LearningPlanController.class).getPlan(plan.getId())).withSelfRel(),
+                linkTo(methodOn(LearningPlanController.class).getPlans()).withRel("all-plans"),
+                linkTo(methodOn(LearningPlanController.class).getLearningPlanOfUser(plan.getCreatorId())).withRel("user-plans"),
+                linkTo(methodOn(LearningPlanController.class).updateLearningPlan(plan.getId(), null)).withRel("update-plan"),
+                linkTo(methodOn(LearningPlanController.class).createPlan(null)).withRel("create"),
+                linkTo(methodOn(LearningPlanController.class).deletePlan(plan.getId())).withRel("delete"),
+                linkTo(methodOn(LearningPlanController.class).updateTaskStatus(plan.getId(), 0, true)).withRel("mark-task-complete")
+        );
+
+        return new ResponseEntity<>(new ResponseDto(false,model), HttpStatus.OK);
     }
 
     //Update learning plans
@@ -86,12 +97,12 @@ public class LearningPlanController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
 //    // HATEOAS model builder
 //    private EntityModel<LearningPlan> toModel(LearningPlan plan) {
 //        return EntityModel.of(plan,
 //                linkTo(methodOn(LearningPlanController.class).getPlan(plan.getId())).withSelfRel(),
-//                linkTo(methodOn(LearningPlanController.class).getAllPlans()).withRel("all-plans"),
+//                linkTo(methodOn(LearningPlanController.class).getPlans()).withRel("all-plans"),
+//                linkTo(methodOn(LearningPlanController.class).getLearningPlanOfUser(plan.getCreatorId())).withRel("user-plans"),
 //                linkTo(methodOn(LearningPlanController.class).updateTaskStatus(plan.getId(), 0, true)).withRel("mark-task-complete"),
 //                linkTo(methodOn(LearningPlanController.class).updateLearningPlan(plan.getId(),null)).withRel("update-plan"),
 //                linkTo(methodOn(LearningPlanController.class).createPlan(null)).withRel("create"),

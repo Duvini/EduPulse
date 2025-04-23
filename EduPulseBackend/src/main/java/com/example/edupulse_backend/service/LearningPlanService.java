@@ -7,7 +7,7 @@ public interface LearningPlanService {
 
     ResponseDto createLearningPlan(LearningPlan learningPlan);
 
-    ResponseDto getLearningPlan(String planId);
+    LearningPlan getLearningPlan(String planId);
 
     ResponseDto getAllLearningPlans();
 
