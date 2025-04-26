@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "file.storage")
 public class FileStorageConfig {
-    private String base;
-    private String imageFolder;
-    private String videoFolder;
+    private String base = "/default/base/path/";
+    private String imageFolder = "images/";
+    private String videoFolder = "videos/";
 }

@@ -2,17 +2,24 @@ package com.example.edupulse_backend.dto;
 
 import com.example.edupulse_backend.model.User;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor  // Lombok will generate a constructor with all fields (token, user)
-@NoArgsConstructor   // Lombok will also generate a no-argument constructor (useful for deserialization)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthResponseDTO {
-    private String token;  // The authentication token
-    private User user;     // The user details
+    private String token;
+    private String id;
+    private String username;
+    private String email;
+    private String name;
 
-    // No need to define constructors manually, Lombok will do that for you
+    public AuthResponseDTO(String token, User user) {
+        this.token = token;
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.name = user.getName();
+    }
 }

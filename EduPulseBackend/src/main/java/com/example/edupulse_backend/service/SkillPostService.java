@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface SkillPostService {
-    ResponseDto createSkillPost(String userId, String userName, String profilePhotoUrl, String description, List<String> tags, MultipartFile[] files);
+    ResponseDto createSkillPost(String description, List<String> tags, MultipartFile[] files);
 
     ResponseDto getPostsByUserId(String userId);
 
