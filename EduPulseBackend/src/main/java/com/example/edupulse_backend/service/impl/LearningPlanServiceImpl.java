@@ -39,7 +39,6 @@ public class LearningPlanServiceImpl implements LearningPlanService {
         return new ResponseDto(false, planList);
     }
 
-    @Override
     public ResponseDto updateLearningPLan(String planId, LearningPlan plan) {
         Optional<LearningPlan> planOptional = learningPlanRepository.findById(planId);
         if (planOptional.isPresent()) {
@@ -52,39 +51,16 @@ public class LearningPlanServiceImpl implements LearningPlanService {
             if (plan.getDescription() != null) {
                 planToUpdate.setDescription(plan.getDescription());
             }
-
-            // Update tasks individually
-            if (plan.getTasks() != null && !plan.getTasks().isEmpty()) {
-                List<Task> existingTasks = planToUpdate.getTasks();
-
-                for (Task incomingTask : plan.getTasks()) {
-                    Optional<Task> existingTaskOpt = existingTasks.stream()
-                            .filter(t -> t.getName().equalsIgnoreCase(incomingTask.getName()))
-                            .findFirst();
-
-                    if (existingTaskOpt.isPresent()) {
-                        Task existingTask = existingTaskOpt.get();
-                        if (incomingTask.getDeadline() != null) {
-                            existingTask.setDeadline(incomingTask.getDeadline());
-                        }
-                        if (incomingTask.getResources() != null) {
-                            existingTask.setResources(incomingTask.getResources());
-                        }
-                        existingTask.setCompleted(incomingTask.isCompleted());
-                    } else {
-                        existingTasks.add(incomingTask); // Add new task if not found
-                    }
-                }
-
-                planToUpdate.setTasks(existingTasks);
+            if (plan.getTasks() != null) {
+                planToUpdate.setTasks(plan.getTasks());
             }
 
             learningPlanRepository.save(planToUpdate);
             return new ResponseDto(false, planToUpdate);
         }
-
         return new ResponseDto(true, "Learning plan not found");
     }
+
 
     @Override
     public ResponseDto deleteLearningPlan(String planId) {
