@@ -24,33 +24,34 @@ public class SkillPostController {
 
     @PostMapping
     public ResponseEntity<EntityModel<ResponseDto>> createPost(
-            @RequestParam String userId,
-            @RequestParam String userName,
-            @RequestParam String profilePhotoUrl,
             @RequestParam String description,
             @RequestParam List<String> tags,
             @RequestParam("mediaFiles") MultipartFile[] mediaFiles
     ) {
-        ResponseDto response = service.createSkillPost(userId, userName, profilePhotoUrl, description, tags, mediaFiles);
-
+        ResponseDto response = service.createSkillPost(description, tags, mediaFiles);
+    
         EntityModel<ResponseDto> resource = EntityModel.of(response);
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SkillPostController.class)
-                .getUserPosts(userId)).withRel("user-posts"));
+                .getUserPosts(((SkillPost) response.getData()).getUserId())).withRel("user-posts"));
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SkillPostController.class)
                 .deletePost(((SkillPost) response.getData()).getId())).withRel("delete-post"));
-
+    
         return new ResponseEntity<>(resource, HttpStatus.CREATED);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<EntityModel<ResponseDto>> getUserPosts(@PathVariable String userId) {
+    public ResponseEntity<ResponseDto> getUserPosts(@PathVariable String userId) {
+    
+        // Fetch posts for the given user ID
         ResponseDto response = service.getPostsByUserId(userId);
-        EntityModel<ResponseDto> resource = EntityModel.of(response);
-        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SkillPostController.class)
-                .createPost(null, null, null, null, null, null)).withRel("create-post"));
-        return new ResponseEntity<>(resource, HttpStatus.OK);
+    
+        if (response.isError()) {
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    
     @PostMapping("/followed")
     public ResponseEntity<ResponseDto> getFollowedPosts(@RequestBody List<String> userIds) {
         ResponseDto response = service.getPostsByFollowedUserIds(userIds);

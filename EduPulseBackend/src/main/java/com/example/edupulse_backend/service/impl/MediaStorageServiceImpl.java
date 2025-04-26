@@ -43,6 +43,12 @@ public class MediaStorageServiceImpl implements MediaStorageService {
             }
 
             String fileName = UUID.randomUUID() + "." + ext;
+                        if (fileStorageConfig.getBase() == null || folder == null || fileName == null) {
+                throw new IllegalArgumentException("File storage configuration or file details are missing.");
+            }
+            if (fileStorageConfig.getBase() == null || folder == null || fileName == null) {
+                throw new IllegalArgumentException("File storage configuration or file details are missing.");
+            }
             Path path = Paths.get(fileStorageConfig.getBase() + folder + fileName);
             try {
                 Files.createDirectories(path.getParent());
@@ -57,7 +63,12 @@ public class MediaStorageServiceImpl implements MediaStorageService {
 
     private void validateVideoDuration(MultipartFile file) {
         try {
-            Path tempFile = Files.createTempFile("video", ".tmp");
+            Path tempFile;
+            try {
+                tempFile = Files.createTempFile("video", ".tmp");
+            } catch (IOException e) {
+                throw new FileValidationException("Failed to create temporary file for video validation.", e);
+            }            
             Files.write(tempFile, file.getBytes());
             Process process = new ProcessBuilder("ffprobe", "-v", "error", "-show_entries",
                     "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", tempFile.toString())

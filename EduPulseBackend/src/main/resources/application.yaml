@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: EduPulseBackend
+    
+  data:
+    mongodb:
+      uri: mongodb+srv://dasunhimsara:dasun123@edupulse.oovinf0.mongodb.net/EduPulse?retryWrites=true&w=majority&appName=EduPulse
+      
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 682477946273-rb38mvvqp5c2peeu8n0ngq7i88l1gg12.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: "{baseUrl}/oauth2/callback/google"
+            scope:
+              - email
+              - profile
+              
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:thisIsAStrongSecretKeyForJwtTokenGenerationPleaseUseEnvironmentVariableInProduction}
+  expiration-ms: 86400000 # 24 hours in milliseconds
+
+# File storage configuration
+file:
+  storage:
+    base: /tmp/edupulse/ # Writable directory for file storage
+    imageFolder: images/
+    videoFolder: videos/
+
+# App custom properties
+app:
+  oauth2:
+    redirectUri: http://localhost:5173/oauth2/callback
+    
+# Server configuration
+server:
+  port: 8080
+
+# Logging
+logging:
+  level:
+    com.example.edupulse_backend: INFO
+    org.springframework.security: INFO
