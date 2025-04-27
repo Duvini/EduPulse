@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class EduPulseBackendApplication {
 
     public static void main(String[] args) {
-        Dotenv dotenv = Dotenv.load();
-        System.setProperty("SPRING_DATA_MONGODB_URI", dotenv.get("SPRING_DATA_MONGODB_URI"));
+//        Dotenv dotenv = Dotenv.load();
+//        System.setProperty("SPRING_DATA_MONGODB_URI", dotenv.get("SPRING_DATA_MONGODB_URI"));
         SpringApplication.run(EduPulseBackendApplication.class, args);
     }
 
