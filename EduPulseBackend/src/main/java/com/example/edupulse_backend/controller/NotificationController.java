@@ -4,7 +4,10 @@ import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/notifications")
@@ -58,5 +61,75 @@ public class NotificationController {
             return new ResponseDto(true, "User ID cannot be empty");
         }
         return notificationService.markAllAsRead(userId);
+    }
+    
+    @GetMapping("/today/{userId}")
+    public ResponseDto getTodayNotifications(@PathVariable String userId) {
+        if (userId == null || userId.trim().isEmpty()) {
+            log.warn("Invalid user ID provided");
+            return new ResponseDto(true, "User ID cannot be empty");
+        }
+        return notificationService.getTodayNotifications(userId);
+    }
+    
+    @GetMapping("/yesterday/{userId}")
+    public ResponseDto getYesterdayNotifications(@PathVariable String userId) {
+        if (userId == null || userId.trim().isEmpty()) {
+            log.warn("Invalid user ID provided");
+            return new ResponseDto(true, "User ID cannot be empty");
+        }
+        return notificationService.getYesterdayNotifications(userId);
+    }
+    
+    @GetMapping("/last-week/{userId}")
+    public ResponseDto getLastWeekNotifications(@PathVariable String userId) {
+        if (userId == null || userId.trim().isEmpty()) {
+            log.warn("Invalid user ID provided");
+            return new ResponseDto(true, "User ID cannot be empty");
+        }
+        return notificationService.getLastWeekNotifications(userId);
+    }
+    
+    @GetMapping("/last-two-weeks/{userId}")
+    public ResponseDto getLastTwoWeeksNotifications(@PathVariable String userId) {
+        if (userId == null || userId.trim().isEmpty()) {
+            log.warn("Invalid user ID provided");
+            return new ResponseDto(true, "User ID cannot be empty");
+        }
+        return notificationService.getLastTwoWeeksNotifications(userId);
+    }
+    
+    @GetMapping("/last-month/{userId}")
+    public ResponseDto getLastMonthNotifications(@PathVariable String userId) {
+        if (userId == null || userId.trim().isEmpty()) {
+            log.warn("Invalid user ID provided");
+            return new ResponseDto(true, "User ID cannot be empty");
+        }
+        return notificationService.getLastMonthNotifications(userId);
+    }
+    
+    // For custom date ranges
+    @GetMapping("/date-range/{userId}")
+    public ResponseDto getNotificationsByDateRange(
+            @PathVariable String userId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        
+        if (userId == null || userId.trim().isEmpty()) {
+            log.warn("Invalid user ID provided");
+            return new ResponseDto(true, "User ID cannot be empty");
+        }
+        
+        if (startDate == null || endDate == null) {
+            log.warn("Invalid date range provided");
+            return new ResponseDto(true, "Start date and end date must be provided");
+        }
+        
+        if (startDate.isAfter(endDate)) {
+            log.warn("Invalid date range: start date is after end date");
+            return new ResponseDto(true, "Start date cannot be after end date");
+        }
+        
+        return notificationService.getNotificationsByTimeRange(userId, startDate, endDate);
     }
 }
