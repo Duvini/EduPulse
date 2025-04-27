@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -78,6 +79,99 @@ public class NotificationServiceImpl implements NotificationService {
         log.info("Getting unread notification count for user: {}", userId);
         long count = notificationRepository.countByRecipientIdAndRead(userId, false);
         return new ResponseDto(false, count);
+    }
+
+    @Override
+    public ResponseDto getNotificationsByTimeRange(String userId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        if (!StringUtils.hasText(userId)) {
+            log.error("Invalid user ID: null or empty");
+            return new ResponseDto(true, "User ID cannot be null or empty");
+        }
+        
+        if (startDateTime == null || endDateTime == null) {
+            log.error("Invalid date range: start or end date is null");
+            return new ResponseDto(true, "Start date and end date cannot be null");
+        }
+        
+        if (startDateTime.isAfter(endDateTime)) {
+            log.error("Invalid date range: start date is after end date");
+            return new ResponseDto(true, "Start date cannot be after end date");
+        }
+        
+        log.info("Getting notifications for user: {} between {} and {}", userId, startDateTime, endDateTime);
+        List<Notification> notifications = notificationRepository.findByRecipientIdAndCreatedAtBetweenOrderByCreatedAtDesc(
+                userId, startDateTime, endDateTime);
+        return new ResponseDto(false, notifications);
+    }
+
+    @Override
+    public ResponseDto getTodayNotifications(String userId) {
+        if (!StringUtils.hasText(userId)) {
+            log.error("Invalid user ID: null or empty");
+            return new ResponseDto(true, "User ID cannot be null or empty");
+        }
+        
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59);
+        
+        log.info("Getting today's notifications for user: {}", userId);
+        return getNotificationsByTimeRange(userId, startOfDay, endOfDay);
+    }
+
+    @Override
+    public ResponseDto getYesterdayNotifications(String userId) {
+        if (!StringUtils.hasText(userId)) {
+            log.error("Invalid user ID: null or empty");
+            return new ResponseDto(true, "User ID cannot be null or empty");
+        }
+        
+        LocalDateTime startOfYesterday = LocalDateTime.now().minusDays(1).toLocalDate().atStartOfDay();
+        LocalDateTime endOfYesterday = LocalDateTime.now().minusDays(1).toLocalDate().atTime(23, 59, 59);
+        
+        log.info("Getting yesterday's notifications for user: {}", userId);
+        return getNotificationsByTimeRange(userId, startOfYesterday, endOfYesterday);
+    }
+
+    @Override
+    public ResponseDto getLastWeekNotifications(String userId) {
+        if (!StringUtils.hasText(userId)) {
+            log.error("Invalid user ID: null or empty");
+            return new ResponseDto(true, "User ID cannot be null or empty");
+        }
+        
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7).toLocalDate().atStartOfDay();
+        LocalDateTime now = LocalDateTime.now();
+        
+        log.info("Getting last week's notifications for user: {}", userId);
+        return getNotificationsByTimeRange(userId, sevenDaysAgo, now);
+    }
+
+    @Override
+    public ResponseDto getLastTwoWeeksNotifications(String userId) {
+        if (!StringUtils.hasText(userId)) {
+            log.error("Invalid user ID: null or empty");
+            return new ResponseDto(true, "User ID cannot be null or empty");
+        }
+        
+        LocalDateTime fourteenDaysAgo = LocalDateTime.now().minusDays(14).toLocalDate().atStartOfDay();
+        LocalDateTime now = LocalDateTime.now();
+        
+        log.info("Getting last two weeks' notifications for user: {}", userId);
+        return getNotificationsByTimeRange(userId, fourteenDaysAgo, now);
+    }
+
+    @Override
+    public ResponseDto getLastMonthNotifications(String userId) {
+        if (!StringUtils.hasText(userId)) {
+            log.error("Invalid user ID: null or empty");
+            return new ResponseDto(true, "User ID cannot be null or empty");
+        }
+        
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1).toLocalDate().atStartOfDay();
+        LocalDateTime now = LocalDateTime.now();
+        
+        log.info("Getting last month's notifications for user: {}", userId);
+        return getNotificationsByTimeRange(userId, oneMonthAgo, now);
     }
 
     @Override

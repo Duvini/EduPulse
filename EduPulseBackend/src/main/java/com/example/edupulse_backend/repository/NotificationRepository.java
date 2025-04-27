@@ -16,4 +16,8 @@ public interface NotificationRepository extends MongoRepository<Notification, St
     // New method to find recent notifications of a specific type from a specific sender
     List<Notification> findByRecipientIdAndSenderIdAndTypeAndCreatedAtAfter(
             String recipientId, String senderId, Notification.NotificationType type, LocalDateTime since);
+
+    // New method for time-based filtering
+    List<Notification> findByRecipientIdAndCreatedAtBetweenOrderByCreatedAtDesc(
+            String recipientId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }
