@@ -1,7 +1,6 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { usePostForm } from '../../hooks/usePostForm';
 
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4'];
 
@@ -17,17 +16,17 @@ const postValidationSchema = Yup.object().shape({
     .nullable(),
   files: Yup.mixed()
     .test('fileType', 'Only images or videos are allowed', (files) => {
-      if (!files || files.length === 0) return true; // No files uploaded
+      if (!files || files.length === 0) return true;
       return Array.from(files).every((file) => SUPPORTED_FORMATS.includes(file.type));
     })
     .test('fileCount', 'You can upload a maximum of 3 images or 1 video', (files) => {
-      if (!files || files.length === 0) return true; // No files uploaded
+      if (!files || files.length === 0) return true;
       const imageFiles = Array.from(files).filter((file) => file.type.startsWith('image/'));
       const videoFiles = Array.from(files).filter((file) => file.type.startsWith('video/'));
       return (imageFiles.length <= 3 && videoFiles.length === 0) || (videoFiles.length === 1 && imageFiles.length === 0);
     })
     .test('videoDuration', 'Video duration cannot exceed 30 seconds', async (files) => {
-      if (!files || files.length === 0) return true; // No files uploaded
+      if (!files || files.length === 0) return true;
       const videoFile = Array.from(files).find((file) => file.type.startsWith('video/'));
       if (videoFile) {
         const videoDuration = await getVideoDuration(videoFile);
@@ -37,7 +36,6 @@ const postValidationSchema = Yup.object().shape({
     }),
 });
 
-// Utility function to get video duration
 const getVideoDuration = (file) => {
   return new Promise((resolve) => {
     const video = document.createElement('video');
@@ -51,8 +49,6 @@ const getVideoDuration = (file) => {
 };
 
 const PostForm = ({ onSubmit }) => {
-  const { isSubmitting, handleSubmit } = usePostForm(onSubmit);
-
   return (
     <Formik
       initialValues={{
@@ -62,9 +58,9 @@ const PostForm = ({ onSubmit }) => {
         files: null,
       }}
       validationSchema={postValidationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
-      {({ setFieldValue }) => (
+      {({ setFieldValue, isSubmitting }) => (
         <Form className="bg-white p-4 rounded-lg shadow-md space-y-4">
           {/* Title Field */}
           <div>

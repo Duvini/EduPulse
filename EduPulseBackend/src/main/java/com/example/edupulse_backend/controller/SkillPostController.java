@@ -67,7 +67,7 @@ public class SkillPostController {
         @RequestBody List<String> userIds,
         Authentication authentication
     ) {
-        // Optional: You can verify if the current user is actually following these users
+        //verify if the current user is actually following these users
         ResponseDto response = service.getPostsByFollowedUserIds(userIds);
         return ResponseEntity.ok(response);
     }
