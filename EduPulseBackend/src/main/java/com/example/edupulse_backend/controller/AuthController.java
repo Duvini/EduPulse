@@ -9,10 +9,13 @@ import com.example.edupulse_backend.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
+
 
 import java.util.List;
-
-@CrossOrigin(origins = "http://localhost:5173") // Allow frontend access
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -25,9 +28,15 @@ public class AuthController {
 
     // ✅ Register User
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<EntityModel<User>> register(@RequestBody RegisterDTO registerDTO) {
         User user = authService.register(registerDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+
+        EntityModel<User> userResource = EntityModel.of(user,
+            linkTo(methodOn(AuthController.class).getUserById(user.getId())).withSelfRel(),
+            linkTo(methodOn(AuthController.class).getAllUsers()).withRel("all-users")
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResource);
     }
 
     // ✅ Login
@@ -38,25 +47,46 @@ public class AuthController {
 
     // ✅ Get All Users
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return authService.getAllUsers();
+    public CollectionModel<EntityModel<User>> getAllUsers() {
+        List<User> users = authService.getAllUsers();
+
+        List<EntityModel<User>> userResources = users.stream()
+            .map(user -> EntityModel.of(user,
+                linkTo(methodOn(AuthController.class).getUserById(user.getId())).withSelfRel()
+            ))
+            .toList();
+
+        return CollectionModel.of(userResources,
+            linkTo(methodOn(AuthController.class).getAllUsers()).withSelfRel()
+        );
     }
 
-    // ✅ Get User by ID (MongoDB uses String IDs)
+    // ✅ Get User by ID
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable String id) {
-        return authService.getUserById(id);
+    public EntityModel<User> getUserById(@PathVariable String id) {
+        User user = authService.getUserById(id);
+
+        return EntityModel.of(user,
+            linkTo(methodOn(AuthController.class).getUserById(id)).withSelfRel(),
+            linkTo(methodOn(AuthController.class).getAllUsers()).withRel("all-users")
+        );
     }
 
     // ✅ Update User
     @PutMapping("/userupdate/{id}")
-    public User updateUser(@PathVariable String id, @RequestBody RegisterDTO registerDTO) {
-        return authService.updateUser(id, registerDTO);
+    public EntityModel<User> updateUser(@PathVariable String id, @RequestBody RegisterDTO registerDTO) {
+        User updatedUser = authService.updateUser(id, registerDTO);
+
+        return EntityModel.of(updatedUser,
+            linkTo(methodOn(AuthController.class).getUserById(id)).withSelfRel(),
+            linkTo(methodOn(AuthController.class).getAllUsers()).withRel("all-users")
+        );
     }
 
     // ✅ Delete User
     @DeleteMapping("/usersdelete/{id}")
-    public void deleteUser(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         authService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
