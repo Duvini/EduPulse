@@ -24,6 +24,10 @@ public class MediaStorageServiceImpl implements MediaStorageService {
 
     @Override
     public List<String> saveMediaFiles(MultipartFile[] files) {
+        if (files == null || files.length == 0) {
+            return Collections.emptyList();
+        }
+        
         if (files.length > 3) {
             throw new FileValidationException("Maximum 3 media files are allowed.");
         }
@@ -43,17 +47,20 @@ public class MediaStorageServiceImpl implements MediaStorageService {
             }
 
             String fileName = UUID.randomUUID() + "." + ext;
-                        if (fileStorageConfig.getBase() == null || folder == null || fileName == null) {
-                throw new IllegalArgumentException("File storage configuration or file details are missing.");
-            }
             if (fileStorageConfig.getBase() == null || folder == null || fileName == null) {
                 throw new IllegalArgumentException("File storage configuration or file details are missing.");
             }
-            Path path = Paths.get(fileStorageConfig.getBase() + folder + fileName);
+
             try {
-                Files.createDirectories(path.getParent());
-                Files.write(path, file.getBytes());
-                mediaPaths.add("/" + path.toString());
+                Path fullPath = Paths.get(fileStorageConfig.getBase(), folder, fileName);
+                Files.createDirectories(fullPath.getParent());
+                Files.write(fullPath, file.getBytes());
+                
+                // Generate URL path for the file
+                String urlPath = "/uploads/" + folder + fileName;
+                mediaPaths.add(urlPath);
+                
+                log.info("File saved successfully: {}", urlPath);
             } catch (IOException e) {
                 throw new FileValidationException("Failed to store file " + fileName, e);
             }
@@ -63,25 +70,22 @@ public class MediaStorageServiceImpl implements MediaStorageService {
 
     private void validateVideoDuration(MultipartFile file) {
         try {
-            Path tempFile;
-            try {
-                tempFile = Files.createTempFile("video", ".tmp");
-            } catch (IOException e) {
-                throw new FileValidationException("Failed to create temporary file for video validation.", e);
-            }            
+            Path tempFile = Files.createTempFile("video", ".tmp");
             Files.write(tempFile, file.getBytes());
             Process process = new ProcessBuilder("ffprobe", "-v", "error", "-show_entries",
                     "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", tempFile.toString())
                     .redirectErrorStream(true)
                     .start();
-            @SuppressWarnings("resource")
-            Scanner scanner = new Scanner(process.getInputStream());
-            if (scanner.hasNext()) {
-                double duration = Double.parseDouble(scanner.next().trim());
-                if (duration > 30.0) {
-                    throw new FileValidationException("Video must be less than 30 seconds.");
+            
+            try (Scanner scanner = new Scanner(process.getInputStream())) {
+                if (scanner.hasNext()) {
+                    double duration = Double.parseDouble(scanner.next().trim());
+                    if (duration > 30.0) {
+                        throw new FileValidationException("Video must be less than 30 seconds.");
+                    }
                 }
             }
+            
             Files.deleteIfExists(tempFile);
         } catch (IOException e) {
             throw new FileValidationException("Video duration validation failed.", e);

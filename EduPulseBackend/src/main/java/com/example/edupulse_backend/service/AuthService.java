@@ -137,4 +137,19 @@ public class AuthService {
         userRepository.deleteById(id);
         return new ResponseDto(false, "User deleted successfully");
     }
+
+    public ResponseDto validateToken(String token) {
+        try {
+            if (jwtUtil.validateToken(token)) {
+                String username = jwtUtil.extractUsername(token);
+                User user = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                return new ResponseDto(false, user);
+            }
+            return new ResponseDto(true, "Invalid token");
+        } catch (Exception e) {
+            log.error("Token validation failed: {}", e.getMessage());
+            return new ResponseDto(true, "Token validation failed");
+        }
+    }
 }
