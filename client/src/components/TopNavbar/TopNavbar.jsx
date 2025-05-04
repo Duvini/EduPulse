@@ -82,7 +82,7 @@ const TopNavbar = () => {
                 <FiHome className="text-xl mb-0.5" />
                 <span className="text-xs">Feed</span>
               </Link>
-              <Link to="/learn" className="px-3 py-2 rounded-md flex flex-col items-center text-white/90 hover:text-white hover:bg-white/10">
+              <Link to="/learning-plans" className="px-3 py-2 rounded-md flex flex-col items-center text-white/90 hover:text-white hover:bg-white/10">
                 <FiBook className="text-xl mb-0.5" />
                 <span className="text-xs">Learn</span>
               </Link>
@@ -222,7 +222,7 @@ const TopNavbar = () => {
                 <span className="ml-auto bg-white text-[#4937ce] rounded-full py-0.5 px-2 text-xs font-bold">10</span>
               </Link>
               
-              <Link to="/learn" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
+              <Link to="/learning-plans" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
                 <FiBook className="mr-3 text-lg" />
                 <span>Learn Plans</span>
               </Link>
