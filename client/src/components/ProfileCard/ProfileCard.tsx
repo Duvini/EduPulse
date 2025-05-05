@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../store';
+import { getMediaUrl } from '../../services/axiosConfig';
 
 const ProfileCard = () => {
   const { user } = useStore();
@@ -18,7 +19,7 @@ const ProfileCard = () => {
         {/* Profile Image */}
         <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-8">
           <img 
-            src={imageError ? defaultProfileImage : (user?.profilePicture || defaultProfileImage)}
+            src={imageError ? defaultProfileImage : (user?.profilePicture ? getMediaUrl(user.profilePicture) : defaultProfileImage)}
             alt="Profile"
             className="w-16 h-16 rounded-full border-4 border-white object-cover bg-gray-100"
             onError={() => setImageError(true)}

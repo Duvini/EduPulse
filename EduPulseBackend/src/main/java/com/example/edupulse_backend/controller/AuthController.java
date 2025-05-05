@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -87,6 +88,20 @@ public class AuthController {
         
         if (response.isError()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/users/{id}/profile-picture")
+    public ResponseEntity<ResponseDto> updateProfilePicture(
+            @PathVariable String id,
+            @RequestParam("profilePicture") MultipartFile file) {
+        log.info("Request to update profile picture for user with ID: {}", id);
+        ResponseDto response = authService.updateProfilePicture(id, file);
+        
+        if (response.isError()) {
+            return ResponseEntity.badRequest().body(response);
         }
         
         return ResponseEntity.ok(response);

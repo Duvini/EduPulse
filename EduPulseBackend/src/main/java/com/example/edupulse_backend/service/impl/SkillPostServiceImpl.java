@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,18 +30,15 @@ public class SkillPostServiceImpl implements SkillPostService {
 
     @Override
     public ResponseDto createSkillPost(Authentication auth, String description, List<String> tags, MultipartFile[] files) {
-        // Check if authentication is valid
         if (auth == null || !auth.isAuthenticated()) {
             log.warn("createSkillPost: Authentication is missing or invalid");
             return new ResponseDto(true, "Authentication required");
         }
         
         try {
-            // Extract user details from Authentication
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
             String username = userDetails.getUsername();
             
-            // Get full user info from username
             User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
             
@@ -49,10 +47,8 @@ public class SkillPostServiceImpl implements SkillPostService {
             
             log.info("createSkillPost: Creating post for userId {}", userId);
             
-            // Save media files
             List<String> mediaUrls = mediaStorageService.saveMediaFiles(files);
         
-            // Create and save the skill post
             SkillPost post = SkillPost.builder()
                     .userId(userId)
                     .userName(userName)
@@ -65,7 +61,7 @@ public class SkillPostServiceImpl implements SkillPostService {
             SkillPost saved = repository.save(post);
             log.info("createSkillPost: Saved post with ID {} for user {}", saved.getId(), saved.getUserId());
         
-            return new ResponseDto(false, saved);
+            return new ResponseDto(false, enrichPostWithUserData(saved));
         } catch (Exception e) {
             log.error("Error in createSkillPost: ", e);
             return new ResponseDto(true, "Error creating post: " + e.getMessage());
@@ -81,19 +77,26 @@ public class SkillPostServiceImpl implements SkillPostService {
         
         log.info("getPostsByUserId: Fetching posts for userId {}", userId);
         List<SkillPost> posts = repository.findByUserId(userId);
+        List<SkillPost> enrichedPosts = posts.stream()
+            .map(this::enrichPostWithUserData)
+            .collect(Collectors.toList());
         
         log.info("getPostsByUserId: Found {} posts for user {}", posts.size(), userId);
         
-        return new ResponseDto(false, posts);
+        return new ResponseDto(false, enrichedPosts);
     }
 
     @Override
     public ResponseDto getPostsByFollowedUserIds(List<String> followedUserIds) {
         log.info("getPostsByFollowedUserIds: Fetching posts for followed user IDs {}", followedUserIds);
-        return new ResponseDto(false, repository.findByUserIdIn(followedUserIds));
+        List<SkillPost> posts = repository.findByUserIdIn(followedUserIds);
+        List<SkillPost> enrichedPosts = posts.stream()
+            .map(this::enrichPostWithUserData)
+            .collect(Collectors.toList());
+        return new ResponseDto(false, enrichedPosts);
     }
 
-        @Override
+    @Override
     public ResponseDto updateSkillPostWithFiles(String id, String description, List<String> tags, 
                                                MultipartFile[] files, Authentication auth) {
         log.info("updateSkillPostWithFiles: Updating post with id {}", id);
@@ -104,29 +107,24 @@ public class SkillPostServiceImpl implements SkillPostService {
         }
         
         try {
-            // Check if post exists
             Optional<SkillPost> optionalPost = repository.findById(id);
             if (optionalPost.isEmpty()) {
                 log.warn("updateSkillPostWithFiles: Post with id {} not found", id);
                 return new ResponseDto(true, "Post not found with id: " + id);
             }
             
-            // Get current user
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
             User currentUser = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
             
-            // Get existing post
             SkillPost existingPost = optionalPost.get();
             
-            // Verify ownership - only post owner can update
             if (!existingPost.getUserId().equals(currentUser.getId())) {
                 log.warn("updateSkillPostWithFiles: User {} is not authorized to update post {}", 
                     currentUser.getId(), id);
                 return new ResponseDto(true, "You are not authorized to update this post");
             }
             
-            // Update fields if provided
             if (description != null) {
                 existingPost.setDescription(description);
             }
@@ -135,7 +133,6 @@ public class SkillPostServiceImpl implements SkillPostService {
                 existingPost.setTags(tags);
             }
             
-            // Handle file uploads if provided
             if (files != null && files.length > 0 && files[0].getSize() > 0) {
                 List<String> mediaUrls = mediaStorageService.saveMediaFiles(files);
                 existingPost.setMediaUrls(mediaUrls);
@@ -144,7 +141,7 @@ public class SkillPostServiceImpl implements SkillPostService {
             SkillPost saved = repository.save(existingPost);
             log.info("updateSkillPostWithFiles: Successfully updated post with id {}", id);
             
-            return new ResponseDto(false, saved);
+            return new ResponseDto(false, enrichPostWithUserData(saved));
         } catch (Exception e) {
             log.error("Error in updateSkillPostWithFiles: ", e);
             return new ResponseDto(true, "Error updating post: " + e.getMessage());
@@ -161,22 +158,18 @@ public class SkillPostServiceImpl implements SkillPostService {
         }
         
         try {
-            // Check if post exists
             Optional<SkillPost> optionalPost = repository.findById(id);
             if (optionalPost.isEmpty()) {
                 log.warn("deleteSkillPost: Post with id {} not found", id);
                 return new ResponseDto(true, "Post not found with id: " + id);
             }
             
-            // Get current user
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
             User currentUser = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
             
-            // Get existing post
             SkillPost existingPost = optionalPost.get();
             
-            // Verify ownership - only post owner can delete
             if (!existingPost.getUserId().equals(currentUser.getId())) {
                 log.warn("deleteSkillPost: User {} is not authorized to delete post {}", 
                     currentUser.getId(), id);
@@ -196,6 +189,9 @@ public class SkillPostServiceImpl implements SkillPostService {
     public ResponseDto getAllSkillPosts() {
         log.info("getAllSkillPosts: Fetching all skill posts");
         List<SkillPost> posts = repository.findAll();
+        List<SkillPost> enrichedPosts = posts.stream()
+            .map(this::enrichPostWithUserData)
+            .collect(Collectors.toList());
         
         log.info("getAllSkillPosts: Found {} posts", posts.size());
         
@@ -203,6 +199,18 @@ public class SkillPostServiceImpl implements SkillPostService {
             log.info("getAllSkillPosts: No posts found in the database");
         }
         
-        return new ResponseDto(false, posts);
+        return new ResponseDto(false, enrichedPosts);
+    }
+
+    private SkillPost enrichPostWithUserData(SkillPost post) {
+        try {
+            User user = userRepository.findById(post.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            post.setProfilePhotoUrl(user.getProfilePicture());
+            return post;
+        } catch (Exception e) {
+            log.error("Error enriching post with user data: ", e);
+            return post;
+        }
     }
 }

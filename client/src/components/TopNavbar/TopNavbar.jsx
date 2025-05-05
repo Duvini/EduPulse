@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FiHome, FiBook, FiUsers, FiCreditCard, FiSettings, FiHelpCircle, FiSearch, FiStar, FiMenu, FiX, FiBell } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../store';
+import { getMediaUrl } from '../../services/axiosConfig';
 
 const TopNavbar = () => {
   const notificationRef = useRef(null);
@@ -200,7 +201,7 @@ const TopNavbar = () => {
                 >
                   <div className="relative w-8 h-8">
                     <img 
-                      src={userProfile.avatar} 
+                      src={user?.profilePicture ? getMediaUrl(user.profilePicture) : defaultUserAvatar}
                       alt="User avatar" 
                       className="w-8 h-8 rounded-full object-cover bg-gray-100"
                       onError={(e) => {
