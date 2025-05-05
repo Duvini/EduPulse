@@ -1,13 +1,22 @@
 import axios from 'axios';
 import { authService } from './authService';
 
+const BASE_URL = 'http://localhost:8080';
+
 // Create axios instance with default config
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+// Utility function to get full media URL
+export const getMediaUrl = (url) => {
+  if (!url) return null;
+  if (url.startsWith('http')) return url;
+  return `${BASE_URL}${url}`;
+};
 
 // Add a request interceptor
 axiosInstance.interceptors.request.use(

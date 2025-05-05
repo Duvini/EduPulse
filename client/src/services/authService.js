@@ -45,6 +45,27 @@ export const authService = {
 
     updateUser: async (id, userData) => {
         const response = await axiosInstance.put(`${API_URL}/users/${id}`, userData);
+        if (response.data?.data) {
+            // Update the stored user data
+            const currentUser = authService.getCurrentUser();
+            const updatedUser = { ...currentUser, ...response.data.data };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+        }
+        return response.data;
+    },
+
+    updateProfilePicture: async (id, formData) => {
+        const response = await axiosInstance.put(`${API_URL}/users/${id}/profile-picture`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        if (response.data?.data) {
+            // Update the stored user data
+            const currentUser = authService.getCurrentUser();
+            const updatedUser = { ...currentUser, ...response.data.data };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+        }
         return response.data;
     },
 
