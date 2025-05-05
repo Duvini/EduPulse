@@ -214,7 +214,7 @@ const Home = () => {
 
         {/* Modal for Adding New Post */}
         {isModalOpen && (
-          <Modal onClose={handleModalClose}>
+          <Modal onClose={handleModalClose} hideCloseButton={true}>
             <PostForm
               onSubmit={handlePostSubmitSuccess}
               onCancel={handleModalClose}
