@@ -138,9 +138,9 @@ const PostCard = ({
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4 sm:p-5 mb-5 w-full">
+      <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden w-full">
         {/* Post Header */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center p-3 border-b border-gray-50">
           <div className="flex items-center group">
             <div className="relative">
               <img
@@ -150,7 +150,7 @@ const PostCard = ({
                 onError={() => setAvatarError(true)}
               />
               {currentUserId === userId && (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full border-2 border-white"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></div>
               )}
             </div>
             <div className="flex flex-col">
@@ -160,17 +160,17 @@ const PostCard = ({
           </div>
           <div className="relative" ref={menuRef}>
             <button
-              className="bg-transparent border-none cursor-pointer text-gray-500 p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+              className="bg-transparent border-none cursor-pointer text-gray-500 p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <FiMoreVertical className="text-xl" />
+              <FiMoreVertical className="text-lg" />
             </button>
 
             {/* Kebab Menu Dropdown */}
             {isMenuOpen && (
-              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg z-10 py-1 border border-gray-200 transform transition-all duration-200">
+              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg z-10 py-1 border border-gray-100 transform origin-top-right transition-all duration-200">
                 <button
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center"
+                  className="w-full text-left px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center"
                   onClick={handleSaveToggle}
                 >
                   <FiBookmark className="mr-2" />
@@ -179,14 +179,14 @@ const PostCard = ({
                 {currentUserId === userId && (
                   <>
                     <button
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center"
+                      className="w-full text-left px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center"
                       onClick={handleEdit}
                     >
                       <FiEdit2 className="mr-2" />
                       Edit Post
                     </button>
                     <button
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center"
+                      className="w-full text-left px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center"
                       onClick={handleDeleteClick}
                     >
                       <FiTrash2 className="mr-2" />
@@ -201,20 +201,20 @@ const PostCard = ({
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-md text-sm">
+          <div className="px-4 py-2 bg-red-50 text-red-600 text-sm">
             {error}
           </div>
         )}
 
         {/* Post Content */}
-        <div className="mb-4">
-          <p className="text-sm sm:text-base leading-relaxed break-words text-gray-800 whitespace-pre-wrap">{content}</p>
+        <div className="px-4 py-2">
+          <p className="text-sm sm:text-base leading-relaxed break-words text-gray-800 whitespace-pre-wrap mb-2">{content}</p>
           {hashtags && hashtags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="flex flex-wrap gap-1 mb-2">
               {hashtags.map((tag, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors duration-200 cursor-pointer"
+                  className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors duration-200 cursor-pointer"
                 >
                   #{tag}
                 </span>
@@ -225,24 +225,37 @@ const PostCard = ({
 
         {/* Post Media */}
         {(mediaUrls?.length > 0 || image) && (
-          <div className="mb-4 relative">
+          <div className="relative">
             <div className="grid grid-cols-1">
               {(() => {
                 const allMedia = (mediaUrls || [image]).filter(Boolean);
                 const currentMedia = allMedia[currentImageIndex];
                 const fullUrl = getMediaUrl(currentMedia);
-                if (!fullUrl) return null;
+                
+                if (!fullUrl) {
+                  return (
+                    <div className="bg-gray-100 p-6 flex items-center justify-center">
+                      <p className="text-gray-400">Image not available</p>
+                    </div>
+                  );
+                }
 
                 const isVideo = currentMedia?.toLowerCase().endsWith('.mp4');
 
                 return isVideo ? (
-                  <div className="relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200">
+                  <div className="relative overflow-hidden shadow-sm">
                     <video
                       controls
-                      className="w-full max-h-[500px] object-contain bg-black"
+                      className="w-full max-h-[450px] object-contain bg-black"
                       onError={(e) => {
-                        console.error('Video failed to load:', currentMedia);
+                        console.error('Video failed to load:', fullUrl);
                         e.target.style.display = 'none';
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = "bg-gray-100 p-6 flex flex-col items-center justify-center";
+                        errorDiv.innerHTML = `
+                          <p class="text-gray-400">Video could not be loaded</p>
+                        `;
+                        e.target.parentNode.appendChild(errorDiv);
                       }}
                     >
                       <source src={fullUrl} type="video/mp4" />
@@ -250,14 +263,20 @@ const PostCard = ({
                     </video>
                   </div>
                 ) : (
-                  <div className="relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200">
+                  <div className="relative overflow-hidden shadow-sm">
                     <img
                       src={fullUrl}
                       alt={`Post content ${currentImageIndex + 1}`}
-                      className="w-full max-h-[500px] object-contain"
+                      className="w-full max-h-[450px] object-contain bg-gray-50"
                       onError={(e) => {
-                        console.error('Image failed to load:', currentMedia);
+                        console.error('Image failed to load:', fullUrl);
                         e.target.style.display = 'none';
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = "bg-gray-100 p-6 flex flex-col items-center justify-center";
+                        errorDiv.innerHTML = `
+                          <p class="text-gray-400">Image could not be loaded</p>
+                        `;
+                        e.target.parentNode.appendChild(errorDiv);
                       }}
                     />
                   </div>
@@ -275,7 +294,7 @@ const PostCard = ({
                   }`}
                   disabled={currentImageIndex === 0}
                 >
-                  <FiChevronLeft className="w-6 h-6" />
+                  <FiChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={handleNextImage}
@@ -284,11 +303,11 @@ const PostCard = ({
                   }`}
                   disabled={currentImageIndex === (mediaUrls || [image]).filter(Boolean).length - 1}
                 >
-                  <FiChevronRight className="w-6 h-6" />
+                  <FiChevronRight className="w-5 h-5" />
                 </button>
                 
                 {/* Image Counter */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/60 text-white text-sm">
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-black/60 text-white text-xs">
                   {currentImageIndex + 1} / {(mediaUrls || [image]).filter(Boolean).length}
                 </div>
               </>
@@ -297,11 +316,11 @@ const PostCard = ({
         )}
 
         {/* Post Engagement */}
-        <div className="flex flex-wrap justify-between py-3 border-t border-b border-gray-200 mb-4">
-          <div className="flex items-center space-x-6">
-            <button className="flex items-center space-x-2 group" onClick={handleLikeToggle}>
+        <div className="flex flex-wrap justify-between py-1 px-4 border-t border-b border-gray-100">
+          <div className="flex items-center space-x-4">
+            <button className="flex items-center space-x-1 group py-2" onClick={handleLikeToggle}>
               <div
-                className={`p-2 rounded-full transition-colors duration-200 group-hover:bg-blue-50 ${
+                className={`p-1.5 rounded-full transition-colors duration-200 group-hover:bg-blue-50 ${
                   isLiked ? 'text-blue-500' : 'text-gray-500 group-hover:text-blue-500'
                 }`}
               >
@@ -316,8 +335,8 @@ const PostCard = ({
               </span>
             </button>
 
-            <button className="flex items-center space-x-2 group">
-              <div className="p-2 rounded-full text-gray-500 group-hover:text-blue-500 group-hover:bg-blue-50 transition-colors duration-200">
+            <button className="flex items-center space-x-1 group py-2">
+              <div className="p-1.5 rounded-full text-gray-500 group-hover:text-blue-500 group-hover:bg-blue-50 transition-colors duration-200">
                 <FiMessageSquare className="text-lg" />
               </div>
               <span className="text-sm text-gray-500 group-hover:text-blue-500 transition-colors duration-200">
@@ -325,8 +344,8 @@ const PostCard = ({
               </span>
             </button>
 
-            <button className="flex items-center space-x-2 group">
-              <div className="p-2 rounded-full text-gray-500 group-hover:text-blue-500 group-hover:bg-blue-50 transition-colors duration-200">
+            <button className="flex items-center space-x-1 group py-2">
+              <div className="p-1.5 rounded-full text-gray-500 group-hover:text-blue-500 group-hover:bg-blue-50 transition-colors duration-200">
                 <FiShare className="text-lg" />
               </div>
               <span className="text-sm text-gray-500 group-hover:text-blue-500 transition-colors duration-200">
@@ -335,9 +354,9 @@ const PostCard = ({
             </button>
           </div>
 
-          <button className="flex items-center space-x-2 group" onClick={handleSaveToggle}>
+          <button className="flex items-center space-x-1 group py-2" onClick={handleSaveToggle}>
             <div
-              className={`p-2 rounded-full transition-colors duration-200 group-hover:bg-blue-50 ${
+              className={`p-1.5 rounded-full transition-colors duration-200 group-hover:bg-blue-50 ${
                 isSaved ? 'text-blue-500' : 'text-gray-500 group-hover:text-blue-500'
               }`}
             >
@@ -354,7 +373,9 @@ const PostCard = ({
         </div>
 
         {/* Comment Input */}
-        <CommentInput postId={id} />
+        <div className="px-3 pt-1 pb-2">
+          <CommentInput postId={id} />
+        </div>
       </div>
 
       {/* Portals for Modals */}
