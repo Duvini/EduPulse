@@ -52,15 +52,22 @@ public class MediaStorageServiceImpl implements MediaStorageService {
             }
 
             try {
-                Path fullPath = Paths.get(fileStorageConfig.getBase(), folder, fileName);
+                // Get the absolute path for file storage
+                String absoluteBasePath = fileStorageConfig.getAbsoluteBasePath();
+                Path fullPath = Paths.get(absoluteBasePath, folder, fileName);
+                
+                // Ensure directories exist
                 Files.createDirectories(fullPath.getParent());
+                
+                // Write file to disk
                 Files.write(fullPath, file.getBytes());
                 
-                // Generate URL path for the file
+                // Generate consistent URL path for the file
                 String urlPath = "/uploads/" + folder + fileName;
                 mediaPaths.add(urlPath);
                 
                 log.info("File saved successfully: {}", urlPath);
+                log.info("At physical path: {}", fullPath.toString());
             } catch (IOException e) {
                 throw new FileValidationException("Failed to store file " + fileName, e);
             }
