@@ -4,6 +4,7 @@ import Home from '../pages/Home/Home';
 import SignIn from '../pages/Auth/SignIn';
 import SignUp from '../pages/Auth/SignUp';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
+import UserProfile from '../pages/Profile/UserProfile';
 
 const AppRoutes = () => {
   return (
@@ -16,6 +17,12 @@ const AppRoutes = () => {
       <Route path="/feed" element={
         <ProtectedRoute>
           <Home />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <UserProfile />
         </ProtectedRoute>
       } />
       
