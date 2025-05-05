@@ -1,22 +1,16 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { createUserSlice } from './userSlice';
+import { createUiSlice } from './uiSlice';
+import { createPostSlice } from './postSlice';
+import { createNotificationSlice } from './notificationSlice';
+import { createFollowerSlice } from './followerSlice';
 
-export const createStore = (createState) => {
-    return create(
-        devtools(
-            persist(
-                createState,
-                {
-                    name: 'edupulse-storage',
-                    partialize: (state) => ({
-                        user: state.user,
-                        isAuthenticated: state.isAuthenticated,
-                        unreadNotificationCount: state.unreadNotificationCount,
-                        likedPosts: state.likedPosts,
-                        savedPosts: state.savedPosts,
-                    }),
-                }
-            )
-        )
-    );
-};
+const useStore = create((set) => ({
+    ...createUserSlice(set),
+    ...createUiSlice(set),
+    ...createPostSlice(set),
+    ...createNotificationSlice(set),
+    ...createFollowerSlice(set)
+}));
+
+export { useStore };
