@@ -485,7 +485,7 @@ const UserProfile = () => {
                     <p className="text-lg font-light">No posts yet</p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-4 mx-auto max-w-2xl">
                     {userPosts.map(post => (
                       <PostCard
                         key={post.id}
@@ -527,7 +527,7 @@ const UserProfile = () => {
                     <p className="text-lg font-light">No saved posts yet</p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-4 mx-auto max-w-2xl">
                     {savedPosts.map(post => (
                       <PostCard
                         key={post.id}
