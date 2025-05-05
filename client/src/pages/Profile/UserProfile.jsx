@@ -8,31 +8,29 @@ import { getMediaUrl } from '../../services/axiosConfig';
 import { FiUser, FiMail, FiLock, FiEdit2, FiCamera, FiUsers, FiUserCheck, FiUserPlus } from 'react-icons/fi';
 import PostCard from '../../components/PostCard/postCard';
 
+const defaultProfileImage = '/default-avatar.png';
+
 const UserProfile = () => {
   const { id } = useParams();
   const { user, updateUserProfile } = useStore();
-  const {
-    followers,
-    following,
-    stats,
-    isFollowing,
-    loading: followLoading,
-    setFollowers,
-    setFollowing,
-    setStats,
-    setIsFollowing,
-    setLoading: setFollowLoading
-  } = useStore();
-
+  const [profileUser, setProfileUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('posts');
   const [userPosts, setUserPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(false);
-  const [activeTab, setActiveTab] = useState('posts');
-  const [profileUser, setProfileUser] = useState(null);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [stats, setStats] = useState({
+    followersCount: 0,
+    followingCount: 0,
+    postsCount: 0
+  });
 
   const [formData, setFormData] = useState({
     name: '',
@@ -40,10 +38,8 @@ const UserProfile = () => {
     email: '',
     currentPassword: '',
     newPassword: '',
-    confirmPassword: '',
+    confirmPassword: ''
   });
-
-  const defaultProfileImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -94,17 +90,7 @@ const UserProfile = () => {
           }
         }
 
-        if (activeTab === 'followers') {
-          const followersResponse = await followerService.getFollowers(userId);
-          if (!followersResponse.error) {
-            setFollowers(followersResponse.data);
-          }
-        } else if (activeTab === 'following') {
-          const followingResponse = await followerService.getFollowing(userId);
-          if (!followingResponse.error) {
-            setFollowing(followingResponse.data);
-          }
-        }
+        await loadTabData(activeTab, userId);
       } catch (err) {
         console.error('Error initializing profile:', err);
       } finally {
@@ -115,28 +101,27 @@ const UserProfile = () => {
     initializeProfile();
   }, [id, user?.id, activeTab]);
 
-  const handleTabChange = async (tab) => {
-    setActiveTab(tab);
-    const userId = id || user?.id;
-    if (!userId) return;
-
-    setFollowLoading(true);
+  const loadTabData = async (tab, userId) => {
     try {
-      if (tab === 'followers') {
-        const response = await followerService.getFollowers(userId);
-        if (!response.error) {
-          setFollowers(response.data);
-        }
-      } else if (tab === 'following') {
-        const response = await followerService.getFollowing(userId);
-        if (!response.error) {
-          setFollowing(response.data);
-        }
+      switch (tab) {
+        case 'followers':
+          const followersResponse = await followerService.getFollowers(userId);
+          if (!followersResponse.error) {
+            setFollowers(followersResponse.data);
+          }
+          break;
+        case 'following':
+          const followingResponse = await followerService.getFollowing(userId);
+          if (!followingResponse.error) {
+            setFollowing(followingResponse.data);
+          }
+          break;
+        case 'posts':
+          await fetchUserPosts(userId);
+          break;
       }
     } catch (err) {
-      console.error(`Error fetching ${tab}:`, err);
-    } finally {
-      setFollowLoading(false);
+      console.error(`Error loading ${tab} data:`, err);
     }
   };
 
@@ -151,7 +136,18 @@ const UserProfile = () => {
 
       if (!response.error) {
         setIsFollowing(!isFollowing);
-        setStats(response.data);
+        // Update follower stats
+        const statsResponse = await followerService.getFollowStats(id);
+        if (!statsResponse.error) {
+          setStats(statsResponse.data);
+        }
+        // If we're on the followers tab, refresh the list
+        if (activeTab === 'followers') {
+          const followersResponse = await followerService.getFollowers(id);
+          if (!followersResponse.error) {
+            setFollowers(followersResponse.data);
+          }
+        }
       } else {
         setError(response.message);
       }
@@ -280,22 +276,14 @@ const UserProfile = () => {
     }
   };
 
-  const fetchUserPosts = async () => {
-    const userId = id || user?.id;
+  const fetchUserPosts = async (userId) => {
     if (!userId) return;
 
     setLoadingPosts(true);
     try {
       const response = await skillPostService.getUserPosts(userId);
       if (!response.error) {
-        // Only set posts if we're viewing our own profile or if we're viewing someone else's profile
-        if (!id || id === user?.id) {
-          // For own profile
-          setUserPosts(response.data);
-        } else {
-          // For other user's profile
-          setUserPosts(response.data);
-        }
+        setUserPosts(response.data);
         setStats(prev => ({ ...prev, postsCount: response.data.length }));
       }
     } catch (err) {
@@ -305,25 +293,21 @@ const UserProfile = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUserPosts();
-  }, [id, user?.id]);
-
   const isOwnProfile = !id || id === user?.id;
 
   return (
-    <div className="max-w-4xl p-4 mx-auto sm:p-6 lg:p-8">
-      <div className="overflow-hidden bg-white rounded-lg shadow-md">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600">
-          <div className="absolute transform -translate-x-1/2 left-1/2 -bottom-16">
+          <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-16">
             <div className="relative">
               <img
                 src={profileUser?.profilePicture ? getMediaUrl(profileUser.profilePicture) : defaultProfileImage}
                 alt="Profile"
-                className="object-cover w-32 h-32 bg-gray-100 border-4 border-white rounded-full"
+                className="w-32 h-32 rounded-full object-cover border-4 border-white bg-gray-100"
               />
               {isOwnProfile && (
-                <label className="absolute bottom-0 right-0 p-2 transition-colors bg-blue-600 rounded-full cursor-pointer hover:bg-blue-700">
+                <label className="absolute bottom-0 right-0 p-2 bg-blue-600 rounded-full cursor-pointer hover:bg-blue-700 transition-colors">
                   <FiCamera className="text-xl text-white" />
                   <input
                     type="file"
@@ -339,7 +323,7 @@ const UserProfile = () => {
         </div>
 
         <div className="px-6 pt-20 pb-4 border-b">
-          <div className="mb-4 text-center">
+          <div className="text-center mb-4">
             <h2 className="text-2xl font-bold">{profileUser?.name}</h2>
             <p className="text-gray-600">@{profileUser?.username}</p>
             {!isOwnProfile && (
@@ -371,30 +355,30 @@ const UserProfile = () => {
 
           <div className="flex justify-center space-x-8">
             <button 
-              onClick={() => handleTabChange('posts')}
+              onClick={() => setActiveTab('posts')}
               className={`text-center transition-colors duration-200 ${
                 activeTab === 'posts' ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              <div className="text-xl font-semibold">{stats.postsCount}</div>
+              <div className="text-xl font-semibold">{stats.postsCount || 0}</div>
               <div>Posts</div>
             </button>
             <button 
-              onClick={() => handleTabChange('followers')}
+              onClick={() => setActiveTab('followers')}
               className={`text-center transition-colors duration-200 ${
                 activeTab === 'followers' ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              <div className="text-xl font-semibold">{stats.followersCount}</div>
+              <div className="text-xl font-semibold">{stats.followersCount || 0}</div>
               <div>Followers</div>
             </button>
             <button 
-              onClick={() => handleTabChange('following')}
+              onClick={() => setActiveTab('following')}
               className={`text-center transition-colors duration-200 ${
                 activeTab === 'following' ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              <div className="text-xl font-semibold">{stats.followingCount}</div>
+              <div className="text-xl font-semibold">{stats.followingCount || 0}</div>
               <div>Following</div>
             </button>
           </div>
@@ -402,290 +386,104 @@ const UserProfile = () => {
 
         <div className="p-6">
           {error && (
-            <div className="p-4 mb-4 text-red-600 border border-red-200 rounded-lg bg-red-50">
+            <div className="p-4 mb-4 text-red-600 bg-red-50 border border-red-200 rounded-lg">
               {error}
             </div>
           )}
           {success && (
-            <div className="p-4 mb-4 text-green-600 border border-green-200 rounded-lg bg-green-50">
+            <div className="p-4 mb-4 text-green-600 bg-green-50 border border-green-200 rounded-lg">
               {success}
             </div>
           )}
 
-          {followLoading ? (
-            <div className="py-8 text-center">
-              <div className="inline-block w-8 h-8 border-b-2 border-blue-600 rounded-full animate-spin"></div>
-            </div>
-          ) : (
-            <>
-              {activeTab === 'posts' && (
-                <div className="space-y-4">
-                  {loadingPosts ? (
-                    <div className="py-8 text-center">
-                      <div className="inline-block w-8 h-8 border-b-2 border-blue-600 rounded-full animate-spin"></div>
-                    </div>
-                  ) : userPosts.length === 0 ? (
-                    <div className="py-8 text-center text-gray-500">
-                      No posts yet
-                    </div>
-                  ) : (
-                    userPosts.map(post => (
-                      <PostCard
-                        key={post.id}
-                        id={post.id}
-                        authorName={post.userName}
-                        authorRole="Member"
-                        authorImage={post.profilePhotoUrl}
-                        content={post.description}
-                        mediaUrls={post.mediaUrls}
-                        likes={post.likes || 0}
-                        comments={post.comments?.length || 0}
-                        shares={0}
-                        saves={0}
-                        hashtags={post.tags}
-                        userId={post.userId}
-                        currentUserId={user?.id}
-                        onPostUpdated={fetchUserPosts}
-                      />
-                    ))
-                  )}
-                </div>
-              )}
-
-              {activeTab === 'followers' && (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {followers.length === 0 ? (
-                    <div className="col-span-2 py-8 text-center text-gray-500">
-                      No followers yet
-                    </div>
-                  ) : (
-                    followers.map(follower => (
-                      <div key={follower.id} className="flex items-center p-4 rounded-lg bg-gray-50">
-                        <Link to={`/profile/${follower.id}`} className="flex items-center flex-1">
-                          <img
-                            src={follower.profilePicture || defaultProfileImage}
-                            alt={follower.name}
-                            className="w-12 h-12 mr-4 rounded-full"
-                          />
-                          <div>
-                            <div className="font-semibold">{follower.name}</div>
-                            <div className="text-sm text-gray-600">@{follower.username}</div>
-                          </div>
-                        </Link>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-
-              {activeTab === 'following' && (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {following.length === 0 ? (
-                    <div className="col-span-2 py-8 text-center text-gray-500">
-                      Not following anyone yet
-                    </div>
-                  ) : (
-                    following.map(followed => (
-                      <div key={followed.id} className="flex items-center p-4 rounded-lg bg-gray-50">
-                        <Link to={`/profile/${followed.id}`} className="flex items-center flex-1">
-                          <img
-                            src={followed.profilePicture || defaultProfileImage}
-                            alt={followed.name}
-                            className="w-12 h-12 mr-4 rounded-full"
-                          />
-                          <div>
-                            <div className="font-semibold">{followed.name}</div>
-                            <div className="text-sm text-gray-600">@{followed.username}</div>
-                          </div>
-                        </Link>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </>
-          )}
-
-          {isOwnProfile && isEditing && (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
-                    Full Name
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <FiUser className="text-gray-400" />
-                    </div>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      disabled={!isEditing || loading}
-                      className="block w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500"
-                    />
+          {/* Tabs Content */}
+          <div className="mt-4">
+            {activeTab === 'posts' && (
+              <div className="space-y-4">
+                {loadingPosts ? (
+                  <div className="flex justify-center py-8">
+                    <div className="w-8 h-8 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
                   </div>
-                </div>
-
-                <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
-                    Username
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <FiUser className="text-gray-400" />
-                    </div>
-                    <input
-                      type="text"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleChange}
-                      disabled={!isEditing || loading}
-                      className="block w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500"
-                    />
+                ) : userPosts.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    No posts yet
                   </div>
-                </div>
-
-                <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <FiMail className="text-gray-400" />
-                    </div>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      disabled={!isEditing || loading}
-                      className="block w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500"
+                ) : (
+                  userPosts.map(post => (
+                    <PostCard
+                      key={post.id}
+                      id={post.id}
+                      authorName={post.userName}
+                      authorRole="Member"
+                      authorImage={post.profilePhotoUrl}
+                      content={post.description}
+                      mediaUrls={post.mediaUrls}
+                      likes={post.likes || 0}
+                      comments={post.comments?.length || 0}
+                      shares={0}
+                      saves={0}
+                      hashtags={post.tags}
+                      userId={post.userId}
+                      currentUserId={user?.id}
+                      onPostUpdated={() => fetchUserPosts(id || user?.id)}
                     />
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
+            )}
 
-              <div className="flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  disabled={loading}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  disabled={loading}
-                >
-                  {loading ? 'Saving...' : 'Save Changes'}
-                </button>
+            {activeTab === 'followers' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {followers.length === 0 ? (
+                  <div className="col-span-2 text-center py-8 text-gray-500">
+                    No followers yet
+                  </div>
+                ) : (
+                  followers.map(follower => (
+                    <div key={follower.id} className="flex items-center p-4 bg-gray-50 rounded-lg">
+                      <Link to={`/profile/${follower.id}`} className="flex items-center flex-1">
+                        <img
+                          src={follower.profilePicture ? getMediaUrl(follower.profilePicture) : defaultProfileImage}
+                          alt={follower.name}
+                          className="w-12 h-12 rounded-full mr-4"
+                        />
+                        <div>
+                          <div className="font-semibold">{follower.name}</div>
+                          <div className="text-sm text-gray-600">@{follower.username}</div>
+                        </div>
+                      </Link>
+                    </div>
+                  ))
+                )}
               </div>
-            </form>
-          )}
+            )}
 
-          {isOwnProfile && isChangingPassword && (
-            <div className="pt-8 mt-8 border-t border-gray-200">
-              <h3 className="mb-4 text-lg font-medium text-gray-900">Change Password</h3>
-              <form onSubmit={handlePasswordChange} className="space-y-4">
-                <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
-                    Current Password
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <FiLock className="text-gray-400" />
-                    </div>
-                    <input
-                      type="password"
-                      name="currentPassword"
-                      value={formData.currentPassword}
-                      onChange={handleChange}
-                      required
-                      className="block w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    />
+            {activeTab === 'following' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {following.length === 0 ? (
+                  <div className="col-span-2 text-center py-8 text-gray-500">
+                    Not following anyone yet
                   </div>
-                </div>
-                <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
-                    New Password
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <FiLock className="text-gray-400" />
+                ) : (
+                  following.map(followed => (
+                    <div key={followed.id} className="flex items-center p-4 bg-gray-50 rounded-lg">
+                      <Link to={`/profile/${followed.id}`} className="flex items-center flex-1">
+                        <img
+                          src={followed.profilePicture ? getMediaUrl(followed.profilePicture) : defaultProfileImage}
+                          alt={followed.name}
+                          className="w-12 h-12 rounded-full mr-4"
+                        />
+                        <div>
+                          <div className="font-semibold">{followed.name}</div>
+                          <div className="text-sm text-gray-600">@{followed.username}</div>
+                        </div>
+                      </Link>
                     </div>
-                    <input
-                      type="password"
-                      name="newPassword"
-                      value={formData.newPassword}
-                      onChange={handleChange}
-                      required
-                      className="block w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
-                    Confirm New Password
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <FiLock className="text-gray-400" />
-                    </div>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      required
-                      className="block w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-end space-x-3">
-                  <button
-                    type="button"
-                    onClick={() => setIsChangingPassword(false)}
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    disabled={loading}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                    disabled={loading}
-                  >
-                    {loading ? 'Updating...' : 'Update Password'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-
-          {isOwnProfile && !isEditing && !isChangingPassword && (
-            <div className="flex justify-end mt-6 space-x-3">
-              <button
-                type="button"
-                onClick={() => setIsEditing(true)}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <FiEdit2 className="mr-2" />
-                Edit Profile
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsChangingPassword(true)}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-              >
-                <FiLock className="mr-2" />
-                Change Password
-              </button>
-            </div>
-          )}
+                  ))
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

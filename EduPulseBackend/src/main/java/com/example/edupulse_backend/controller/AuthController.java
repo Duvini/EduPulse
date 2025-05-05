@@ -106,4 +106,11 @@ public class AuthController {
         
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/users/search")
+    public ResponseEntity<ResponseDto> searchUsers(@RequestParam String username) {
+        log.info("Search request received for username pattern: {}", username);
+        ResponseDto response = authService.searchUsers(username);
+        return ResponseEntity.ok(response);
+    }
 }
