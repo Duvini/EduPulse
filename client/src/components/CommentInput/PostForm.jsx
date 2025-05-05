@@ -2,52 +2,31 @@ import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4'];
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_IMAGES = 3;
 
 const postValidationSchema = Yup.object().shape({
   description: Yup.string()
     .required('Description is required')
-    .min(10, 'Description must be at least 10 characters long'),
+    .min(1, 'Description must not be empty')
+    .max(1000, 'Description must not exceed 1000 characters'),
   tags: Yup.string()
-    .matches(/^(\w+)(,\s*\w+)*$/, 'Tags must be comma-separated words')
-    .nullable(),
-  mediaFiles: Yup.array()
-    .test('fileType', 'Unsupported file format', (files) => {
-      if (!files || files.length === 0) return true;
-      return files.every(file => SUPPORTED_FORMATS.includes(file.type));
-    })
-    .test('fileSize', 'File too large (max 10MB)', (files) => {
-      if (!files || files.length === 0) return true;
-      return files.every(file => file.size <= MAX_FILE_SIZE);
-    })
-    .test('fileCount', 'Maximum 3 images or 1 video allowed', (files) => {
-      if (!files || files.length === 0) return true;
-      const imageFiles = files.filter(file => file.type.startsWith('image/'));
-      const videoFiles = files.filter(file => file.type.startsWith('video/'));
-      return (imageFiles.length <= 3 && videoFiles.length === 0) || 
-             (videoFiles.length === 1 && imageFiles.length === 0);
-    })
+    .nullable()
+    .matches(/^[a-zA-Z0-9\s,]*$/, 'Tags can only contain letters, numbers, and commas')
 });
 
-const PostForm = ({ initialValues, onSubmit, onCancel, isEdit = false }) => {
+const PostForm = ({ onSubmit, onCancel, isEdit, initialValues }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
-  
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const submitValues = {
-        ...values,
-        mediaFiles: selectedFiles
-      };
-      
       if (typeof onSubmit === 'function') {
-        await onSubmit(submitValues);
+        await onSubmit({
+          ...values,
+          files: selectedFiles
+        });
         if (!isEdit) {
-          resetForm();
           setSelectedFiles([]);
         }
-      } else {
-        console.error('onSubmit is not a function');
       }
     } catch (error) {
       console.error('Error submitting post:', error);
@@ -58,22 +37,43 @@ const PostForm = ({ initialValues, onSubmit, onCancel, isEdit = false }) => {
 
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.currentTarget.files);
-    setSelectedFiles(prevFiles => {
-      // Combine previous files with new files
-      const updatedFiles = [...prevFiles, ...newFiles];
-      
-      // Check if we have videos
-      const hasVideo = updatedFiles.some(file => file.type.startsWith('video/'));
-      
-      // If we have a video, only keep the first video
-      if (hasVideo) {
-        const firstVideo = updatedFiles.find(file => file.type.startsWith('video/'));
-        return [firstVideo];
+    
+    // Check if we have any videos
+    const hasVideo = newFiles.some(file => file.type.startsWith('video/'));
+    const hasExistingVideo = selectedFiles.some(file => file.type.startsWith('video/'));
+    const currentImages = selectedFiles.filter(file => file.type.startsWith('image/'));
+    
+    // Prevent mixing videos and images
+    if (hasVideo && selectedFiles.length > 0) {
+      alert('You can only upload either images or a video, not both');
+      return;
+    }
+    
+    if (hasExistingVideo) {
+      alert('Please remove the existing video before uploading new files');
+      return;
+    }
+
+    // Handle video upload
+    if (hasVideo) {
+      if (newFiles.length > 1) {
+        alert('You can only upload 1 video');
+        return;
       }
-      
-      // For images, limit to 3 most recent
-      const imageFiles = updatedFiles.filter(file => file.type.startsWith('image/'));
-      return imageFiles.slice(-3); // Keep only the 3 most recent images
+      setSelectedFiles([newFiles[0]]);
+      return;
+    }
+
+    // Handle image upload
+    const totalImageCount = currentImages.length + newFiles.length;
+    if (totalImageCount > MAX_IMAGES) {
+      alert(`You can only upload up to ${MAX_IMAGES} images`);
+      return;
+    }
+
+    setSelectedFiles(prevFiles => {
+      const updatedFiles = [...prevFiles, ...newFiles];
+      return updatedFiles.slice(0, MAX_IMAGES); // Ensure we don't exceed MAX_IMAGES
     });
   };
 
@@ -90,12 +90,11 @@ const PostForm = ({ initialValues, onSubmit, onCancel, isEdit = false }) => {
       initialValues={{
         description: initialValues?.description || '',
         tags: initialValues?.tags?.join(', ') || '',
-        mediaFiles: []
       }}
       validationSchema={postValidationSchema}
       onSubmit={handleSubmit}
     >
-      {({ setFieldValue, isSubmitting }) => (
+      {({ isSubmitting }) => (
         <Form className="bg-white p-6 rounded-lg shadow-md space-y-4">
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700">
@@ -164,7 +163,6 @@ const PostForm = ({ initialValues, onSubmit, onCancel, isEdit = false }) => {
                 </div>
               )}
             </div>
-            <ErrorMessage name="mediaFiles" component="div" className="mt-1 text-sm text-red-600" />
             <p className="mt-1 text-sm text-gray-500">
               Upload up to 3 images (JPEG, PNG, GIF) or 1 video (MP4). Max 10MB each.
             </p>
@@ -187,7 +185,7 @@ const PostForm = ({ initialValues, onSubmit, onCancel, isEdit = false }) => {
                 isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
-              {isSubmitting ? 'Submitting...' : isEdit ? 'Update Post' : 'Create Post'}
+              {isSubmitting ? 'Creating...' : 'Create Post'}
             </button>
           </div>
         </Form>
