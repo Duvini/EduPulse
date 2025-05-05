@@ -3,7 +3,7 @@ import { authService } from './authService';
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
-  baseURL: '/',
+  baseURL: 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json',
   },

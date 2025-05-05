@@ -1,32 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { learningProgressService } from '../../services/learningProgressService';
+import { useStore } from '../../../store';
 
 const LearningProgress = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useStore();
 
-  useEffect(() => {
-    fetchLearningProgress();
-  }, []);
-
-  const fetchLearningProgress = async () => {
+  const fetchLearningProgress = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await learningProgressService.getUserProgress();
-    if (error) {
-      setError(error);
+    setError(null);
+    
+    const { data, error: serviceError } = await learningProgressService.getUserProgress(user?.id);
+    
+    if (serviceError) {
+      setError(serviceError);
     } else {
       setCourses(data.data || []);
     }
     setLoading(false);
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchLearningProgress();
+    } else {
+      setLoading(false);
+    }
+  }, [user, fetchLearningProgress]);
 
   const handleTaskStatusUpdate = async (planId, taskIndex, isCompleted) => {
-    const { error } = await learningProgressService.updateTaskStatus(planId, taskIndex, isCompleted);
-    if (!error) {
-      fetchLearningProgress(); // Refresh data after update
+    try {
+      const { error: updateError } = await learningProgressService.updateTaskStatus(planId, taskIndex, isCompleted);
+      if (updateError) {
+        setError(updateError);
+      } else {
+        fetchLearningProgress(); // Refresh data after update
+      }
+    } catch (error) {
+      console.error('Task status update failed:', error);
+      setError('Failed to update task status');
     }
   };
+
+  if (!user) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <p className="text-gray-500 text-center">Sign in to track your learning progress</p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -46,7 +70,21 @@ const LearningProgress = () => {
   if (error) {
     return (
       <div className="bg-white rounded-lg shadow-md p-4">
-        <p className="text-red-500">Error loading learning progress</p>
+        <p className="text-red-500 text-center">Error loading learning progress</p>
+        <button 
+          onClick={fetchLearningProgress}
+          className="mt-2 text-sm text-blue-600 hover:text-blue-800 block mx-auto"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  if (!courses || courses.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <p className="text-gray-500 text-center">No learning plans found. Start learning by enrolling in a course!</p>
       </div>
     );
   }
@@ -64,7 +102,10 @@ const LearningProgress = () => {
               <img 
                 src={course.image || '/api/placeholder/48/48'} 
                 alt={course.title} 
-                className="w-10 h-10 rounded mr-3 object-cover" 
+                className="w-10 h-10 rounded mr-3 object-cover"
+                onError={(e) => {
+                  e.target.src = '/api/placeholder/48/48';
+                }}
               />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">{course.title}</p>
@@ -95,11 +136,13 @@ const LearningProgress = () => {
         ))}
       </div>
       
-      <div className="px-4 py-3 text-center border-t border-gray-200">
-        <button className="text-sm text-blue-600 font-medium hover:text-blue-800">
-          View all courses
-        </button>
-      </div>
+      {courses.length > 0 && (
+        <div className="px-4 py-3 text-center border-t border-gray-200">
+          <button className="text-sm text-blue-600 font-medium hover:text-blue-800">
+            View all courses
+          </button>
+        </div>
+      )}
     </div>
   );
 };
