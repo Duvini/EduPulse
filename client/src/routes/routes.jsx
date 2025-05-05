@@ -5,6 +5,7 @@ import SignIn from '../pages/Auth/SignIn';
 import SignUp from '../pages/Auth/SignUp';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import UserProfile from '../pages/Profile/UserProfile';
+import SearchUsers from '../components/SearchUsers/SearchUsers';
 
 const AppRoutes = () => {
   return (
@@ -25,8 +26,20 @@ const AppRoutes = () => {
           <UserProfile />
         </ProtectedRoute>
       } />
+
+      <Route path="/profile/:id" element={
+        <ProtectedRoute>
+          <UserProfile />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/search" element={
+        <ProtectedRoute>
+          <SearchUsers />
+        </ProtectedRoute>
+      } />
       
-      {/* Add other protected routes here */}
+      {/* Other protected routes */}
       <Route path="/learn" element={
         <ProtectedRoute>
           <div>Learn Page (Coming Soon)</div>
