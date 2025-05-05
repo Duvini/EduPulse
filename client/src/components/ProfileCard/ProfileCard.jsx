@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../store';
 import { getMediaUrl } from '../../services/axiosConfig';
-import { followerService } from '../../services/followerService';
-import { skillPostService } from '../../services/skillPostService';
+import { useGetFollowerStats } from '../../api/hooks/useFollowers';
+import { useGetPostsByUserId } from '../../api/hooks/usePosts';
 
 const ProfileCard = () => {
   const { user } = useStore();
@@ -16,36 +16,34 @@ const ProfileCard = () => {
 
   const defaultProfileImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
 
+  // Use React Query hooks to fetch follower stats and posts data
+  const { data: followerStatsData } = useGetFollowerStats(
+    user?.id,
+    { enabled: !!user?.id }
+  );
+  
+  const { data: userPosts } = useGetPostsByUserId(
+    user?.id,
+    { enabled: !!user?.id }
+  );
+
+  // Update stats when data from React Query hooks changes
   useEffect(() => {
-    const fetchUserStats = async () => {
-      if (!user?.id) return;
-      
-      try {
-        // Fetch follower stats
-        const statsResponse = await followerService.getFollowStats(user.id);
-        if (!statsResponse.error) {
-          setStats(prev => ({
-            ...prev,
-            followersCount: statsResponse.data.followersCount || 0,
-            followingCount: statsResponse.data.followingCount || 0
-          }));
-        }
-        
-        // Fetch post count
-        const postsResponse = await skillPostService.getUserPosts(user.id);
-        if (!postsResponse.error) {
-          setStats(prev => ({
-            ...prev,
-            postsCount: postsResponse.data.length || 0
-          }));
-        }
-      } catch (err) {
-        console.error('Error fetching user stats:', err);
-      }
-    };
+    if (followerStatsData) {
+      setStats(prev => ({
+        ...prev,
+        followersCount: followerStatsData.followersCount || 0,
+        followingCount: followerStatsData.followingCount || 0
+      }));
+    }
     
-    fetchUserStats();
-  }, [user?.id]);
+    if (userPosts) {
+      setStats(prev => ({
+        ...prev,
+        postsCount: userPosts.length || 0
+      }));
+    }
+  }, [followerStatsData, userPosts]);
 
   if (!user) {
     return (
