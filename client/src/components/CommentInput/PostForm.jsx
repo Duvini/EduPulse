@@ -1,140 +1,191 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4'];
+const MAX_IMAGES = 3;
 
 const postValidationSchema = Yup.object().shape({
-  title: Yup.string()
-    .required('Title is required')
-    .max(100, 'Title cannot exceed 100 characters'),
-  content: Yup.string()
-    .required('Content is required')
-    .min(10, 'Content must be at least 10 characters long'),
-  hashtags: Yup.string()
-    .matches(/^#(\w+)( #\w+)*$/, 'Hashtags must start with # and be space-separated')
-    .nullable(),
-  files: Yup.mixed()
-    .test('fileType', 'Only images or videos are allowed', (files) => {
-      if (!files || files.length === 0) return true;
-      return Array.from(files).every((file) => SUPPORTED_FORMATS.includes(file.type));
-    })
-    .test('fileCount', 'You can upload a maximum of 3 images or 1 video', (files) => {
-      if (!files || files.length === 0) return true;
-      const imageFiles = Array.from(files).filter((file) => file.type.startsWith('image/'));
-      const videoFiles = Array.from(files).filter((file) => file.type.startsWith('video/'));
-      return (imageFiles.length <= 3 && videoFiles.length === 0) || (videoFiles.length === 1 && imageFiles.length === 0);
-    })
-    .test('videoDuration', 'Video duration cannot exceed 30 seconds', async (files) => {
-      if (!files || files.length === 0) return true;
-      const videoFile = Array.from(files).find((file) => file.type.startsWith('video/'));
-      if (videoFile) {
-        const videoDuration = await getVideoDuration(videoFile);
-        return videoDuration <= 30;
-      }
-      return true;
-    }),
+  description: Yup.string()
+    .required('Description is required')
+    .min(1, 'Description must not be empty')
+    .max(1000, 'Description must not exceed 1000 characters'),
+  tags: Yup.string()
+    .nullable()
+    .matches(/^[a-zA-Z0-9\s,]*$/, 'Tags can only contain letters, numbers, and commas')
 });
 
-const getVideoDuration = (file) => {
-  return new Promise((resolve) => {
-    const video = document.createElement('video');
-    video.preload = 'metadata';
-    video.onloadedmetadata = () => {
-      window.URL.revokeObjectURL(video.src);
-      resolve(video.duration);
-    };
-    video.src = URL.createObjectURL(file);
-  });
-};
+const PostForm = ({ onSubmit, onCancel, isEdit, initialValues }) => {
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
-const PostForm = ({ onSubmit }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      if (typeof onSubmit === 'function') {
+        await onSubmit({
+          ...values,
+          files: selectedFiles
+        });
+        if (!isEdit) {
+          setSelectedFiles([]);
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting post:', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const newFiles = Array.from(event.currentTarget.files);
+    
+    // Check if we have any videos
+    const hasVideo = newFiles.some(file => file.type.startsWith('video/'));
+    const hasExistingVideo = selectedFiles.some(file => file.type.startsWith('video/'));
+    const currentImages = selectedFiles.filter(file => file.type.startsWith('image/'));
+    
+    // Prevent mixing videos and images
+    if (hasVideo && selectedFiles.length > 0) {
+      alert('You can only upload either images or a video, not both');
+      return;
+    }
+    
+    if (hasExistingVideo) {
+      alert('Please remove the existing video before uploading new files');
+      return;
+    }
+
+    // Handle video upload
+    if (hasVideo) {
+      if (newFiles.length > 1) {
+        alert('You can only upload 1 video');
+        return;
+      }
+      setSelectedFiles([newFiles[0]]);
+      return;
+    }
+
+    // Handle image upload
+    const totalImageCount = currentImages.length + newFiles.length;
+    if (totalImageCount > MAX_IMAGES) {
+      alert(`You can only upload up to ${MAX_IMAGES} images`);
+      return;
+    }
+
+    setSelectedFiles(prevFiles => {
+      const updatedFiles = [...prevFiles, ...newFiles];
+      return updatedFiles.slice(0, MAX_IMAGES); // Ensure we don't exceed MAX_IMAGES
+    });
+  };
+
+  const removeFile = (index) => {
+    setSelectedFiles(prevFiles => {
+      const updatedFiles = [...prevFiles];
+      updatedFiles.splice(index, 1);
+      return updatedFiles;
+    });
+  };
+
   return (
     <Formik
       initialValues={{
-        title: '',
-        content: '',
-        hashtags: '',
-        files: null,
+        description: initialValues?.description || '',
+        tags: initialValues?.tags?.join(', ') || '',
       }}
       validationSchema={postValidationSchema}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
     >
-      {({ setFieldValue, isSubmitting }) => (
-        <Form className="bg-white p-4 rounded-lg shadow-md space-y-4">
-          {/* Title Field */}
+      {({ isSubmitting }) => (
+        <Form className="bg-white p-6 rounded-lg shadow-md space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-              Title
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              Description
             </label>
             <Field
-              id="title"
-              name="title"
-              type="text"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Enter post title"
-            />
-            <ErrorMessage name="title" component="div" className="text-red-500 text-sm mt-1" />
-          </div>
-
-          {/* Content Field */}
-          <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-              Content
-            </label>
-            <Field
-              id="content"
-              name="content"
               as="textarea"
+              id="description"
+              name="description"
               rows="4"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Write your post content here..."
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="Share your thoughts..."
             />
-            <ErrorMessage name="content" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage name="description" component="div" className="mt-1 text-sm text-red-600" />
           </div>
 
-          {/* Hashtags Field */}
           <div>
-            <label htmlFor="hashtags" className="block text-sm font-medium text-gray-700">
-              Hashtags
+            <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
+              Tags
             </label>
             <Field
-              id="hashtags"
-              name="hashtags"
               type="text"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="e.g., #react #javascript"
+              id="tags"
+              name="tags"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="Enter tags separated by commas (e.g., javascript, react, webdev)"
             />
-            <ErrorMessage name="hashtags" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage name="tags" component="div" className="mt-1 text-sm text-red-600" />
           </div>
 
-          {/* File Upload Field */}
           <div>
             <label htmlFor="files" className="block text-sm font-medium text-gray-700">
-              Upload Images or Video
+              Media Files
             </label>
             <input
-              id="files"
-              name="files"
               type="file"
-              accept="image/*,video/mp4"
+              id="files"
               multiple
-              onChange={(event) => setFieldValue('files', event.currentTarget.files)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              accept="image/*, video/mp4"
+              onChange={handleFileChange}
+              className="mt-1 block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100"
             />
-            <ErrorMessage name="files" component="div" className="text-red-500 text-sm mt-1" />
+            <div className="mt-2">
+              {selectedFiles.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                  {selectedFiles.map((file, index) => (
+                    <div key={index} className="relative">
+                      <div className="border rounded p-2 flex items-center">
+                        <span className="truncate text-xs">{file.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => removeFile(index)}
+                          className="ml-2 text-red-500 hover:text-red-700"
+                          title="Remove file"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <p className="mt-1 text-sm text-gray-500">
+              Upload up to 3 images (JPEG, PNG, GIF) or 1 video (MP4). Max 10MB each.
+            </p>
           </div>
 
-          {/* Submit Button */}
-          <div>
+          <div className="flex justify-end space-x-3 pt-4">
+            {onCancel && (
+              <button
+                type="button"
+                onClick={onCancel}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Cancel
+              </button>
+            )}
             <button
               type="submit"
-              className={`w-full py-2 px-4 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+              disabled={isSubmitting}
+              className={`px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
                 isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
               }`}
-              disabled={isSubmitting}
             >
-              {isSubmitting ? 'Submitting...' : 'Create Post'}
+              {isSubmitting ? 'Creating...' : 'Create Post'}
             </button>
           </div>
         </Form>

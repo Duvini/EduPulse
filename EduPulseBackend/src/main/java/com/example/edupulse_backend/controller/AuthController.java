@@ -78,4 +78,17 @@ public class AuthController {
         
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/validate")
+    public ResponseEntity<ResponseDto> validateToken(@RequestHeader("Authorization") String authHeader) {
+        log.info("Token validation request received");
+        String token = authHeader.substring(7); // Remove "Bearer " prefix
+        ResponseDto response = authService.validateToken(token);
+        
+        if (response.isError()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        
+        return ResponseEntity.ok(response);
+    }
 }

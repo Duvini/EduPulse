@@ -10,6 +10,7 @@ export const createStore = (createState) => {
                     name: 'edupulse-storage',
                     partialize: (state) => ({
                         user: state.user,
+                        isAuthenticated: state.isAuthenticated,
                         unreadNotificationCount: state.unreadNotificationCount,
                         likedPosts: state.likedPosts,
                         savedPosts: state.savedPosts,
