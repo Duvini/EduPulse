@@ -166,6 +166,48 @@ public class NotificationServiceImpl implements NotificationService {
         // Also send updated count
         sendUnreadCountUpdate(postOwnerId);
     }
+
+    @Override
+    public void createFollowNotification(String followerId, String followerName, String followedUserId) {
+        // Don't notify if a user follows themselves (shouldn't happen, but just in case)
+        if (followerId.equals(followedUserId)) {
+            return;
+        }
+        
+        log.info("Creating follow notification: {} is now following {}", followerId, followedUserId);
+        
+        // Check if similar notification exists recently to prevent spam
+        List<Notification> recentNotifications = notificationRepository.findByRecipientIdAndSenderIdAndTypeAndCreatedAtAfter(
+                followedUserId, followerId, Notification.NotificationType.FOLLOW, 
+                LocalDateTime.now().minusMinutes(5)); // Check last 5 minutes
+                
+        if (!recentNotifications.isEmpty()) {
+            log.info("Recent follow notification already exists, skipping");
+            return;
+        }
+        
+        Notification notification = Notification.builder()
+                .recipientId(followedUserId)
+                .senderId(followerId)
+                .senderName(followerName)
+                .type(Notification.NotificationType.FOLLOW)
+                .content(followerName + " started following you")
+                .read(false)
+                .createdAt(LocalDateTime.now())
+                .build();
+        
+        notification = notificationRepository.save(notification);
+        
+        // Send real-time notification via WebSocket
+        messagingTemplate.convertAndSendToUser(
+                followedUserId,
+                "/queue/notifications",
+                notification
+        );
+        
+        // Also send updated count
+        sendUnreadCountUpdate(followedUserId);
+    }
     
     // Helper method to send unread count updates
     private void sendUnreadCountUpdate(String userId) {
