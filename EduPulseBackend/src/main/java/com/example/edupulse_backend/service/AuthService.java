@@ -17,9 +17,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -150,6 +157,46 @@ public class AuthService {
         } catch (Exception e) {
             log.error("Token validation failed: {}", e.getMessage());
             return new ResponseDto(true, "Token validation failed");
+        }
+    }
+
+    public ResponseDto updateProfilePicture(String id, MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return new ResponseDto(true, "Profile picture file is required");
+        }
+
+        try {
+            User existingUser = userRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+
+            // Generate a unique filename
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename != null ? originalFilename.substring(originalFilename.lastIndexOf(".")) : ".jpg";
+            String filename = UUID.randomUUID().toString() + fileExtension;
+
+            // Create directory if it doesn't exist
+            Path uploadPath = Paths.get("uploads/profile-pictures");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // Save the file
+            Path filePath = uploadPath.resolve(filename);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Update user profile picture URL
+            String profilePictureUrl = "/uploads/profile-pictures/" + filename;
+            existingUser.setProfilePicture(profilePictureUrl);
+            existingUser.setUpdatedAt(LocalDateTime.now());
+
+            User updatedUser = userRepository.save(existingUser);
+            return new ResponseDto(false, updatedUser);
+        } catch (ResourceNotFoundException e) {
+            log.error("User not found: {}", e.getMessage());
+            return new ResponseDto(true, e.getMessage());
+        } catch (IOException e) {
+            log.error("Failed to save profile picture: {}", e.getMessage());
+            return new ResponseDto(true, "Failed to save profile picture");
         }
     }
 }

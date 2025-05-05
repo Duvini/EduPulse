@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import CommentInput from '../CommentInput/commentInput';
 import { FiThumbsUp, FiMessageSquare, FiShare, FiBookmark, FiMoreVertical, FiEdit2, FiTrash2, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { skillPostService } from '../../services/skillPostService';
+import { getMediaUrl } from '../../services/axiosConfig';
 import SkillPostEditForm from '../CommentInput/SkillPostEditForm';
 import DeleteConfirmationModal from '../Modal/DeleteConfirmationModal';
 import Modal from '../Modal/Modal';
-
-const BASE_URL = 'http://localhost:8080';
 
 // Default user avatar as SVG data URL
 const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
@@ -115,13 +114,6 @@ const PostCard = ({
     }
   };
 
-  const getMediaUrl = (url) => {
-    if (!url) return null;
-    if (url.startsWith('http')) return url;
-    if (url.startsWith('/')) return `${BASE_URL}${url}`;
-    return `${BASE_URL}/${url}`;
-  };
-
   const handlePreviousImage = (e) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : 0));
@@ -152,7 +144,7 @@ const PostCard = ({
           <div className="flex items-center group">
             <div className="relative">
               <img
-                src={avatarError ? defaultUserAvatar : getMediaUrl(authorImage) || defaultUserAvatar}
+                src={avatarError ? defaultUserAvatar : (authorImage ? getMediaUrl(authorImage) : defaultUserAvatar)}
                 alt="Author"
                 className="w-10 h-10 rounded-full object-cover mr-2.5 bg-gray-100 ring-2 ring-transparent group-hover:ring-blue-200 transition-all duration-200"
                 onError={() => setAvatarError(true)}
