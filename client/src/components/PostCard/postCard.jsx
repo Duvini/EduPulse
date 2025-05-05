@@ -2,12 +2,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import CommentInput from '../CommentInput/commentInput';
 import { FiThumbsUp, FiMessageSquare, FiShare, FiBookmark, FiMoreVertical, FiEdit2, FiTrash2, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { skillPostService } from '../../services/skillPostService';
-import { getMediaUrl } from '../../services/axiosConfig';
+import { getMediaUrl } from '../../services/apiClient';
 import SkillPostEditForm from '../CommentInput/SkillPostEditForm';
 import DeleteConfirmationModal from '../Modal/DeleteConfirmationModal';
 import Modal from '../Modal/Modal';
-import axiosInstance from '../../services/axiosConfig';
+import axiosInstance from '../../services/apiClient';
+import { useDeletePost, useLikePost, useUnlikePost, useSavePost, useUnsavePost } from '../../api/hooks/usePosts';
 
 // Default user avatar as SVG data URL
 const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
@@ -34,7 +34,6 @@ const PostCard = ({
   const menuRef = useRef(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
   const [error, setError] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,6 +43,13 @@ const PostCard = ({
   const [savesCount, setSavesCount] = useState(saves || 0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [mediaTypes, setMediaTypes] = useState({});
+  
+  // React Query mutation hooks
+  const deletePostMutation = useDeletePost();
+  const likePostMutation = useLikePost();
+  const unlikePostMutation = useUnlikePost();
+  const savePostMutation = useSavePost();
+  const unsavePostMutation = useUnsavePost();
   
   // Fetch media types for blob URLs when the component mounts
   useEffect(() => {
@@ -102,14 +108,36 @@ const PostCard = ({
     };
   }, []);
 
-  const handleLikeToggle = () => {
-    setIsLiked(!isLiked);
-    setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
+  const handleLikeToggle = async () => {
+    try {
+      if (isLiked) {
+        await unlikePostMutation.mutateAsync(id);
+      } else {
+        await likePostMutation.mutateAsync(id);
+      }
+      
+      setIsLiked(!isLiked);
+      setLikesCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      // Handle error if needed but don't update UI
+    }
   };
 
-  const handleSaveToggle = () => {
-    setIsSaved(!isSaved);
-    setSavesCount((prev) => (isSaved ? prev - 1 : prev + 1));
+  const handleSaveToggle = async () => {
+    try {
+      if (isSaved) {
+        await unsavePostMutation.mutateAsync(id);
+      } else {
+        await savePostMutation.mutateAsync(id);
+      }
+      
+      setIsSaved(!isSaved);
+      setSavesCount(prevCount => isSaved ? prevCount - 1 : prevCount + 1);
+    } catch (error) {
+      console.error('Error toggling save:', error);
+      // Handle error if needed but don't update UI
+    }
   };
 
   const handleEdit = (e) => {
@@ -121,22 +149,15 @@ const PostCard = ({
 
   const handleDelete = async () => {
     try {
-      setIsDeleting(true);
-      const response = await skillPostService.deletePost(id);
-      if (response.error) {
-        setError(response.message || 'Failed to delete post');
-        setIsDeleting(false);
-        return;
-      }
+      await deletePostMutation.mutateAsync(id);
       setIsDeleteModalOpen(false);
-      setIsDeleting(false);
+      
       if (onPostUpdated) {
         onPostUpdated();
       }
     } catch (error) {
       console.error('Error deleting post:', error);
       setError('Failed to delete post. Please try again.');
-      setIsDeleting(false);
     }
   };
 
@@ -223,6 +244,7 @@ const PostCard = ({
                 <button
                   className="w-full text-left px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center"
                   onClick={handleSaveToggle}
+                  disabled={savePostMutation.isPending || unsavePostMutation.isPending}
                 >
                   <FiBookmark className="mr-2" />
                   {isSaved ? 'Unsave Post' : 'Save Post'}
@@ -239,6 +261,7 @@ const PostCard = ({
                     <button
                       className="w-full text-left px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center"
                       onClick={handleDeleteClick}
+                      disabled={deletePostMutation.isPending}
                     >
                       <FiTrash2 className="mr-2" />
                       Delete Post
@@ -254,6 +277,13 @@ const PostCard = ({
         {error && (
           <div className="px-4 py-2 bg-red-50 text-red-600 text-sm">
             {error}
+          </div>
+        )}
+        
+        {/* Delete Error */}
+        {deletePostMutation.isError && (
+          <div className="px-4 py-2 bg-red-50 text-red-600 text-sm">
+            Failed to delete post. Please try again.
           </div>
         )}
 
@@ -371,7 +401,11 @@ const PostCard = ({
         {/* Post Engagement */}
         <div className="flex flex-wrap justify-between py-1 px-4 border-t border-b border-gray-100">
           <div className="flex items-center space-x-4">
-            <button className="flex items-center space-x-1 group py-2" onClick={handleLikeToggle}>
+            <button 
+              className="flex items-center space-x-1 group py-2" 
+              onClick={handleLikeToggle}
+              disabled={likePostMutation.isPending || unlikePostMutation.isPending}
+            >
               <div
                 className={`p-1.5 rounded-full transition-colors duration-200 group-hover:bg-blue-50 ${
                   isLiked ? 'text-blue-500' : 'text-gray-500 group-hover:text-blue-500'
@@ -407,7 +441,11 @@ const PostCard = ({
             </button>
           </div>
 
-          <button className="flex items-center space-x-1 group py-2" onClick={handleSaveToggle}>
+          <button 
+            className="flex items-center space-x-1 group py-2" 
+            onClick={handleSaveToggle}
+            disabled={savePostMutation.isPending || unsavePostMutation.isPending}
+          >
             <div
               className={`p-1.5 rounded-full transition-colors duration-200 group-hover:bg-blue-50 ${
                 isSaved ? 'text-blue-500' : 'text-gray-500 group-hover:text-blue-500'
@@ -467,7 +505,7 @@ const PostCard = ({
             onConfirm={handleDelete}
             title="Delete Post"
             message="Are you sure you want to delete this post? This action cannot be undone."
-            isDeleting={isDeleting}
+            isDeleting={deletePostMutation.isPending}
           />,
           document.getElementById(`modal-root-${id}`)
         )}
