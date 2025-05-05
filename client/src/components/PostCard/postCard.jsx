@@ -34,6 +34,7 @@ const PostCard = ({
   const menuRef = useRef(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
   const [error, setError] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -120,18 +121,22 @@ const PostCard = ({
 
   const handleDelete = async () => {
     try {
+      setIsDeleting(true);
       const response = await skillPostService.deletePost(id);
       if (response.error) {
         setError(response.message || 'Failed to delete post');
+        setIsDeleting(false);
         return;
       }
       setIsDeleteModalOpen(false);
+      setIsDeleting(false);
       if (onPostUpdated) {
         onPostUpdated();
       }
     } catch (error) {
       console.error('Error deleting post:', error);
       setError('Failed to delete post. Please try again.');
+      setIsDeleting(false);
     }
   };
 
@@ -435,6 +440,7 @@ const PostCard = ({
               setIsEditModalOpen(false);
               setError(null);
             }}
+            hideCloseButton={true} // Hide the default close button since SkillPostEditForm has its own
           >
             <SkillPostEditForm
               postId={id}
@@ -461,6 +467,7 @@ const PostCard = ({
             onConfirm={handleDelete}
             title="Delete Post"
             message="Are you sure you want to delete this post? This action cannot be undone."
+            isDeleting={isDeleting}
           />,
           document.getElementById(`modal-root-${id}`)
         )}

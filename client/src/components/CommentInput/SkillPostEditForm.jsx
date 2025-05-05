@@ -239,15 +239,24 @@ const SkillPostEditForm = ({ postId, initialData, onSubmitSuccess }) => {
       validationSchema={skillPostValidationSchema}
       onSubmit={handleSubmit}
     >
-      {({ setFieldValue, isSubmitting }) => (
-        <Form className="bg-white p-8 rounded-xl shadow-lg space-y-6 max-w-2xl mx-auto">
-          <div className="border-b pb-4 mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800">Edit Post</h2>
-            <p className="text-sm text-gray-500 mt-1">Update your post content and media</p>
+      {({ setFieldValue, isSubmitting, values }) => (
+        <Form className="bg-white rounded-lg shadow-md overflow-hidden max-w-xl w-full mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-800">Edit Post</h2>
+            <button
+              type="button"
+              onClick={() => onSubmitSuccess({ cancelled: true })}
+              className="text-gray-500 hover:text-gray-700 rounded-full p-1 hover:bg-gray-100 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-start">
+            <div className="p-4 mx-6 mt-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-start">
               <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -256,7 +265,7 @@ const SkillPostEditForm = ({ postId, initialData, onSubmitSuccess }) => {
           )}
 
           {fileError && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-start">
+            <div className="p-4 mx-6 mt-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-start">
               <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -264,102 +273,122 @@ const SkillPostEditForm = ({ postId, initialData, onSubmitSuccess }) => {
             </div>
           )}
 
-          <div className="space-y-2">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              Description
-              <span className="text-red-500 ml-1">*</span>
-            </label>
+          {/* Main content */}
+          <div className="px-6 py-2">
             <Field
               as="textarea"
               id="description"
               name="description"
-              rows="4"
-              className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition duration-150 ease-in-out"
+              rows="5"
+              className="w-full border-0 focus:ring-0 text-base placeholder-gray-400 resize-none p-0 focus:outline-none"
+              placeholder="What do you want to talk about?"
+              style={{ minHeight: "120px" }}
             />
             <ErrorMessage name="description" component="div" className="mt-1 text-sm text-red-600" />
-          </div>
 
-          <div className="space-y-2">
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
-              Tags
-              <span className="text-gray-400 ml-2 font-normal">(separated by commas)</span>
-            </label>
-            <Field
-              type="text"
-              id="tags"
-              name="tags"
-              className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition duration-150 ease-in-out"
-            />
-            <ErrorMessage name="tags" component="div" className="mt-1 text-sm text-red-600" />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Media Files
-            </label>
-            <div className="mt-1">
-              <input
-                type="file"
-                onChange={(e) => handleFileChange(e, setFieldValue)}
-                accept=".jpg,.jpeg,.png,.gif,.mp4"
-                multiple
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none"
+            <div className="mt-2">
+              <Field
+                type="text"
+                id="tags"
+                name="tags"
+                className="w-full border-0 focus:ring-0 text-sm text-gray-500 placeholder-gray-400 p-0 focus:outline-none"
+                placeholder="#Add_tags_separated_by_commas"
               />
+              <ErrorMessage name="tags" component="div" className="mt-1 text-sm text-red-600" />
             </div>
+          </div>
 
-            {previews.length > 0 && (
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {/* Media preview */}
+          {previews.length > 0 && (
+            <div className="px-6 py-3">
+              <div className={`grid ${previews.length > 1 ? 'grid-cols-2 gap-3' : 'grid-cols-1'} rounded-lg overflow-hidden border border-gray-200`}>
                 {previews.map((preview, index) => (
-                  <div key={preview.id} className="relative group">
-                    <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-gray-100">
-                      {preview.type === 'video' ? (
-                        <video 
-                          src={preview.url} 
-                          className="w-full h-full object-cover rounded-lg"
-                          controls
-                        />
-                      ) : (
-                        <img 
-                          src={preview.url} 
-                          alt={`Preview ${index + 1}`}
-                          className="w-full h-full object-cover rounded-lg"
-                        />
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => removeFile(index, setFieldValue)}
-                        className="absolute top-2 right-2 p-1.5 bg-white/80 hover:bg-white text-gray-600 hover:text-red-500 rounded-full shadow-sm transition-all duration-200 backdrop-blur-sm"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
+                  <div key={preview.id} className="relative group rounded-md overflow-hidden bg-gray-50 aspect-video">
+                    {preview.type === 'video' ? (
+                      <video 
+                        src={preview.url} 
+                        className="w-full h-full object-contain"
+                        controls
+                      />
+                    ) : (
+                      <img 
+                        src={preview.url} 
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-full object-contain"
+                      />
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index, setFieldValue)}
+                      className="absolute top-2 right-2 p-1.5 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-all duration-200 shadow-sm"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
                   </div>
                 ))}
               </div>
-            )}
+            </div>
+          )}
 
-            <p className="text-sm text-gray-500 mt-2 flex items-center">
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Upload up to 3 images (JPEG, PNG, GIF) or 1 video (MP4). Max 10MB each.
-            </p>
+          {/* Post options */}
+          <div className="px-6 py-3 mt-2">
+            <div className="flex flex-wrap gap-2">
+              <label className="flex items-center justify-center px-3 py-2 rounded-md border border-gray-300 bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+                <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span className="text-sm font-medium text-gray-600">Photo</span>
+                <input
+                  type="file"
+                  onChange={(e) => handleFileChange(e, setFieldValue)}
+                  accept="image/jpeg,image/png,image/gif"
+                  multiple
+                  className="hidden"
+                />
+              </label>
+              
+              <label className="flex items-center justify-center px-3 py-2 rounded-md border border-gray-300 bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+                <svg className="w-5 h-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                <span className="text-sm font-medium text-gray-600">Video</span>
+                <input
+                  type="file"
+                  onChange={(e) => handleFileChange(e, setFieldValue)}
+                  accept="video/mp4"
+                  className="hidden"
+                />
+              </label>
+            </div>
+            
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-xs text-gray-500 flex items-center">
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Up to 3 images or 1 video (10MB max)
+              </p>
+              <span className="text-xs text-gray-500">
+                {values?.description?.length || 0}/1000
+              </span>
+            </div>
           </div>
 
-          <div className="flex justify-end space-x-3 pt-6 border-t mt-8">
+          {/* Submit buttons */}
+          <div className="px-6 py-4 border-t border-gray-200 flex justify-between">
             <button
               type="button"
               onClick={() => onSubmitSuccess({ cancelled: true })}
-              className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              className="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none transition duration-150 ease-in-out"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out ${
+              className={`px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none transition duration-150 ease-in-out ${
                 isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
@@ -369,7 +398,7 @@ const SkillPostEditForm = ({ postId, initialData, onSubmitSuccess }) => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  Updating...
+                  Saving...
                 </span>
               ) : (
                 'Update Post'
