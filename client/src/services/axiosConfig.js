@@ -15,7 +15,22 @@ const axiosInstance = axios.create({
 export const getMediaUrl = (url) => {
   if (!url) return null;
   if (url.startsWith('http')) return url;
-  return `${BASE_URL}${url}`;
+  
+  // Clean up the URL path to ensure it works consistently
+  let cleanUrl = url;
+  
+  // If the URL has multiple forward slashes, normalize them
+  cleanUrl = cleanUrl.replace(/\/+/g, '/');
+  
+  // Ensure URL starts with a single forward slash
+  if (!cleanUrl.startsWith('/')) {
+    cleanUrl = '/' + cleanUrl;
+  }
+  
+  // Logging for debugging
+  console.log(`getMediaUrl: original=${url}, processed=${BASE_URL + cleanUrl}`);
+  
+  return `${BASE_URL}${cleanUrl}`;
 };
 
 // Add a request interceptor
