@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FiHome, FiBook, FiUsers, FiCreditCard, FiSettings, FiHelpCircle, FiSearch, FiStar, FiMenu, FiX, FiBell } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../../store';
 import { getMediaUrl } from '../../services/axiosConfig';
 
@@ -8,6 +8,8 @@ const TopNavbar = () => {
   const notificationRef = useRef(null);
   const userMenuRef = useRef(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   const {
     notifications, 
@@ -64,6 +66,20 @@ const TopNavbar = () => {
     setIsUserMenuOpen(!isUserMenuOpen);
   };
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit(e);
+    }
+  };
+
   // Default user avatar as SVG data URL
   const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
 
@@ -89,16 +105,19 @@ const TopNavbar = () => {
 
             {/* Search Bar */}
             <div className={`relative hidden md:block flex-1 mx-10 ${isSearchFocused ? 'max-w-md' : 'max-w-xs'} transition-all duration-200`}>
-              <div className="bg-white/20 rounded-full p-2 flex items-center">
+              <form onSubmit={handleSearchSubmit} className="bg-white/20 rounded-full p-2 flex items-center">
                 <FiSearch className="text-white ml-1 mr-2" />
                 <input 
                   type="text" 
-                  placeholder="Search" 
+                  placeholder="Search users..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
                   className="bg-transparent border-none text-white outline-none w-full placeholder-white/70"
                   onFocus={() => setSearchFocused(true)}
                   onBlur={() => setSearchFocused(false)}
                 />
-              </div>
+              </form>
             </div>
 
             {/* Desktop Menu Items */}

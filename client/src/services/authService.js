@@ -123,5 +123,17 @@ export const authService = {
             
             return { error: true, data: 'Token validation failed' };
         }
+    },
+
+    searchUsers: async (username) => {
+        try {
+            const response = await axiosInstance.get(`${API_URL}/users/search`, {
+                params: { username }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error searching users:', error);
+            return { error: true, message: 'Error searching users' };
+        }
     }
 };
