@@ -4,6 +4,7 @@ import com.example.edupulse_backend.dto.AuthResponseDTO;
 import com.example.edupulse_backend.dto.LoginDTO;
 import com.example.edupulse_backend.dto.RegisterDTO;
 import com.example.edupulse_backend.exception.ResourceNotFoundException;
+import com.example.edupulse_backend.model.Media;
 import com.example.edupulse_backend.model.User;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.repository.UserRepository;
@@ -20,10 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +34,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final MediaBlobService mediaBlobService;
 
     public ResponseDto register(RegisterDTO registerDTO) {
         log.info("Registering new user: {}", registerDTO.getUsername());
@@ -170,24 +168,12 @@ public class AuthService {
             User existingUser = userRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
 
-            // Generate a unique filename
-            String originalFilename = file.getOriginalFilename();
-            String fileExtension = originalFilename != null ? originalFilename.substring(originalFilename.lastIndexOf(".")) : ".jpg";
-            String filename = UUID.randomUUID().toString() + fileExtension;
+            // Store profile picture in MongoDB as BLOB
+            Media media = mediaBlobService.updateMedia(file, "profile", id, "image");
 
-            // Create directory if it doesn't exist
-            Path uploadPath = Paths.get("uploads/profile-pictures");
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            // Save the file
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            // Update user profile picture URL
-            String profilePictureUrl = "/uploads/profile-pictures/" + filename;
-            existingUser.setProfilePicture(profilePictureUrl);
+            // Update user profile picture reference to point to the media ID
+            String profilePictureId = media.getId();
+            existingUser.setProfilePicture("blob:" + profilePictureId);
             existingUser.setUpdatedAt(LocalDateTime.now());
 
             User updatedUser = userRepository.save(existingUser);
