@@ -37,6 +37,7 @@ public class Notification {
         COMMENT,
         REPLY,
         MENTION,
-        SYSTEM
+        SYSTEM,
+        FOLLOW
     }
 }
