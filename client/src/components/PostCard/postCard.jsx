@@ -208,7 +208,7 @@ const PostCard = ({
 
         {/* Post Content */}
         <div className="mb-4">
-          <p className="m-0 mb-2 text-sm sm:text-base leading-relaxed break-words text-gray-800">{content}</p>
+          <p className="text-sm sm:text-base leading-relaxed break-words text-gray-800 whitespace-pre-wrap">{content}</p>
           {hashtags && hashtags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
               {hashtags.map((tag, index) => (
