@@ -14,8 +14,18 @@ const axiosInstance = axios.create({
 // Utility function to get full media URL
 export const getMediaUrl = (url) => {
   if (!url) return null;
+  
+  // Return external URLs as-is
   if (url.startsWith('http')) return url;
   
+  // Handle blob-based media URLs
+  if (url.startsWith('blob:')) {
+    // Extract the media ID
+    const mediaId = url.substring(5); // Remove 'blob:' prefix
+    return `${BASE_URL}/api/v1/media-blob/${mediaId}`;
+  }
+  
+  // Handle legacy filesystem-based URLs
   // Clean up the URL path to ensure it works consistently
   let cleanUrl = url;
   
@@ -26,9 +36,6 @@ export const getMediaUrl = (url) => {
   if (!cleanUrl.startsWith('/')) {
     cleanUrl = '/' + cleanUrl;
   }
-  
-  // Logging for debugging
-  console.log(`getMediaUrl: original=${url}, processed=${BASE_URL + cleanUrl}`);
   
   return `${BASE_URL}${cleanUrl}`;
 };

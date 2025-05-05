@@ -7,6 +7,7 @@ import { getMediaUrl } from '../../services/axiosConfig';
 import SkillPostEditForm from '../CommentInput/SkillPostEditForm';
 import DeleteConfirmationModal from '../Modal/DeleteConfirmationModal';
 import Modal from '../Modal/Modal';
+import axiosInstance from '../../services/axiosConfig';
 
 // Default user avatar as SVG data URL
 const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
@@ -41,6 +42,51 @@ const PostCard = ({
   const [likesCount, setLikesCount] = useState(likes || 0);
   const [savesCount, setSavesCount] = useState(saves || 0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [mediaTypes, setMediaTypes] = useState({});
+  
+  // Fetch media types for blob URLs when the component mounts
+  useEffect(() => {
+    async function fetchMediaMetadata() {
+      if (!mediaUrls || mediaUrls.length === 0) return;
+      
+      const types = {};
+      
+      for (const url of mediaUrls) {
+        if (url && url.startsWith('blob:')) {
+          try {
+            // Extract media ID
+            const mediaId = url.substring(5);
+            // Fetch metadata to determine media type using authenticated axiosInstance
+            const response = await axiosInstance.get(`/api/v1/media-blob/metadata/id/${mediaId}`);
+            
+            if (!response.data.error && response.data.data) {
+              types[url] = response.data.data.contentType;
+              console.log(`Media ${mediaId} content type: ${response.data.data.contentType}`);
+            }
+          } catch (error) {
+            console.error('Error fetching media type:', error);
+          }
+        }
+      }
+      
+      setMediaTypes(types);
+    }
+    
+    fetchMediaMetadata();
+  }, [mediaUrls]);
+
+  // Function to determine if a media URL is for a video
+  const isVideoMedia = (mediaUrl) => {
+    if (!mediaUrl) return false;
+    
+    // For blob URLs, check the content type
+    if (mediaUrl.startsWith('blob:')) {
+      return mediaTypes[mediaUrl]?.startsWith('video/');
+    }
+    
+    // For traditional URLs, check the extension
+    return mediaUrl.toLowerCase().endsWith('.mp4');
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -240,7 +286,9 @@ const PostCard = ({
                   );
                 }
 
-                const isVideo = currentMedia?.toLowerCase().endsWith('.mp4');
+                // Use the isVideoMedia function to determine if media is video
+                const isVideo = isVideoMedia(currentMedia);
+                console.log('Media URL:', currentMedia, 'Is Video:', isVideo);
 
                 return isVideo ? (
                   <div className="relative overflow-hidden shadow-sm">
@@ -258,7 +306,7 @@ const PostCard = ({
                         e.target.parentNode.appendChild(errorDiv);
                       }}
                     >
-                      <source src={fullUrl} type="video/mp4" />
+                      <source src={fullUrl} type={mediaTypes[currentMedia] || "video/mp4"} />
                       Your browser does not support the video tag.
                     </video>
                   </div>

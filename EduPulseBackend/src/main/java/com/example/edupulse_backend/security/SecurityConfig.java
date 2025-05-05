@@ -45,6 +45,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/api/v1/skillposts").permitAll() // Allow public access to posts
                     .requestMatchers("/uploads/**").permitAll()
+                    .requestMatchers("/api/v1/media-blob/**").permitAll() // Allow access to media blob resources without auth
                     .requestMatchers("/ws/**").permitAll() // WebSocket endpoints
                     .requestMatchers("/api/v1/skillposts/user/**").permitAll() // Public user posts
                     .requestMatchers("/api/v1/skillposts/followed").permitAll() // Public followed posts

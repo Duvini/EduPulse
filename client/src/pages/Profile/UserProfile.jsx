@@ -294,6 +294,7 @@ const UserProfile = () => {
         return;
       }
 
+      // Update user profile with the new blob-based profile picture
       updateUserProfile(response.data);
       setSuccess('Profile picture updated successfully');
     } catch (err) {
