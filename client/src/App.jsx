@@ -4,6 +4,7 @@ import TopNavbar from './components/TopNavbar/TopNavbar';
 import AppRoutes from './routes/routes';
 import { useStore } from '../store';
 import { authService } from './services/authService';
+import { sessionService } from './services/sessionService';
 
 // Configure React Router future flags
 import { UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom';
@@ -16,45 +17,64 @@ const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthPath = location.pathname === '/signin' || location.pathname === '/signup';
-  const { setUser, logout } = useStore();
+  const { setUser, user, isAuthenticated, logout } = useStore();
+
+  // Initialize the session management
+  useEffect(() => {
+    sessionService.initializeSession();
+  }, []);
 
   // Check authentication on startup
   useEffect(() => {
     const validateAuth = async () => {
-      const token = authService.getToken();
+      // First check if we already have auth state in the store
+      // This prevents unnecessary redirects during initial load
+      if (isAuthenticated && user) {
+        // We're already authenticated from persisted state
+        // No need to redirect
+        return;
+      }
+
       const currentUser = authService.getCurrentUser();
+      const token = authService.getToken();
       
-      if (token && currentUser) {
+      // If we have local storage data but store is empty, sync them
+      if (currentUser && token && !isAuthenticated) {
+        setUser(currentUser);
+        return;
+      }
+
+      // If we have a token, validate it
+      if (token) {
         try {
-          const response = await authService.validateToken();
-          if (response.error) {
-            // If token validation fails, log out
+          // Use the session service to restore the session
+          const { valid, user } = await sessionService.restoreSession();
+          
+          if (valid && user) {
+            // Update with the latest user data if validation was successful
+            setUser(user);
+          } else if (!isAuthPath) {
+            // Only logout and redirect if we're sure the session is invalid
             authService.logout();
             logout();
-            if (!isAuthPath) {
-              navigate('/signin');
-            }
-          } else {
-            // Update user data from the server response
-            setUser(response.data);
-          }
-        } catch (error) {
-          console.error('Authentication validation failed:', error);
-          // If validation request fails, log out
-          authService.logout();
-          logout();
-          if (!isAuthPath) {
             navigate('/signin');
           }
+        } catch (error) {
+          console.error('Session restoration failed:', error);
+          
+          // On errors, don't logout if we have a user in local storage
+          if (currentUser && !isAuthenticated) {
+            setUser(currentUser);
+          }
         }
-      } else if (!isAuthPath) {
-        // If no token or user, and not on auth path, redirect to signin
+      } else if (!isAuthPath && !isAuthenticated) {
+        // Only redirect to signin if not authenticated and not already on auth path
         navigate('/signin');
       }
     };
 
     validateAuth();
-  }, [setUser, logout, isAuthPath, navigate]);
+  }, [setUser, logout, isAuthPath, navigate, isAuthenticated, user]);
 
   return (
     <div className="min-h-screen bg-gray-100">
