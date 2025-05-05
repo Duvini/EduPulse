@@ -27,6 +27,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -197,6 +198,20 @@ public class AuthService {
         } catch (IOException e) {
             log.error("Failed to save profile picture: {}", e.getMessage());
             return new ResponseDto(true, "Failed to save profile picture");
+        }
+    }
+
+    public ResponseDto searchUsers(String username) {
+        log.info("Searching for users with username pattern: {}", username);
+        try {
+            List<User> users = userRepository.findAll().stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(username.toLowerCase()) ||
+                              user.getName().toLowerCase().contains(username.toLowerCase()))
+                .collect(Collectors.toList());
+            return new ResponseDto(false, users);
+        } catch (Exception e) {
+            log.error("Error searching users: {}", e.getMessage());
+            return new ResponseDto(true, "Error searching users");
         }
     }
 }
