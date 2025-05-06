@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,13 +60,19 @@ public class CommentServiceImpl implements CommentService {
                 return new ResponseDto(true, "Post not found with id: " + postId);
             }
             
-            // Create and save the comment
+            // Create and save the comment with explicit UTC timestamps
+            LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
             Comment comment = Comment.builder()
                     .postId(postId)
                     .userId(userId)
                     .userName(userName)
                     .content(content)
+                    .createdAt(now)
+                    .updatedAt(now)
                     .build();
+            
+            // Ensure timestamps are set (double safety)
+            comment.ensureTimestamps();
             
             Comment savedComment = commentRepository.save(comment);
             
@@ -148,7 +156,7 @@ public class CommentServiceImpl implements CommentService {
             // Update content
             if (content != null && !content.isEmpty()) {
                 existingComment.setContent(content);
-                existingComment.updateTimestamp();
+                existingComment.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC)); // Use UTC time
                 
                 Comment updatedComment = commentRepository.save(existingComment);
                 log.info("updateComment: Successfully updated comment with id {}", id);
