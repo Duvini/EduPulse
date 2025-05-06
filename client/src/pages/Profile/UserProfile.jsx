@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../../store';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { skillPostService } from '../../services/skillPostService';
 import { followerService } from '../../services/followerService';
@@ -13,6 +13,7 @@ const defaultProfileImage = '/default-avatar.png';
 
 const UserProfile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user, updateUserProfile } = useStore();
   const [profileUser, setProfileUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -324,18 +325,18 @@ const UserProfile = () => {
   const isOwnProfile = !id || id === user?.id;
 
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-      <div className="bg-white rounded-lg overflow-hidden">
-        <div className="px-4 sm:px-6 md:px-8 pt-8 flex flex-col md:flex-row items-center md:items-start">
+    <div className="max-w-6xl p-4 mx-auto sm:p-6 lg:p-8">
+      <div className="overflow-hidden bg-white rounded-lg">
+        <div className="flex flex-col items-center px-4 pt-8 sm:px-6 md:px-8 md:flex-row md:items-start">
           <div className="relative flex-shrink-0 mb-6 md:mb-0 md:mr-10">
             <div className="relative">
               <img
                 src={profileUser?.profilePicture ? getMediaUrl(profileUser.profilePicture) : defaultProfileImage}
                 alt="Profile"
-                className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border border-gray-200 bg-gray-100"
+                className="object-cover w-32 h-32 bg-gray-100 border border-gray-200 rounded-full sm:w-40 sm:h-40"
               />
               {isOwnProfile && (
-                <label className="absolute bottom-2 right-2 p-2 bg-gray-200 rounded-full cursor-pointer hover:bg-gray-300 transition-colors">
+                <label className="absolute p-2 transition-colors bg-gray-200 rounded-full cursor-pointer bottom-2 right-2 hover:bg-gray-300">
                   <FiCamera className="text-lg text-gray-800" />
                   <input
                     type="file"
@@ -350,7 +351,7 @@ const UserProfile = () => {
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <div className="flex flex-col md:flex-row md:items-center mb-4">
+            <div className="flex flex-col mb-4 md:flex-row md:items-center">
               <h2 className="text-2xl font-semibold">{profileUser?.username || ''}</h2>
               
               {!isOwnProfile ? (
@@ -364,7 +365,7 @@ const UserProfile = () => {
                   } transition-colors duration-200`}
                 >
                   {followLoading ? (
-                    <div className="w-4 h-4 border-2 border-current rounded-full border-t-transparent animate-spin mx-auto"></div>
+                    <div className="w-4 h-4 mx-auto border-2 border-current rounded-full border-t-transparent animate-spin"></div>
                   ) : isFollowing ? (
                     'Following'
                   ) : (
@@ -389,7 +390,7 @@ const UserProfile = () => {
               )}
             </div>
             
-            <div className="flex justify-center md:justify-start space-x-8 mb-4">
+            <div className="flex justify-center mb-4 space-x-8 md:justify-start">
               <div className="text-center">
                 <span className="font-semibold">{stats.postsCount || 0}</span>
                 <p className="text-sm text-gray-600">posts</p>
@@ -410,23 +411,23 @@ const UserProfile = () => {
               </button>
             </div>
             
-            <div className="text-left hidden md:block">
+            <div className="hidden text-left md:block">
               <h3 className="font-semibold">{profileUser?.name || ''}</h3>
               {profileUser?.bio && (
-                <p className="text-sm mt-1 max-w-lg">{profileUser.bio}</p>
+                <p className="max-w-lg mt-1 text-sm">{profileUser.bio}</p>
               )}
             </div>
           </div>
         </div>
 
-        <div className="md:hidden px-4 sm:px-6 pb-4 text-left">
+        <div className="px-4 pb-4 text-left md:hidden sm:px-6">
           <h3 className="font-semibold">{profileUser?.name || ''}</h3>
           {profileUser?.bio && (
-            <p className="text-sm mt-1">{profileUser.bio}</p>
+            <p className="mt-1 text-sm">{profileUser.bio}</p>
           )}
         </div>
 
-        <div className="border-t border-gray-200 mt-6">
+        <div className="mt-6 border-t border-gray-200">
           <div className="flex justify-center">
             <button 
               onClick={() => setActiveTab('posts')}
@@ -436,7 +437,7 @@ const UserProfile = () => {
                   : 'border-transparent text-gray-500 hover:text-gray-800'
               } transition-colors duration-200 uppercase flex items-center`}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h4v4H5V5zm0 6h4v4H5v-4zm6-6h4v4h-4V5zm0 6h4v4h-4v-4z" clipRule="evenodd" />
               </svg>
               Posts
@@ -450,7 +451,7 @@ const UserProfile = () => {
                     : 'border-transparent text-gray-500 hover:text-gray-800'
                 } transition-colors duration-200 uppercase flex items-center`}
               >
-                <FiBookmark className="h-3 w-3 mr-1" />
+                <FiBookmark className="w-3 h-3 mr-1" />
                 Saved
               </button>
             )}
@@ -459,12 +460,12 @@ const UserProfile = () => {
 
         <div className="p-4 sm:p-6">
           {error && (
-            <div className="p-4 mb-4 text-red-600 bg-red-50 border border-red-200 rounded-lg">
+            <div className="p-4 mb-4 text-red-600 border border-red-200 rounded-lg bg-red-50">
               {error}
             </div>
           )}
           {success && (
-            <div className="p-4 mb-4 text-green-600 bg-green-50 border border-green-200 rounded-lg">
+            <div className="p-4 mb-4 text-green-600 border border-green-200 rounded-lg bg-green-50">
               {success}
             </div>
           )}
@@ -477,15 +478,15 @@ const UserProfile = () => {
                     <div className="w-8 h-8 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin"></div>
                   </div>
                 ) : userPosts.length === 0 ? (
-                  <div className="text-center py-16 text-gray-500">
-                    <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="py-16 text-center text-gray-500">
+                    <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                     <p className="text-lg font-light">No posts yet</p>
                   </div>
                 ) : (
-                  <div className="space-y-4 mx-auto max-w-2xl">
+                  <div className="max-w-2xl mx-auto space-y-4">
                     {userPosts.map(post => (
                       <PostCard
                         key={post.id}
@@ -513,8 +514,8 @@ const UserProfile = () => {
             {activeTab === 'saved' && (
               <div>
                 {!isOwnProfile ? (
-                  <div className="text-center py-16 text-gray-500">
-                    <FiLock className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                  <div className="py-16 text-center text-gray-500">
+                    <FiLock className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                     <p className="text-lg font-light">This collection is private</p>
                   </div>
                 ) : loadingSaved ? (
@@ -522,12 +523,12 @@ const UserProfile = () => {
                     <div className="w-8 h-8 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin"></div>
                   </div>
                 ) : savedPosts.length === 0 ? (
-                  <div className="text-center py-16 text-gray-500">
-                    <FiBookmark className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                  <div className="py-16 text-center text-gray-500">
+                    <FiBookmark className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                     <p className="text-lg font-light">No saved posts yet</p>
                   </div>
                 ) : (
-                  <div className="space-y-4 mx-auto max-w-2xl">
+                  <div className="max-w-2xl mx-auto space-y-4">
                     {savedPosts.map(post => (
                       <PostCard
                         key={post.id}
@@ -555,10 +556,10 @@ const UserProfile = () => {
             )}
 
             {activeTab === 'followers' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                 {followers.length === 0 ? (
-                  <div className="col-span-3 text-center py-16 text-gray-500">
-                    <FiUsers className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                  <div className="col-span-3 py-16 text-center text-gray-500">
+                    <FiUsers className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                     <p className="text-lg font-light">No followers yet</p>
                   </div>
                 ) : (
@@ -568,10 +569,10 @@ const UserProfile = () => {
                         <img
                           src={follower.profilePicture ? getMediaUrl(follower.profilePicture) : defaultProfileImage}
                           alt={follower.name}
-                          className="w-12 h-12 rounded-full mr-3 object-cover"
+                          className="object-cover w-12 h-12 mr-3 rounded-full"
                         />
                         <div>
-                          <div className="font-medium text-sm">{follower.username}</div>
+                          <div className="text-sm font-medium">{follower.username}</div>
                           <div className="text-sm text-gray-500">{follower.name}</div>
                         </div>
                       </Link>
@@ -582,10 +583,10 @@ const UserProfile = () => {
             )}
 
             {activeTab === 'following' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                 {following.length === 0 ? (
-                  <div className="col-span-3 text-center py-16 text-gray-500">
-                    <FiUsers className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                  <div className="col-span-3 py-16 text-center text-gray-500">
+                    <FiUsers className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                     <p className="text-lg font-light">Not following anyone yet</p>
                   </div>
                 ) : (
@@ -595,10 +596,10 @@ const UserProfile = () => {
                         <img
                           src={followed.profilePicture ? getMediaUrl(followed.profilePicture) : defaultProfileImage}
                           alt={followed.name}
-                          className="w-12 h-12 rounded-full mr-3 object-cover"
+                          className="object-cover w-12 h-12 mr-3 rounded-full"
                         />
                         <div>
-                          <div className="font-medium text-sm">{followed.username}</div>
+                          <div className="text-sm font-medium">{followed.username}</div>
                           <div className="text-sm text-gray-500">{followed.name}</div>
                         </div>
                       </Link>
@@ -609,158 +610,27 @@ const UserProfile = () => {
             )}
           </div>
         </div>
+
+        {/* Edit Profile Form */}
+        {isEditing && (
+          <Modal onClose={() => setIsEditing(false)}>
+            <div className="w-full max-w-md p-6 mx-auto bg-white rounded-lg">
+              <h2 className="mb-4 text-2xl font-bold">Edit Profile</h2>
+              {/* ...existing code... */}
+            </div>
+          </Modal>
+        )}
+
+        {/* Change Password Form */}
+        {isChangingPassword && (
+          <Modal onClose={() => setIsChangingPassword(false)}>
+            <div className="w-full max-w-md p-6 mx-auto bg-white rounded-lg">
+              <h2 className="mb-4 text-2xl font-bold">Change Password</h2>
+              {/* ...existing code... */}
+            </div>
+          </Modal>
+        )}
       </div>
-
-      {/* Edit Profile Modal */}
-      {isEditing && (
-        <Modal onClose={() => setIsEditing(false)}>
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Edit Profile</h2>
-            
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                  <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-              
-              <div className="mt-6 flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  {loading ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Saving...
-                    </span>
-                  ) : 'Save Changes'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </Modal>
-      )}
-
-      {/* Change Password Modal */}
-      {isChangingPassword && (
-        <Modal onClose={() => setIsChangingPassword(false)}>
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Change Password</h2>
-            
-            <form onSubmit={handlePasswordChange}>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-                  <input
-                    type="password"
-                    id="currentPassword"
-                    name="currentPassword"
-                    value={formData.currentPassword}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                  <input
-                    type="password"
-                    id="newPassword"
-                    name="newPassword"
-                    value={formData.newPassword}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="mt-6 flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setIsChangingPassword(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  {loading ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Updating...
-                    </span>
-                  ) : 'Update Password'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 };

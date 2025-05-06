@@ -43,6 +43,16 @@ export const authService = {
         return localStorage.getItem('token');
     },
 
+    getUserById: async (id) => {
+        try {
+            const response = await axiosInstance.get(`${API_URL}/users/${id}`);
+            return { error: false, data: response.data.data };
+        } catch (err) {
+            console.error('Error fetching user:', err);
+            return { error: true, message: err.response?.data?.message || 'Error fetching user profile' };
+        }
+    },
+
     updateUser: async (id, userData) => {
         const response = await axiosInstance.put(`${API_URL}/users/${id}`, userData);
         if (response.data?.data) {
@@ -71,6 +81,11 @@ export const authService = {
 
     deleteUser: async (id) => {
         const response = await axiosInstance.delete(`${API_URL}/users/${id}`);
+        if (!response.data.error) {
+            // Clear local storage since the account is being deleted
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+        }
         return response.data;
     },
 
@@ -134,6 +149,15 @@ export const authService = {
         } catch (error) {
             console.error('Error searching users:', error);
             return { error: true, message: 'Error searching users' };
+        }
+    },
+
+    verifyPassword: async (password) => {
+        try {
+            const response = await axiosInstance.post(`${API_URL}/verify-password`, { password });
+            return { error: false, data: response.data };
+        } catch (err) {
+            return { error: true, message: err.response?.data?.message || 'Password verification failed' };
         }
     }
 };
