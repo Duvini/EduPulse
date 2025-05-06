@@ -1,65 +1,67 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { learningProgressService } from '../../services/learningProgressService';
-import { useStore } from '../../../store';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const LearningProgress = () => {
-  const [courses, setCourses] = useState([]);
+  const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { user } = useStore();
-
-  const fetchLearningProgress = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    
-    const { data, error: serviceError } = await learningProgressService.getUserProgress(user?.id);
-    
-    if (serviceError) {
-      setError(serviceError);
-    } else {
-      setCourses(data.data || []);
-    }
-    setLoading(false);
-  }, [user]);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (user) {
-      fetchLearningProgress();
-    } else {
-      setLoading(false);
-    }
-  }, [user, fetchLearningProgress]);
+    fetchPlans();
+  }, []);
 
-  const handleTaskStatusUpdate = async (planId, taskIndex, isCompleted) => {
+  const fetchPlans = async () => {
     try {
-      const { error: updateError } = await learningProgressService.updateTaskStatus(planId, taskIndex, isCompleted);
-      if (updateError) {
-        setError(updateError);
-      } else {
-        fetchLearningProgress(); // Refresh data after update
+      const response = await axios.get("http://localhost:8080/api/v1/plans");
+      if (response.data.error === false) {
+        setPlans(response.data.data);
       }
     } catch (error) {
-      console.error('Task status update failed:', error);
-      setError('Failed to update task status');
+      console.error('Error fetching learning plans:', error);
+      setMessage('Error loading learning plans');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!user) {
-    return (
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <p className="text-gray-500 text-center">Sign in to track your learning progress</p>
-      </div>
-    );
-  }
+  const handleDelete = async (planId) => {
+    if (window.confirm('Are you sure you want to delete this learning plan?')) {
+      try {
+        const response = await axios.delete(`http://localhost:8080/api/v1/plans/delete/${planId}`);
+        if (response.data.error === false) {
+          setMessage('Learning plan deleted successfully');
+          // Remove the deleted plan from the state
+          setPlans(plans.filter(plan => plan.id !== planId));
+        }
+      } catch (error) {
+        console.error('Error deleting learning plan:', error);
+        setMessage('Error deleting learning plan');
+      }
+    }
+  };
+
+  const calculateProgress = (tasks) => {
+    if (!tasks || tasks.length === 0) return 0;
+    const completedTasks = tasks.filter(task => task.completed).length;
+    return Math.round((completedTasks / tasks.length) * 100);
+  };
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <div className="animate-pulse space-y-4">
-          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+      <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4 p-4">
+        <div className="animate-pulse">
+          <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
           <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 bg-gray-200 rounded"></div>
+            {[1, 2, 3].map(i => (
+              <div key={i} className="flex items-start space-x-3">
+                <div className="w-10 h-10 bg-gray-200 rounded"></div>
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-2 bg-gray-200 rounded w-full mb-2"></div>
+                  <div className="h-2 bg-gray-200 rounded w-1/4"></div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -67,90 +69,88 @@ const LearningProgress = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <p className="text-red-500 text-center">Error loading learning progress</p>
-        <button 
-          onClick={fetchLearningProgress}
-          className="mt-2 text-sm text-blue-600 hover:text-blue-800 block mx-auto"
-        >
-          Try again
-        </button>
-      </div>
-    );
-  }
-
-  if (!courses || courses.length === 0) {
-    return (
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <p className="text-gray-500 text-center">No learning plans found. Start learning by enrolling in a course!</p>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+      {message && (
+        <div className={`px-4 py-2 ${message.includes('successfully') ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
+          {message}
+        </div>
+      )}
+      
       <div className="px-4 py-3 border-b border-gray-200">
         <h3 className="text-base font-semibold">Learning Progress</h3>
       </div>
       
       <div className="divide-y divide-gray-200">
-        {courses.map(course => (
-          <div key={course.id} className="px-4 py-3">
-            <div className="flex items-start">
-              <img 
-                src={course.image || '/api/placeholder/48/48'} 
-                alt={course.title} 
-                className="w-10 h-10 rounded mr-3 object-cover"
-                onError={(e) => {
-                  e.target.src = '/api/placeholder/48/48';
-                }}
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{course.title}</p>
-                <p className="text-xs text-gray-500 mb-2">
-                  Last accessed {course.lastAccessed || 'recently'}
-                </p>
-                
-                {/* Progress bar */}
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
-                  <div 
-                    className={`h-2 rounded-full ${getProgressColor(course.progress)}`}
-                    style={{ width: `${course.progress}%` }}
-                  ></div>
+        {plans.map(plan => {
+          const progress = calculateProgress(plan.tasks);
+          return (
+            <div key={plan.id} className="px-4 py-3">
+              <div className="flex items-start">
+                <div className="w-10 h-10 rounded mr-3 bg-blue-100 flex items-center justify-center text-blue-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
                 </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-medium">{course.progress}% complete</span>
-                  <button 
-                    onClick={() => handleTaskStatusUpdate(course.id, course.currentTaskIndex, true)}
-                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                  >
-                    Continue
-                  </button>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-start">
+                    <p className="text-sm font-medium text-gray-900 truncate">{plan.title}</p>
+                    <button
+                      onClick={() => handleDelete(plan.id)}
+                      className="text-red-600 hover:text-red-800 text-sm ml-2"
+                      title="Delete plan"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 mb-2">
+                    {plan.tasks.filter(t => t.completed).length} of {plan.tasks.length} tasks completed
+                  </p>
+                  
+                  {/* Progress bar */}
+                  <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
+                    <div 
+                      className={`h-2 rounded-full transition-all duration-500 ${getProgressBarColor(progress)}`}
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-medium">{progress}% complete</span>
+                    <Link 
+                      to={`/update-plan/${plan.id}`}
+                      className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      Continue
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       
-      {courses.length > 0 && (
-        <div className="px-4 py-3 text-center border-t border-gray-200">
-          <button className="text-sm text-blue-600 font-medium hover:text-blue-800">
-            View all courses
-          </button>
-        </div>
-      )}
+      <div className="px-4 py-3 text-center border-t border-gray-200">
+        <Link 
+          to="/learning-plans" 
+          className="text-sm text-blue-600 font-medium hover:text-blue-800"
+        >
+          View all plans
+        </Link>
+      </div>
     </div>
   );
 };
 
-const getProgressColor = (progress) => {
-  if (progress < 30) return 'bg-red-500';
-  if (progress < 70) return 'bg-yellow-500';
-  return 'bg-green-500';
+const getProgressBarColor = (progress) => {
+  if (progress === 100) return 'bg-green-600';
+  if (progress >= 75) return 'bg-blue-600';
+  if (progress >= 50) return 'bg-yellow-600';
+  if (progress >= 25) return 'bg-orange-600';
+  return 'bg-red-600';
 };
 
 export default LearningProgress;
