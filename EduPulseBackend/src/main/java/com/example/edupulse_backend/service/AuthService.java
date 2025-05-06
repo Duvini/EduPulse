@@ -110,27 +110,34 @@ public class AuthService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         
         // Check if username is being changed and already exists
-        if (!existingUser.getUsername().equals(registerDTO.getUsername()) && 
+        if (registerDTO.getUsername() != null && !registerDTO.getUsername().equals(existingUser.getUsername()) && 
                 userRepository.existsByUsername(registerDTO.getUsername())) {
             return new ResponseDto(true, "Username is already taken!");
         }
         
         // Check if email is being changed and already exists
-        if (!existingUser.getEmail().equals(registerDTO.getEmail()) && 
+        if (registerDTO.getEmail() != null && !registerDTO.getEmail().equals(existingUser.getEmail()) && 
                 userRepository.existsByEmail(registerDTO.getEmail())) {
             return new ResponseDto(true, "Email is already in use!");
         }
 
-        existingUser.setUsername(registerDTO.getUsername());
-        existingUser.setEmail(registerDTO.getEmail());
-        existingUser.setName(registerDTO.getName());
-        existingUser.setUpdatedAt(LocalDateTime.now());
+        // Update basic info if provided
+        if (registerDTO.getUsername() != null) existingUser.setUsername(registerDTO.getUsername());
+        if (registerDTO.getEmail() != null) existingUser.setEmail(registerDTO.getEmail());
+        if (registerDTO.getName() != null) existingUser.setName(registerDTO.getName());
         
-        // Only update password if one is provided
-        if (registerDTO.getPassword() != null && !registerDTO.getPassword().isBlank()) {
+        // Handle password change if requested
+        if (registerDTO.getCurrentPassword() != null && registerDTO.getPassword() != null) {
+            // Verify current password
+            if (!passwordEncoder.matches(registerDTO.getCurrentPassword(), existingUser.getPassword())) {
+                return new ResponseDto(true, "Current password is incorrect");
+            }
+            
+            // Update to new password
             existingUser.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         }
         
+        existingUser.setUpdatedAt(LocalDateTime.now());
         User updatedUser = userRepository.save(existingUser);
         return new ResponseDto(false, updatedUser);
     }
