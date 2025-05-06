@@ -22,9 +22,6 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
     
     @Autowired
     private OAuth2AuthenticationSuccessHandler oAuth2SuccessHandler;
@@ -46,6 +43,13 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/v1/skillposts").permitAll() // Allow public access to posts
+                    .requestMatchers("/uploads/**").permitAll()
+                    .requestMatchers("/api/v1/media-blob/**").permitAll() // Allow access to media blob resources without auth
+                    .requestMatchers("/ws/**").permitAll() // WebSocket endpoints
+                    .requestMatchers("/api/v1/skillposts/user/**").permitAll() // Public user posts
+                    .requestMatchers("/api/v1/skillposts/followed").permitAll() // Public followed posts
+                    .requestMatchers("/api/v1/plans/**").authenticated() // Secure learning plan endpoints
                     .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
@@ -82,7 +86,7 @@ public class SecurityConfig {
     
     private CorsConfiguration corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000", "http://localhost:3001"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

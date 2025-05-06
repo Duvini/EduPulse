@@ -80,7 +80,6 @@ public class SkillPostController {
         @RequestParam(value = "mediaFiles", required = false) MultipartFile[] mediaFiles,
         Authentication authentication
     ) {
-        // Let service verify ownership and handle the update
         ResponseDto response = service.updateSkillPostWithFiles(id, description, tags, mediaFiles, authentication);
         
         if (response.isError()) {
