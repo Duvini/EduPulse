@@ -4,6 +4,7 @@ import com.example.edupulse_backend.dto.AuthResponseDTO;
 import com.example.edupulse_backend.dto.LoginDTO;
 import com.example.edupulse_backend.dto.RegisterDTO;
 import com.example.edupulse_backend.exception.ResourceNotFoundException;
+import com.example.edupulse_backend.model.Media;
 import com.example.edupulse_backend.model.User;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.repository.UserRepository;
@@ -17,9 +18,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +34,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final MediaBlobService mediaBlobService;
 
     public ResponseDto register(RegisterDTO registerDTO) {
         log.info("Registering new user: {}", registerDTO.getUsername());
@@ -136,5 +142,62 @@ public class AuthService {
         
         userRepository.deleteById(id);
         return new ResponseDto(false, "User deleted successfully");
+    }
+
+    public ResponseDto validateToken(String token) {
+        try {
+            if (jwtUtil.validateToken(token)) {
+                String username = jwtUtil.extractUsername(token);
+                User user = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                return new ResponseDto(false, user);
+            }
+            return new ResponseDto(true, "Invalid token");
+        } catch (Exception e) {
+            log.error("Token validation failed: {}", e.getMessage());
+            return new ResponseDto(true, "Token validation failed");
+        }
+    }
+
+    public ResponseDto updateProfilePicture(String id, MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return new ResponseDto(true, "Profile picture file is required");
+        }
+
+        try {
+            User existingUser = userRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+
+            // Store profile picture in MongoDB as BLOB
+            Media media = mediaBlobService.updateMedia(file, "profile", id, "image");
+
+            // Update user profile picture reference to point to the media ID
+            String profilePictureId = media.getId();
+            existingUser.setProfilePicture("blob:" + profilePictureId);
+            existingUser.setUpdatedAt(LocalDateTime.now());
+
+            User updatedUser = userRepository.save(existingUser);
+            return new ResponseDto(false, updatedUser);
+        } catch (ResourceNotFoundException e) {
+            log.error("User not found: {}", e.getMessage());
+            return new ResponseDto(true, e.getMessage());
+        } catch (IOException e) {
+            log.error("Failed to save profile picture: {}", e.getMessage());
+            return new ResponseDto(true, "Failed to save profile picture");
+        }
+    }
+
+    public ResponseDto searchUsers(String username) {
+        log.info("Searching for users with username pattern: {}", username);
+        try {
+            List<User> users = userRepository.findAll().stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(username.toLowerCase()) ||
+                              user.getName().toLowerCase().contains(username.toLowerCase()))
+                .collect(Collectors.toList());
+            return new ResponseDto(false, users);
+        } catch (Exception e) {
+            log.error("Error searching users: {}", e.getMessage());
+            return new ResponseDto(true, "Error searching users");
+        }
     }
 }

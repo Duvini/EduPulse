@@ -1,58 +1,27 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, useLocation } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import TopNavbar from './components/TopNavbar/TopNavbar';
 import AppRoutes from './routes/routes';
-import { useStore } from '../store';
+import { AuthProvider } from './contexts/AuthContext';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { queryClient } from './utils/queryClient';
 
-// Mock data for initializing our store
-const mockUser = {
-  id: 'usr-123',
-  name: 'Azunyan U. Wu',
-  role: 'Basic Member',
-  avatar: '/api/placeholder/40/40',
-  email: 'azunyan@example.com',
+// Configure React Router future flags
+import { UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom';
+NavigationContext.future = {
+  v7_startTransition: true,
+  v7_relativeSplatPath: true
 };
-
-const mockNotifications = [
-  {
-    id: 1,
-    avatar: '/api/placeholder/40/40',
-    text: 'John Smith commented on your post',
-    time: '2 minutes ago',
-    read: false
-  },
-  {
-    id: 2,
-    avatar: '/api/placeholder/40/40',
-    text: 'Alice Johnson liked your comment',
-    time: '1 hour ago',
-    read: false
-  },
-  {
-    id: 3,
-    avatar: '/api/placeholder/40/40',
-    text: 'New course recommendation: Advanced JavaScript',
-    time: 'Yesterday',
-    read: true
-  }
-];
 
 const Layout = () => {
   const location = useLocation();
-  const isRootPath = location.pathname === '/';
-  const { setUser, setNotifications, setUnreadCount } = useStore();
-
-  // Initialize store with mock data
-  useEffect(() => {
-    setUser(mockUser);
-    setNotifications(mockNotifications);
-    setUnreadCount(mockNotifications.filter(n => !n.read).length);
-  }, [setUser, setNotifications, setUnreadCount]);
+  const isAuthPath = location.pathname === '/signin' || location.pathname === '/signup';
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {!isRootPath && <TopNavbar />}
-      <div className="pt-2 px-2 sm:px-3 md:px-4 max-w-7xl mx-auto">
+      {!isAuthPath && <TopNavbar />}
+      <div className={`${!isAuthPath ? 'pt-16' : ''} px-2 sm:px-3 md:px-4 max-w-7xl mx-auto`}>
         <AppRoutes />
       </div>
     </div>
@@ -61,9 +30,15 @@ const Layout = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Layout />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AuthProvider>
+          <Layout />
+        </AuthProvider>
+      </BrowserRouter>
+      {/* Only include DevTools in development */}
+      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+    </QueryClientProvider>
   );
 }
 
