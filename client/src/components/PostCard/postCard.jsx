@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import { useStore } from '../../../store';
 import CommentInput from '../CommentInput/commentInput';
 import { FiThumbsUp, FiMessageSquare, FiShare, FiBookmark, FiMoreVertical, FiEdit2, FiTrash2, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { getMediaUrl } from '../../services/apiClient';
@@ -43,7 +44,17 @@ const PostCard = ({
   const [savesCount, setSavesCount] = useState(saves || 0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [mediaTypes, setMediaTypes] = useState({});
+  const { user } = useStore();
+
+  // Update author information if it matches the current user
+  const [currentAuthorName, setCurrentAuthorName] = useState(authorName);
   
+  useEffect(() => {
+    if (user && userId === user.id) {
+      setCurrentAuthorName(user.name || user.username);
+    }
+  }, [user, userId]);
+
   // React Query mutation hooks
   const deletePostMutation = useDeletePost();
   const likePostMutation = useLikePost();
@@ -226,7 +237,7 @@ const PostCard = ({
               )}
             </div>
             <div className="flex flex-col">
-              <h4 className="m-0 text-base font-semibold group-hover:text-blue-600 transition-colors duration-200">{authorName}</h4>
+              <h4 className="m-0 text-base font-semibold group-hover:text-blue-600 transition-colors duration-200">{currentAuthorName}</h4>
               <p className="m-0 text-xs text-gray-500">{authorRole}</p>
             </div>
           </div>

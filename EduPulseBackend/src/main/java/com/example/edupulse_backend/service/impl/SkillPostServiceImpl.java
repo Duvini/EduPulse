@@ -207,6 +207,7 @@ public class SkillPostServiceImpl implements SkillPostService {
             User user = userRepository.findById(post.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
             post.setProfilePhotoUrl(user.getProfilePicture());
+            post.setUserName(user.getName());  // Add this line to update the userName
             return post;
         } catch (Exception e) {
             log.error("Error enriching post with user data: ", e);
