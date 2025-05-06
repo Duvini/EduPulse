@@ -1,29 +1,93 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { learningProgressService } from '../../services/learningProgressService';
+import { useStore } from '../../../store';
 
 const LearningProgress = () => {
-  const courses = [
-    {
-      id: 1,
-      title: 'Introduction to Machine Learning',
-      progress: 75,
-      lastAccessed: '2 days ago',
-      image: '/api/placeholder/48/48'
-    },
-    {
-      id: 2,
-      title: 'Frontend Development with React',
-      progress: 45,
-      lastAccessed: 'Yesterday',
-      image: '/api/placeholder/48/48'
-    },
-    {
-      id: 3,
-      title: 'Data Structures & Algorithms',
-      progress: 90,
-      lastAccessed: '3 hours ago',
-      image: '/api/placeholder/48/48'
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { user } = useStore();
+
+  const fetchLearningProgress = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    
+    const { data, error: serviceError } = await learningProgressService.getUserProgress(user?.id);
+    
+    if (serviceError) {
+      setError(serviceError);
+    } else {
+      setCourses(data.data || []);
     }
-  ];
+    setLoading(false);
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchLearningProgress();
+    } else {
+      setLoading(false);
+    }
+  }, [user, fetchLearningProgress]);
+
+  const handleTaskStatusUpdate = async (planId, taskIndex, isCompleted) => {
+    try {
+      const { error: updateError } = await learningProgressService.updateTaskStatus(planId, taskIndex, isCompleted);
+      if (updateError) {
+        setError(updateError);
+      } else {
+        fetchLearningProgress(); // Refresh data after update
+      }
+    } catch (error) {
+      console.error('Task status update failed:', error);
+      setError('Failed to update task status');
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <p className="text-gray-500 text-center">Sign in to track your learning progress</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="animate-pulse space-y-4">
+          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-20 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <p className="text-red-500 text-center">Error loading learning progress</p>
+        <button 
+          onClick={fetchLearningProgress}
+          className="mt-2 text-sm text-blue-600 hover:text-blue-800 block mx-auto"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  if (!courses || courses.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <p className="text-gray-500 text-center">No learning plans found. Start learning by enrolling in a course!</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
@@ -35,10 +99,19 @@ const LearningProgress = () => {
         {courses.map(course => (
           <div key={course.id} className="px-4 py-3">
             <div className="flex items-start">
-              <img src={course.image} alt={course.title} className="w-10 h-10 rounded mr-3 object-cover" />
+              <img 
+                src={course.image || '/api/placeholder/48/48'} 
+                alt={course.title} 
+                className="w-10 h-10 rounded mr-3 object-cover"
+                onError={(e) => {
+                  e.target.src = '/api/placeholder/48/48';
+                }}
+              />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">{course.title}</p>
-                <p className="text-xs text-gray-500 mb-2">Last accessed {course.lastAccessed}</p>
+                <p className="text-xs text-gray-500 mb-2">
+                  Last accessed {course.lastAccessed || 'recently'}
+                </p>
                 
                 {/* Progress bar */}
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
@@ -50,7 +123,10 @@ const LearningProgress = () => {
                 
                 <div className="flex justify-between items-center">
                   <span className="text-xs font-medium">{course.progress}% complete</span>
-                  <button className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                  <button 
+                    onClick={() => handleTaskStatusUpdate(course.id, course.currentTaskIndex, true)}
+                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                  >
                     Continue
                   </button>
                 </div>
@@ -60,11 +136,13 @@ const LearningProgress = () => {
         ))}
       </div>
       
-      <div className="px-4 py-3 text-center border-t border-gray-200">
-        <button className="text-sm text-blue-600 font-medium hover:text-blue-800">
-          View all courses
-        </button>
-      </div>
+      {courses.length > 0 && (
+        <div className="px-4 py-3 text-center border-t border-gray-200">
+          <button className="text-sm text-blue-600 font-medium hover:text-blue-800">
+            View all courses
+          </button>
+        </div>
+      )}
     </div>
   );
 };
