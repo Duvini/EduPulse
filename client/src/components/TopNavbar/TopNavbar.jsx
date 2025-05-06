@@ -1,19 +1,37 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FiHome, FiBook, FiUsers, FiCreditCard, FiSettings, FiHelpCircle, FiSearch, FiStar, FiMenu, FiX, FiBell } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../../store';
+import { getMediaUrl } from '../../services/axiosConfig';
 
 const TopNavbar = () => {
   const notificationRef = useRef(null);
+  const userMenuRef = useRef(null);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
-  const {notifications, unreadNotificationCount, isNotificationsOpen, toggleMobileMenu,toggleNotificationsDropdown, closeNotificationsDropdown, markAllNotificationsAsRead,markNotificationAsRead, isMobileMenuOpen, isSearchFocused, 
-    setSearchFocused, user, logout
-  } = useStore()
+  const {
+    notifications, 
+    unreadNotificationCount, 
+    isNotificationsOpen, 
+    toggleMobileMenu,
+    toggleNotificationsDropdown, 
+    closeNotificationsDropdown, 
+    markAllNotificationsAsRead,
+    markNotificationAsRead, 
+    isMobileMenuOpen, 
+    isSearchFocused, 
+    setSearchFocused, 
+    user, 
+    logout
+  } = useStore();
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         closeNotificationsDropdown();
+        setIsUserMenuOpen(false);
       }
     };
     
@@ -28,6 +46,9 @@ const TopNavbar = () => {
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
         closeNotificationsDropdown();
       }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -38,15 +59,35 @@ const TopNavbar = () => {
 
   const handleSignOut = () => {
     logout();
-    // TODO: You may want to redirect here using react-router
-    // history.push('/login');
+    setIsUserMenuOpen(false);
   };
 
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit(e);
+    }
+  };
+
+  // Default user avatar as SVG data URL
+  const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
+
   // Mock data - in a real app, this would come from the API via the store
-  const userProfile = user || {
-    name: 'Azunyan U. Wu',
-    role: 'Basic Member',
-    avatar: '/api/placeholder/40/40'
+  const userProfile = user !== null && user !== undefined ? user : {
+    name: 'Guest User',
+    role: 'Not Signed In',
+    avatar: defaultUserAvatar
   };
 
   return (
@@ -64,16 +105,19 @@ const TopNavbar = () => {
 
             {/* Search Bar */}
             <div className={`relative hidden md:block flex-1 mx-10 ${isSearchFocused ? 'max-w-md' : 'max-w-xs'} transition-all duration-200`}>
-              <div className="bg-white/20 rounded-full p-2 flex items-center">
+              <form onSubmit={handleSearchSubmit} className="bg-white/20 rounded-full p-2 flex items-center">
                 <FiSearch className="text-white ml-1 mr-2" />
                 <input 
                   type="text" 
-                  placeholder="Search" 
+                  placeholder="Search users..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
                   className="bg-transparent border-none text-white outline-none w-full placeholder-white/70"
                   onFocus={() => setSearchFocused(true)}
                   onBlur={() => setSearchFocused(false)}
                 />
-              </div>
+              </form>
             </div>
 
             {/* Desktop Menu Items */}
@@ -169,23 +213,41 @@ const TopNavbar = () => {
               </div>
               
               {/* User Profile */}
-              <div className="relative group ml-2">
-                <button className="flex items-center focus:outline-none">
-                  <img src={userProfile.avatar} alt="User avatar" className="w-8 h-8 rounded-full object-cover" />
+              <div className="relative ml-2" ref={userMenuRef}>
+                <button 
+                  className="flex items-center focus:outline-none p-1 rounded-full hover:bg-white/10"
+                  onClick={toggleUserMenu}
+                >
+                  <div className="relative w-8 h-8">
+                    <img 
+                      src={user?.profilePicture ? getMediaUrl(user.profilePicture) : defaultUserAvatar}
+                      alt="User avatar" 
+                      className="w-8 h-8 rounded-full object-cover bg-gray-100"
+                      onError={(e) => {
+                        e.target.src = defaultUserAvatar;
+                      }}
+                    />
+                  </div>
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden group-hover:block">
-                  <div className="px-4 py-3 text-sm text-gray-800">
-                    <div className="font-bold">{userProfile.name}</div>
-                    <div className="text-xs text-gray-500">{userProfile.role}</div>
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden z-20">
+                    <div className="px-4 py-3 text-sm text-gray-800 border-b border-gray-200">
+                      <div className="font-bold truncate">{userProfile.name}</div>
+                      <div className="text-xs text-gray-500 truncate">{userProfile.role}</div>
+                    </div>
+                    <div className="py-1">
+                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">Profile</Link>
+                      <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">Settings</Link>
+                      <Link to="/help" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">Help & Support</Link>
+                      <button 
+                        onClick={handleSignOut} 
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                      >
+                        Sign out
+                      </button>
+                    </div>
                   </div>
-                  <div className="border-t border-gray-200">
-                    <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
-                    <Link to="/help" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Help & Support</Link>
-                    <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Sign out
-                    </button>
-                  </div>
-                </div>
+                )}
               </div>
 
               {/* Mobile menu button */}
@@ -202,7 +264,6 @@ const TopNavbar = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-[#4937ce]">
-            {/* Mobile Search */}
             <div className="px-4 pt-2 pb-3">
               <div className="bg-white/20 rounded-full p-2 flex items-center">
                 <FiSearch className="text-white ml-1 mr-2" />
@@ -214,7 +275,6 @@ const TopNavbar = () => {
               </div>
             </div>
             
-            {/* Mobile Navigation Links */}
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link to="/feed" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
                 <FiHome className="mr-3 text-lg" />
@@ -256,7 +316,6 @@ const TopNavbar = () => {
                 <span>Help & Support</span>
               </Link>
               
-              {/* Go Pro Banner */}
               <div className="bg-white/15 rounded-lg p-4 flex justify-between items-center mt-4 mx-3">
                 <button className="bg-transparent border-none text-white font-bold cursor-pointer p-0">Go Pro</button>
                 <FiStar className="text-lg" />
@@ -266,7 +325,6 @@ const TopNavbar = () => {
         )}
       </div>
 
-      {/* Spacer for fixed navbar */}
       <div className="h-16"></div>
     </>
   );

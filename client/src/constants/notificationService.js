@@ -1,5 +1,6 @@
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import { authService } from '../services/authService';
 
 const API_BASE_URL = '/api'; // Adjust according to your API base URL
 
@@ -11,8 +12,11 @@ export const connectToNotifications = (userId) => {
   const socket = new SockJS(`${API_BASE_URL}/ws`);
   const stompClient = Stomp.over(socket);
   
+  const token = authService.getToken();
+  const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+  
   // Connect to the WebSocket
-  stompClient.connect({}, () => {
+  stompClient.connect(headers, () => {
     console.log('Connected to notification WebSocket');
     
     // Subscribe to user-specific notification channel
@@ -42,6 +46,10 @@ export const connectToNotifications = (userId) => {
     });
   }, (error) => {
     console.error('WebSocket connection error:', error);
+    if (error.headers && error.headers.message === 'Unauthorized') {
+      // Handle unauthorized access - perhaps redirect to login
+      window.location.href = '/signin';
+    }
   });
   
   return stompClient;
@@ -80,6 +88,7 @@ export const markNotificationAsRead = async (userId, notificationId) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authService.getToken()}`
         }
       }
     );
@@ -104,6 +113,7 @@ export const markAllNotificationsAsRead = async (userId) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authService.getToken()}`
         }
       }
     );
@@ -122,7 +132,11 @@ export const markAllNotificationsAsRead = async (userId) => {
 // Get unread notification count
 export const getUnreadCount = async (userId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/users/${userId}/notifications/unread-count`);
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/notifications/unread-count`, {
+      headers: {
+        'Authorization': `Bearer ${authService.getToken()}`
+      }
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
