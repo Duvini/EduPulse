@@ -10,10 +10,11 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/plans")
 @RequiredArgsConstructor
@@ -24,9 +25,12 @@ public class LearningPlanController {
 
     //create a learning plan
     @PostMapping("/create")
-    public ResponseEntity<ResponseDto> createPlan(@RequestBody LearningPlan plan) {
+    public ResponseEntity<ResponseDto> createPlan(
+            @RequestBody LearningPlan plan,
+            Authentication authentication
+    ) {
 
-        ResponseDto response = service.createLearningPlan(plan);
+        ResponseDto response = service.createLearningPlan(authentication, plan);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -41,7 +45,7 @@ public class LearningPlanController {
     @GetMapping("/user/{userid}")
     public ResponseEntity<ResponseDto> getLearningPlanOfUser(
             @PathVariable String userid
-    ) {
+            ){
         ResponseDto response = service.getLearningPlanOfUser(userid);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -53,36 +57,38 @@ public class LearningPlanController {
             @PathVariable String planId
     ) {
         LearningPlan plan = service.getLearningPlan(planId);
+//
+//        EntityModel<LearningPlan> model = EntityModel.of(plan,
+//                linkTo(methodOn(LearningPlanController.class).getPlan(plan.getId())).withSelfRel(),
+//                linkTo(methodOn(LearningPlanController.class).getPlans()).withRel("all-plans"),
+//                linkTo(methodOn(LearningPlanController.class).getLearningPlanOfUser(plan.getCreatorId())).withRel("user-plans"),
+//                linkTo(methodOn(LearningPlanController.class).updateLearningPlan(plan.getId(), null)).withRel("update-plan"),
+//                linkTo(methodOn(LearningPlanController.class).createPlan(null)).withRel("create"),
+//                linkTo(methodOn(LearningPlanController.class).deletePlan(plan.getId())).withRel("delete"),
+//                linkTo(methodOn(LearningPlanController.class).updateTaskStatus(plan.getId(), 0, true)).withRel("mark-task-complete")
+//        );
 
-        EntityModel<LearningPlan> model = EntityModel.of(plan,
-                linkTo(methodOn(LearningPlanController.class).getPlan(plan.getId())).withSelfRel(),
-                linkTo(methodOn(LearningPlanController.class).getPlans()).withRel("all-plans"),
-                linkTo(methodOn(LearningPlanController.class).getLearningPlanOfUser(plan.getCreatorId())).withRel("user-plans"),
-                linkTo(methodOn(LearningPlanController.class).updateLearningPlan(plan.getId(), null)).withRel("update-plan"),
-                linkTo(methodOn(LearningPlanController.class).createPlan(null)).withRel("create"),
-                linkTo(methodOn(LearningPlanController.class).deletePlan(plan.getId())).withRel("delete"),
-                linkTo(methodOn(LearningPlanController.class).updateTaskStatus(plan.getId(), 0, true)).withRel("mark-task-complete")
-        );
-
-        return new ResponseEntity<>(new ResponseDto(false,model), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto(false,plan), HttpStatus.OK);
     }
 
     //Update learning plans
     @PatchMapping("/update/{planId}")
     public ResponseEntity<ResponseDto> updateLearningPlan(
             @PathVariable String planId,
-            @RequestBody LearningPlan planUpdates
+            @RequestBody LearningPlan planUpdates,
+            Authentication authentication
     ){
-            ResponseDto response = service.updateLearningPLan(planId, planUpdates);
+            ResponseDto response = service.updateLearningPLan(planId, planUpdates, authentication);
             return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //delete a learning plan
     @DeleteMapping("/delete/{planId}")
     public ResponseEntity<ResponseDto> deletePlan(
-            @PathVariable String planId
+            @PathVariable String planId,
+            Authentication authentication
     ){
-        ResponseDto response = service.deleteLearningPlan(planId);
+        ResponseDto response = service.deleteLearningPlan(planId, authentication);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -91,9 +97,10 @@ public class LearningPlanController {
     public ResponseEntity<ResponseDto> updateTaskStatus(
             @PathVariable String planId,
             @PathVariable int index,
-            @RequestParam boolean isCompleted
+            @RequestParam boolean isCompleted,
+            Authentication authentication
     ){
-        ResponseDto response = service.updateTaskStatus(planId, index, isCompleted);
+        ResponseDto response = service.updateTaskStatus(planId, index, isCompleted, authentication);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
