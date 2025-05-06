@@ -54,29 +54,42 @@ export const authService = {
     },
 
     updateUser: async (id, userData) => {
-        const response = await axiosInstance.put(`${API_URL}/users/${id}`, userData);
-        if (response.data?.data) {
-            // Update the stored user data
-            const currentUser = authService.getCurrentUser();
-            const updatedUser = { ...currentUser, ...response.data.data };
-            localStorage.setItem('user', JSON.stringify(updatedUser));
+        try {
+            const response = await axiosInstance.put(`${API_URL}/users/${id}`, userData);
+            if (response.data?.data) {
+                // Update the stored user data
+                const currentUser = authService.getCurrentUser();
+                const updatedUser = { ...currentUser, ...response.data.data };
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+            }
+            return { error: false, data: response.data.data };
+        } catch (err) {
+            return { 
+                error: true, 
+                message: err.response?.data?.message || 'Failed to update user profile'
+            };
         }
-        return response.data;
     },
 
     updateProfilePicture: async (id, formData) => {
-        const response = await axiosInstance.put(`${API_URL}/users/${id}/profile-picture`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
+        try {
+            const response = await axiosInstance.put(`${API_URL}/users/${id}/profile-picture`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            if (response.data?.data) {
+                const currentUser = authService.getCurrentUser();
+                const updatedUser = { ...currentUser, ...response.data.data };
+                localStorage.setItem('user', JSON.stringify(updatedUser));
             }
-        });
-        if (response.data?.data) {
-            // Update the stored user data
-            const currentUser = authService.getCurrentUser();
-            const updatedUser = { ...currentUser, ...response.data.data };
-            localStorage.setItem('user', JSON.stringify(updatedUser));
+            return { error: false, data: response.data.data };
+        } catch (err) {
+            return {
+                error: true,
+                message: err.response?.data?.message || 'Failed to update profile picture'
+            };
         }
-        return response.data;
     },
 
     deleteUser: async (id) => {

@@ -12,4 +12,5 @@ public class RegisterDTO {
     private String email;
     private String password;
     private String name;
+    private String currentPassword;  // Added for password change functionality
 }
