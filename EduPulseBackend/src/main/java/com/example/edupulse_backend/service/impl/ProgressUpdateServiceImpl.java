@@ -2,14 +2,17 @@ package com.example.edupulse_backend.service.impl;
 
 import com.example.edupulse_backend.model.LearningPlan;
 import com.example.edupulse_backend.model.ProgressUpdate;
+import com.example.edupulse_backend.model.User;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.repository.ProgressUpdateRepository;
+import com.example.edupulse_backend.repository.UserRepository;
 import com.example.edupulse_backend.service.ProgressUpdateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,14 +22,33 @@ import java.util.Optional;
 @Slf4j
 public class ProgressUpdateServiceImpl implements ProgressUpdateService {
 
-    @Autowired
     private final ProgressUpdateRepository repository;
+    private final UserRepository userRepository;
 
     //logic to create a progress
     @Override
-    public ResponseDto createProgress(ProgressUpdate progressUpdate) {
+    public ResponseDto createProgress(Authentication auth, ProgressUpdate progressUpdate) {
+
+        if(auth == null || !auth.isAuthenticated()) {
+            log.warn("createLearningPlan: Authentication is missing or invalid");
+            return new ResponseDto(true, "Authentication required");
+        }
         try{
+
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            String username = userDetails.getUsername();
+
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            String userId = user.getId();
+            String userName = user.getUsername();
+
+            log.info("Created a progress update for {}", userName);
+
+            progressUpdate.setUserId(userId);
             repository.save(progressUpdate);
+
             log.info("Created progress update");
             return new ResponseDto(false, progressUpdate);
         }catch(Exception e){
@@ -36,7 +58,12 @@ public class ProgressUpdateServiceImpl implements ProgressUpdateService {
 
     //business logic to update progresses
     @Override
-    public ResponseDto updateProgress(String progressId, ProgressUpdate progressUpdate) {
+    public ResponseDto updateProgress(String progressId, ProgressUpdate progressUpdate, Authentication auth) {
+
+        if (auth == null || !auth.isAuthenticated()) {
+            log.warn("Progress updates: Authentication is missing or invalid");
+            return new ResponseDto(true, "Authentication required");
+        }
         try {
             Optional<ProgressUpdate> optionalProgress = repository.findById(progressId);
 
@@ -82,8 +109,22 @@ public class ProgressUpdateServiceImpl implements ProgressUpdateService {
 
     //logic to delete a progress update
     @Override
-    public ResponseDto deleteProgress(String progressId) {
-        repository.deleteById(progressId);
-        return new ResponseDto(false, "Deleted progress with ID: " + progressId);
+    public ResponseDto deleteProgress(
+            String progressId,
+            Authentication auth
+    ) {
+        if (auth == null || !auth.isAuthenticated()) {
+            log.warn("Progress delete: Authentication is missing or invalid");
+            return new ResponseDto(true, "Authentication required");
+        }
+
+        try{
+            repository.deleteById(progressId);
+            return new ResponseDto(false, "Deleted progress with ID: " + progressId);
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ResponseDto(true, "Error deleting progress: " );
+        }
     }
 }

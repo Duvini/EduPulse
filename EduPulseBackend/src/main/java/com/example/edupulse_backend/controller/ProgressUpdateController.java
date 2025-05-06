@@ -6,6 +6,7 @@ import com.example.edupulse_backend.service.ProgressUpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -27,29 +28,38 @@ public class ProgressUpdateController {
     }
 
     @RequestMapping("/progress/{progressId}")
-    public ResponseEntity<ResponseDto> getProgressById(@PathVariable String progressId) {
+    public ResponseEntity<ResponseDto> getProgressById(
+            @PathVariable String progressId
+    ) {
         ResponseDto response = progressUpdateService.getProgressById(progressId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseDto> createProgress(@RequestBody ProgressUpdate progressUpdate) {
-        ResponseDto response = progressUpdateService.createProgress(progressUpdate);
+    public ResponseEntity<ResponseDto> createProgress(
+            @RequestBody ProgressUpdate progressUpdate,
+            Authentication authentication
+    ) {
+        ResponseDto response = progressUpdateService.createProgress(authentication, progressUpdate);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{progressId}")
     public ResponseEntity<ResponseDto> updateProgress(
             @PathVariable String progressId,
-            @RequestBody ProgressUpdate progressUpdate
+            @RequestBody ProgressUpdate progressUpdate,
+            Authentication authentication
     ) {
-        ResponseDto response = progressUpdateService.updateProgress(progressId, progressUpdate);
+        ResponseDto response = progressUpdateService.updateProgress(progressId, progressUpdate, authentication);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{progressId}")
-    public ResponseEntity<ResponseDto> deleteProgress(@PathVariable String progressId) {
-        ResponseDto response = progressUpdateService.deleteProgress(progressId);
+    public ResponseEntity<ResponseDto> deleteProgress(
+            @PathVariable String progressId,
+            Authentication authentication
+    ) {
+        ResponseDto response = progressUpdateService.deleteProgress(progressId, authentication);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
