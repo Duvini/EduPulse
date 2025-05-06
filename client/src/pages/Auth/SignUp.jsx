@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { useStore } from '../../../store';
+import { FiUser, FiMail, FiLock } from 'react-icons/fi';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -66,115 +67,161 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link to="/signin" className="font-medium text-blue-600 hover:text-blue-500">
-              sign in to your account
-            </Link>
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
-              <span className="block sm:inline">{error}</span>
-            </div>
-          )}
-          <div className="rounded-md shadow-sm space-y-2">
-            <div>
-              <label htmlFor="name" className="sr-only">
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="username" className="sr-only">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword" className="sr-only">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md">
+        <div className="text-center">
+          <div className="flex justify-center mb-6">
+            <div className="bg-[#4937ce] text-white w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold">
+              E
             </div>
           </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Create your account</h2>
+          <p className="text-gray-600 text-sm mb-8">
+            Join EduPulse and start learning today
+          </p>
+        </div>
 
-          <div>
+        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm" role="alert">
+                {error}
+              </div>
+            )}
+            
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiUser className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-[#4937ce] focus:border-[#4937ce] text-gray-900 text-sm transition-colors duration-200"
+                    placeholder="Enter your full name"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                  Username
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiUser className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    required
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-[#4937ce] focus:border-[#4937ce] text-gray-900 text-sm transition-colors duration-200"
+                    placeholder="Choose a username"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiMail className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-[#4937ce] focus:border-[#4937ce] text-gray-900 text-sm transition-colors duration-200"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                  Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiLock className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-[#4937ce] focus:border-[#4937ce] text-gray-900 text-sm transition-colors duration-200"
+                    placeholder="Create a password"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiLock className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-[#4937ce] focus:border-[#4937ce] text-gray-900 text-sm transition-colors duration-200"
+                    placeholder="Confirm your password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
-              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+              className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#4937ce] hover:bg-[#3c2ba7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4937ce] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating account...' : 'Sign up'}
+              {loading ? (
+                <div className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating account...
+                </div>
+              ) : (
+                'Create account'
+              )}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
+
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link to="/signin" className="font-medium text-[#4937ce] hover:text-[#3c2ba7] transition-colors duration-200">
+            Sign in here
+          </Link>
+        </p>
       </div>
     </div>
   );
