@@ -1,67 +1,79 @@
-import React, { useState } from 'react';
-import { FiPaperclip, FiSmile, FiSend } from 'react-icons/fi';
-import { useStore } from '../../../store';
-import { authService } from '../../services/authService';
-
-// Default user avatar as SVG data URL
-const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
+import React, { useState, useEffect } from 'react';
+import { FiSend } from 'react-icons/fi';
+import { useAddComment } from '../../api/hooks/useComments';
 
 const CommentInput = ({ postId }) => {
   const [comment, setComment] = useState('');
-  const [avatarError, setAvatarError] = useState(false);
-  const addComment = useStore();
-  const currentUser = authService.getCurrentUser();
-  
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const addCommentMutation = useAddComment();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (comment.trim()) {
-      addComment(postId, comment);
-      setComment('');
-    }
+
+    if (!comment.trim()) return;
+
+    addCommentMutation.mutate(
+      {
+        postId,
+        content: comment.trim(),
+      },
+      {
+        onSuccess: () => {
+          setComment('');
+        },
+        onError: (error) => {
+          console.error('Error adding comment:', error);
+        },
+      }
+    );
   };
-  
+
   return (
-    <form onSubmit={handleSubmit} className="flex items-center py-2 w-full">
-      <img 
-        src={avatarError ? defaultUserAvatar : (currentUser?.profileImage || defaultUserAvatar)} 
-        alt="User avatar" 
-        className="w-8 h-8 rounded-full mr-2 object-cover bg-gray-100"
-        onError={() => setAvatarError(true)}
-      />
-      <div className="flex-1 relative">
-        <input 
-          type="text" 
-          className="w-full py-2 px-3 border border-gray-200 rounded-full bg-gray-100 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
-          placeholder="Write your comment..." 
+    <div>
+      {/* Display Current Date and Time */}
+      {/* <div className="text-sm text-gray-500 mb-2">
+        {currentDateTime.toLocaleString()}
+      </div> */}
+
+      <form onSubmit={handleSubmit} className="flex items-center">
+        <input
+          type="text"
+          placeholder="Add a comment..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          className="flex-1 py-1.5 px-2 border border-gray-200 rounded-l-md focus:outline-none focus:border-blue-300 text-sm"
+          disabled={addCommentMutation.isPending}
         />
-      </div>
-      <div className="flex items-center ml-2">
-        <button 
-          type="button" 
-          className="bg-transparent border-none cursor-pointer p-1.5 text-gray-500 hover:bg-gray-100 rounded-full transition-colors duration-200"
-          title="Attach file"
+
+        <button
+          type="submit"
+          className={`${
+            comment.trim() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed'
+          } text-white py-1.5 px-3 rounded-r-md transition-colors duration-200 flex items-center justify-center min-h-[34px]`}
+          disabled={addCommentMutation.isPending || !comment.trim()}
         >
-          <FiPaperclip className="text-lg" />
+          {addCommentMutation.isPending ? (
+            <span className="inline-block animate-spin">⏳</span>
+          ) : (
+            <FiSend size={16} />
+          )}
         </button>
-        <button 
-          type="button" 
-          className="bg-transparent border-none cursor-pointer p-1.5 text-gray-500 hover:bg-gray-100 rounded-full transition-colors duration-200"
-          title="Add emoji"
-        >
-          <FiSmile className="text-lg" />
-        </button>
-        <button 
-          type="submit" 
-          className="bg-transparent border-none cursor-pointer p-1.5 text-gray-500 hover:bg-gray-100 rounded-full transition-colors duration-200"
-          disabled={!comment.trim()}
-          title="Send comment"
-        >
-          <FiSend className={`text-lg ${comment.trim() ? 'text-blue-500' : ''}`} />
-        </button>
-      </div>
-    </form>
+
+        {addCommentMutation.isError && (
+          <div className="mt-1 text-xs text-red-500 w-full">
+            Failed to add comment. Please try again.
+          </div>
+        )}
+      </form>
+    </div>
   );
 };
 
