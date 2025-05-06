@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import TaskInput from "./TaskInput";
+import { useNavigate } from "react-router-dom";
 
 const LearningPlanCreate = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tasks, setTasks] = useState([{ name: "", resources: [], deadline: "", completed: false }]);
@@ -65,9 +67,7 @@ const LearningPlanCreate = () => {
       const response = await axios.post("http://localhost:8080/api/v1/plans/create", learningPlan);
       console.log(response);
       setMessage("Learning plan created successfully!");
-      setTitle("");
-      setDescription("");
-      setTasks([{ name: "", resources: [], deadline: "", completed: false }]);
+      navigate('/learning-plans');
     } catch (error) {
       console.error("Error response from backend:", error.response?.data || error.message);
       setMessage("Error creating learning plan. Please try again.");
