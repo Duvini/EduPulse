@@ -12,4 +12,5 @@ public interface NotificationService {
     // Methods for creating notifications based on user interactions
     void createLikeNotification(String postId, String likerId, String likerName, String postOwnerId);
     void createCommentNotification(String postId, String commentId, String commenterId, String commenterName, String postOwnerId);
+    void createFollowNotification(String followerId, String followerName, String followedUserId);
 }
