@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/auth")
@@ -111,6 +113,13 @@ public class AuthController {
     public ResponseEntity<ResponseDto> searchUsers(@RequestParam String username) {
         log.info("Search request received for username pattern: {}", username);
         ResponseDto response = authService.searchUsers(username);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify-password")
+    public ResponseEntity<ResponseDto> verifyPassword(@RequestBody Map<String, String> credentials) {
+        log.info("Password verification request received");
+        ResponseDto response = authService.verifyPassword(credentials.get("password"));
         return ResponseEntity.ok(response);
     }
 }

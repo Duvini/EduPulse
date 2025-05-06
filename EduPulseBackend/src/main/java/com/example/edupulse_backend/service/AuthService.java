@@ -136,12 +136,28 @@ public class AuthService {
     }
 
     public ResponseDto deleteUser(String id) {
-        if (!userRepository.existsById(id)) {
-            return new ResponseDto(true, "User not found with ID: " + id);
+        try {
+            // Get current user from security context
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return new ResponseDto(true, "Not authenticated");
+            }
+
+            String username = authentication.getName();
+            User currentUser = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            // Check if the user is trying to delete their own account
+            if (!currentUser.getId().equals(id)) {
+                return new ResponseDto(true, "You can only delete your own account");
+            }
+
+            userRepository.deleteById(id);
+            return new ResponseDto(false, "User deleted successfully");
+        } catch (Exception e) {
+            log.error("Error deleting user: {}", e.getMessage());
+            return new ResponseDto(true, "Error deleting user: " + e.getMessage());
         }
-        
-        userRepository.deleteById(id);
-        return new ResponseDto(false, "User deleted successfully");
     }
 
     public ResponseDto validateToken(String token) {
@@ -198,6 +214,30 @@ public class AuthService {
         } catch (Exception e) {
             log.error("Error searching users: {}", e.getMessage());
             return new ResponseDto(true, "Error searching users");
+        }
+    }
+
+    public ResponseDto verifyPassword(String password) {
+        try {
+            // Get current user from security context
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return new ResponseDto(true, "Not authenticated");
+            }
+
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            // Verify password
+            if (!passwordEncoder.matches(password, user.getPassword())) {
+                return new ResponseDto(true, "Incorrect password");
+            }
+
+            return new ResponseDto(false, "Password verified");
+        } catch (Exception e) {
+            log.error("Error verifying password: {}", e.getMessage());
+            return new ResponseDto(true, "Error verifying password");
         }
     }
 }
