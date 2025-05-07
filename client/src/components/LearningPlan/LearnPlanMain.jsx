@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import LearnPlanTask from "./LearningPlanTask";
-import axios from "axios";
+import { learningPlanService } from "../../services/learningPlanService";
 import { useNavigate } from "react-router-dom";
 
 const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
@@ -11,14 +11,27 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
   const handleTaskStatusChange = async (taskIndex, isCompleted) => {
     try {
       setLoading(true);
-      await axios.put(
-        `http://localhost:8080/api/v1/plans/${plan.id}/tasks/${taskIndex}?isCompleted=${isCompleted}`
-      );
-      onUpdate();
+      const response = await learningPlanService.updateTaskStatus(plan.id, taskIndex, isCompleted);
+      if (!response.error) {
+        onUpdate();
+      }
     } catch (error) {
       console.error('Error updating task status:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this learning plan? This action cannot be undone.')) {
+      try {
+        const response = await learningPlanService.deletePlan(plan.id);
+        if (!response.error) {
+          onDelete(plan.id);
+        }
+      } catch (error) {
+        console.error('Error deleting plan:', error);
+      }
     }
   };
 
@@ -102,6 +115,8 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
                   <LearnPlanTask
                     key={index}
                     task={task}
+                    index={index}
+                    planId={plan.id}
                     onStatusChange={(isCompleted) => handleTaskStatusChange(index, isCompleted)}
                     loading={loading}
                   />
@@ -131,14 +146,14 @@ const getProgressBarColor = (progress) => {
   return 'bg-red-600';
 };
 
+const getCompletedTasks = (tasks) => {
+  return tasks.filter(task => task.completed).length;
+};
+
 const calculateProgress = (tasks) => {
   if (!tasks || tasks.length === 0) return 0;
   const completedTasks = tasks.filter(task => task.completed).length;
   return Math.round((completedTasks / tasks.length) * 100);
-};
-
-const getCompletedTasks = (tasks) => {
-  return tasks.filter(task => task.completed).length;
 };
 
 const formatDate = (dateString) => {

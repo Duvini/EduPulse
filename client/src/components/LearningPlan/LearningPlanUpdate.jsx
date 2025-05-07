@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import TaskInput from './TaskInput';
+import { learningPlanService } from '../../services/learningPlanService';
+import { useStore } from '../../../store';
 
 const LearningPlanUpdate = () => {
   const { id } = useParams();
@@ -11,30 +12,56 @@ const LearningPlanUpdate = () => {
   const [description, setDescription] = useState('');
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState('');
+  const { user } = useStore();
+
+  // Ensure we have a logged-in user
+  useEffect(() => {
+    if (!user || !user.id) {
+      navigate('/signin', { state: { message: 'Please sign in to update a learning plan' } });
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     const fetchPlan = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/plans/${id}`);
-        if (response.data.error === false) {
-          const planData = response.data.data;
-          setPlan(planData);
-          setTitle(planData.title);
-          setDescription(planData.description);
-          setTasks(planData.tasks);
+        const response = await learningPlanService.getPlanById(id);
+        if (response.error) {
+          throw new Error(response.error);
         }
-        setLoading(false);
+        
+        // Check response structure - it may be nested
+        const planData = response.data?.error === false 
+          ? response.data.data 
+          : response.data;
+        
+        if (!planData) {
+          throw new Error('Learning plan data not found');
+        }
+        
+        setPlan(planData);
+        setTitle(planData.title);
+        setDescription(planData.description);
+        setTasks(planData.tasks || []);
       } catch (err) {
         console.error('Error fetching plan:', err);
-        setError('Failed to fetch learning plan');
+        setError('Failed to fetch learning plan. ' + (err.message || ''));
+        if (err.message?.includes('Unauthorized') || err.message?.includes('authentication')) {
+          setTimeout(() => navigate('/signin'), 1500);
+        }
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchPlan();
-  }, [id]);
+    if (id) {
+      fetchPlan();
+    }
+  }, [id, navigate]);
 
   const handleTaskChange = (index, updatedTask) => {
     const updatedTasks = [...tasks];
@@ -53,39 +80,76 @@ const LearningPlanUpdate = () => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this learning plan? This action cannot be undone.')) {
       try {
-        await axios.delete(`http://localhost:8080/api/v1/plans/delete/${id}`);
+        setSaving(true);
+        const response = await learningPlanService.deletePlan(id);
+        if (response.error) {
+          throw new Error(response.error);
+        }
         navigate('/learning-plans', { state: { message: 'Learning plan deleted successfully' } });
       } catch (error) {
         console.error('Error deleting plan:', error);
-        setMessage('Failed to delete learning plan');
+        setMessage('Failed to delete learning plan: ' + (error.message || ''));
+        if (error.message?.includes('Unauthorized') || error.message?.includes('authentication')) {
+          setTimeout(() => navigate('/signin'), 1500);
+        }
+      } finally {
+        setSaving(false);
       }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate inputs
+    if (title.length < 3 || title.length > 50) {
+      setMessage("Title must be between 3 and 50 characters.");
+      return;
+    }
+    if (description.length > 150) {
+      setMessage("Description cannot exceed 150 characters.");
+      return;
+    }
+    if (tasks.length === 0) {
+      setMessage("At least one task must be added.");
+      return;
+    }
+    
     try {
-      const response = await axios.patch(`http://localhost:8080/api/v1/plans/update/${id}`, {
+      setSaving(true);
+      setMessage('');
+      const updatedPlan = {
         title,
         description,
-        tasks
-      });
-      if (response.data.error === false) {
-        setMessage('Learning plan updated successfully');
-        setTimeout(() => {
-          navigate('/learning-plans');
-        }, 1500);
-      } else {
-        setMessage('Failed to update learning plan');
+        tasks,
+        creatorId: user?.id || plan?.creatorId || ""
+      };
+      
+      const response = await learningPlanService.updatePlan(id, updatedPlan);
+      if (response.error) {
+        throw new Error(response.error);
       }
+      
+      setMessage('Learning plan updated successfully');
+      setTimeout(() => {
+        navigate('/learning-plans');
+      }, 1500);
     } catch (error) {
       console.error('Error updating plan:', error);
-      setMessage('Failed to update learning plan');
+      setMessage('Failed to update learning plan: ' + (error.message || ''));
+      if (error.message?.includes('Unauthorized') || error.message?.includes('authentication')) {
+        setTimeout(() => navigate('/signin'), 1500);
+      }
+    } finally {
+      setSaving(false);
     }
   };
 
-  if (loading) return <div className="text-center py-8">Loading...</div>;
-  if (error) return <div className="text-red-600 text-center py-8">{error}</div>;
+  if (loading) return (
+    <div className="flex justify-center items-center min-h-[60vh]">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    </div>
+  );
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg transform transition-all duration-200 hover:shadow-xl">
@@ -94,6 +158,7 @@ const LearningPlanUpdate = () => {
         <button
           onClick={() => navigate('/learning-plans')}
           className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+          disabled={saving}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -113,11 +178,7 @@ const LearningPlanUpdate = () => {
         </p>
       )}
 
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-        </div>
-      ) : error ? (
+      {error ? (
         <div className="text-center p-6 bg-red-50 rounded-lg">
           <p className="text-red-600">{error}</p>
           <button 
@@ -138,6 +199,7 @@ const LearningPlanUpdate = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full border border-gray-200 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
                 required
+                disabled={saving}
               />
             </div>
             <div>
@@ -147,6 +209,7 @@ const LearningPlanUpdate = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full border border-gray-200 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 min-h-[100px]"
                 required
+                disabled={saving}
               />
             </div>
           </div>
@@ -160,12 +223,16 @@ const LearningPlanUpdate = () => {
                 index={index}
                 handleTaskChange={handleTaskChange}
                 removeTask={removeTask}
+                disabled={saving}
               />
             ))}
             <button
               type="button"
               onClick={addTask}
-              className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition duration-200 ease-in-out shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+              className={`w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition duration-200 ease-in-out shadow-md hover:shadow-lg flex items-center justify-center gap-2 ${
+                saving ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              disabled={saving}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
@@ -177,22 +244,52 @@ const LearningPlanUpdate = () => {
           <div className="flex gap-4 pt-4">
             <button
               type="submit"
-              className="flex-1 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold transition duration-200 ease-in-out shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+              className={`flex-1 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold transition duration-200 ease-in-out shadow-md hover:shadow-lg flex items-center justify-center gap-2 ${
+                saving ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              disabled={saving}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              Update Plan
+              {saving ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  Update Plan
+                </>
+              )}
             </button>
             <button
               type="button"
               onClick={handleDelete}
-              className="flex-1 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition duration-200 ease-in-out shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+              className={`flex-1 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition duration-200 ease-in-out shadow-md hover:shadow-lg flex items-center justify-center gap-2 ${
+                saving ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              disabled={saving}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-              Delete Plan
+              {saving ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  Delete Plan
+                </>
+              )}
             </button>
           </div>
         </form>

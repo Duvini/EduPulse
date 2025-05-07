@@ -1,6 +1,27 @@
 import React from "react";
+import { learningPlanService } from "../../services/learningPlanService";
 
-const LearnPlanTask = ({ task, onStatusChange, loading }) => {
+const LearnPlanTask = ({ task, index, planId, onStatusChange, loading: parentLoading }) => {
+  const [loading, setLoading] = React.useState(false);
+
+  const handleStatusChange = async (isCompleted) => {
+    if (loading || parentLoading) return;
+
+    try {
+      setLoading(true);
+      const response = await learningPlanService.updateTaskStatus(planId, index, isCompleted);
+      if (!response.error) {
+        onStatusChange(isCompleted);
+      } else {
+        console.error("Error updating task status:", response.error);
+      }
+    } catch (error) {
+      console.error("Error updating task status:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -20,7 +41,7 @@ const LearnPlanTask = ({ task, onStatusChange, loading }) => {
                   ? 'bg-green-500 border-green-500' 
                   : 'border-yellow-500 hover:border-yellow-600'
               }`}
-              onClick={() => !loading && onStatusChange(!task.completed)}
+              onClick={() => !loading && handleStatusChange(!task.completed)}
             >
               {task.completed && (
                 <svg className="text-white" viewBox="0 0 16 16">
@@ -34,7 +55,7 @@ const LearnPlanTask = ({ task, onStatusChange, loading }) => {
           </div>
         </div>
         <button
-          onClick={() => !loading && onStatusChange(!task.completed)}
+          onClick={() => !loading && handleStatusChange(!task.completed)}
           disabled={loading}
           className={`px-3 py-1 rounded-lg text-sm font-medium transition duration-200 ${
             loading 
