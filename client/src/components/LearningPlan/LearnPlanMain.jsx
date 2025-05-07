@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import LearnPlanTask from "./LearningPlanTask";
-import axios from "axios";
+import { learningPlanService } from "../../services/learningPlanService";
 import { useNavigate } from "react-router-dom";
 
 const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
@@ -11,10 +11,16 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
   const handleTaskStatusChange = async (taskIndex, isCompleted) => {
     try {
       setLoading(true);
-      await axios.put(
-        `http://localhost:8080/api/v1/plans/${plan.id}/tasks/${taskIndex}?isCompleted=${isCompleted}`
-      );
-      onUpdate();
+      const response = await learningPlanService.updateTaskStatus(plan.id, taskIndex, isCompleted);
+      if (!response.error) {
+        // Instead of calling onUpdate which navigates away, just update the plan locally
+        const updatedTasks = [...plan.tasks];
+        updatedTasks[taskIndex].completed = isCompleted;
+        plan.tasks = updatedTasks;
+        // Force a re-render by updating the state
+        setLoading(false);
+        setLoading(false);
+      }
     } catch (error) {
       console.error('Error updating task status:', error);
     } finally {
@@ -22,11 +28,24 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
     }
   };
 
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this learning plan? This action cannot be undone.')) {
+      try {
+        const response = await learningPlanService.deletePlan(plan.id);
+        if (!response.error) {
+          onDelete(plan.id);
+        }
+      } catch (error) {
+        console.error('Error deleting plan:', error);
+      }
+    }
+  };
+
   const progress = calculateProgress(plan.tasks);
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-200 hover:shadow-xl">
-      <div className="p-6">
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-200 hover:shadow-xl flex flex-col">
+      <div className="p-6 flex-1 min-h-[200px] flex flex-col">
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-xl font-semibold text-gray-800">{plan.title}</h3>
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${getProgressColor(progress)}`}>
@@ -44,7 +63,7 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
           ></div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 mt-auto">
           <div className="flex items-center text-sm text-gray-500">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -60,15 +79,15 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
         </div>
       </div>
       
-      <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
+      <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 mt-auto">
         <div className="flex justify-between items-center">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="text-blue-600 hover:text-blue-800 font-medium text-sm transition duration-200"
-          >
-            View Tasks
-          </button>
-          <div className="flex items-center space-x-2">
+          <div className="flex space-x-4">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-blue-600 hover:text-blue-800 font-medium text-sm transition duration-200"
+            >
+              View Tasks
+            </button>
             <button
               onClick={() => navigate(`/update-plan/${plan.id}`)}
               className="text-gray-600 hover:text-gray-800 text-sm transition duration-200"
@@ -76,6 +95,12 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
               Edit Plan
             </button>
           </div>
+          <button
+            onClick={handleDelete}
+            className="text-red-600 hover:text-red-800 text-sm transition duration-200"
+          >
+            Delete
+          </button>
         </div>
       </div>
 
@@ -102,6 +127,8 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
                   <LearnPlanTask
                     key={index}
                     task={task}
+                    index={index}
+                    planId={plan.id}
                     onStatusChange={(isCompleted) => handleTaskStatusChange(index, isCompleted)}
                     loading={loading}
                   />
@@ -131,14 +158,14 @@ const getProgressBarColor = (progress) => {
   return 'bg-red-600';
 };
 
+const getCompletedTasks = (tasks) => {
+  return tasks.filter(task => task.completed).length;
+};
+
 const calculateProgress = (tasks) => {
   if (!tasks || tasks.length === 0) return 0;
   const completedTasks = tasks.filter(task => task.completed).length;
   return Math.round((completedTasks / tasks.length) * 100);
-};
-
-const getCompletedTasks = (tasks) => {
-  return tasks.filter(task => task.completed).length;
 };
 
 const formatDate = (dateString) => {
