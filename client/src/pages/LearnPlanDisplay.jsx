@@ -77,12 +77,6 @@ const LearningPlanDisplay = () => {
         <div className="text-center py-12 bg-white rounded-lg shadow-sm">
           <div className="text-6xl mb-4">📝</div>
           <p className="text-gray-600 text-lg">No learning plans found. Create one to get started!</p>
-          <button 
-            onClick={handleCreatePlan}
-            className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
-          >
-            Create First Plan
-          </button>
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

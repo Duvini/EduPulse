@@ -13,7 +13,13 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
       setLoading(true);
       const response = await learningPlanService.updateTaskStatus(plan.id, taskIndex, isCompleted);
       if (!response.error) {
-        onUpdate();
+        // Instead of calling onUpdate which navigates away, just update the plan locally
+        const updatedTasks = [...plan.tasks];
+        updatedTasks[taskIndex].completed = isCompleted;
+        plan.tasks = updatedTasks;
+        // Force a re-render by updating the state
+        setLoading(false);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error updating task status:', error);
@@ -75,13 +81,13 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
       
       <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
         <div className="flex justify-between items-center">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="text-blue-600 hover:text-blue-800 font-medium text-sm transition duration-200"
-          >
-            View Tasks
-          </button>
-          <div className="flex items-center space-x-2">
+          <div className="flex space-x-4">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-blue-600 hover:text-blue-800 font-medium text-sm transition duration-200"
+            >
+              View Tasks
+            </button>
             <button
               onClick={() => navigate(`/update-plan/${plan.id}`)}
               className="text-gray-600 hover:text-gray-800 text-sm transition duration-200"
@@ -89,6 +95,12 @@ const LearnPlanMain = ({ plan, onUpdate, onDelete }) => {
               Edit Plan
             </button>
           </div>
+          <button
+            onClick={handleDelete}
+            className="text-red-600 hover:text-red-800 text-sm transition duration-200"
+          >
+            Delete
+          </button>
         </div>
       </div>
 
