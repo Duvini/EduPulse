@@ -33,7 +33,7 @@ public class LikeController {
             return ResponseEntity.badRequest().body(EntityModel.of(response));
         }
 
-        // Create HATEOAS links
+        
         EntityModel<ResponseDto> resource = EntityModel.of(response);
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LikeController.class)
                 .getLikes(postId)).withRel("post-likes"));
