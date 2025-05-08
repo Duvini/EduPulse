@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FiHome, FiBook, FiUsers, FiCreditCard, FiSettings, FiHelpCircle, FiSearch, FiStar, FiMenu, FiX, FiBell } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
+import { FiHome, FiBook, FiSettings, FiHelpCircle, FiSearch, FiMenu, FiX, FiBell } from 'react-icons/fi';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../../../store';
 import { getMediaUrl } from '../../services/axiosConfig';
 import { authService } from '../../services/authService';
 import Modal from '../Modal/Modal';
 
 const TopNavbar = () => {
+  const location = useLocation();
   const notificationRef = useRef(null);
   const userMenuRef = useRef(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -121,6 +122,10 @@ const TopNavbar = () => {
     }
   };
 
+  const isActiveRoute = (path) => {
+    return location.pathname === path;
+  };
+
   // Default user avatar as SVG data URL
   const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
 
@@ -163,22 +168,27 @@ const TopNavbar = () => {
 
             {/* Desktop Menu Items */}
             <div className="items-center hidden space-x-1 md:flex">
-              <Link to="/feed" className="flex flex-col items-center px-3 py-2 rounded-md text-white/90 hover:text-white hover:bg-white/10">
+              <Link 
+                to="/feed" 
+                className={`flex flex-col items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/feed') 
+                    ? 'text-white bg-white/20' 
+                    : 'text-white/90 hover:text-white hover:bg-white/10'
+                }`}
+              >
                 <FiHome className="text-xl mb-0.5" />
                 <span className="text-xs">Feed</span>
               </Link>
-              <Link to="/learning-plans" className="flex flex-col items-center px-3 py-2 rounded-md text-white/90 hover:text-white hover:bg-white/10">
+              <Link 
+                to="/learning-plans" 
+                className={`flex flex-col items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/learning-plans') 
+                    ? 'text-white bg-white/20' 
+                    : 'text-white/90 hover:text-white hover:bg-white/10'
+                }`}
+              >
                 <FiBook className="text-xl mb-0.5" />
                 <span className="text-xs">Learn</span>
-              </Link>
-              <Link to="/friends" className="relative flex flex-col items-center px-3 py-2 rounded-md text-white/90 hover:text-white hover:bg-white/10">
-                <FiUsers className="text-xl mb-0.5" />
-                <span className="text-xs">Friends</span>
-                <span className="absolute top-0 right-0 bg-white text-[#4937ce] rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
-              </Link>
-              <Link to="/subscription" className="flex flex-col items-center px-3 py-2 rounded-md text-white/90 hover:text-white hover:bg-white/10">
-                <FiCreditCard className="text-xl mb-0.5" />
-                <span className="text-xs">Pro</span>
               </Link>
             </div>
 
@@ -187,7 +197,9 @@ const TopNavbar = () => {
               {/* Notifications */}
               <div className="relative ml-2" ref={notificationRef}>
                 <button 
-                  className="p-1.5 rounded-full hover:bg-white/10 flex items-center justify-center relative"
+                  className={`p-1.5 rounded-full transition-colors duration-200 flex items-center justify-center relative ${
+                    isNotificationsOpen ? 'bg-white/20' : 'hover:bg-white/10'
+                  }`}
                   onClick={toggleNotificationsDropdown}
                 >
                   <FiBell className="text-xl" />
@@ -198,7 +210,6 @@ const TopNavbar = () => {
                   )}
                 </button>
                 
-                {/* Notifications Dropdown */}
                 {isNotificationsOpen && (
                   <div className="absolute right-0 z-20 mt-2 overflow-hidden bg-white rounded-md shadow-lg w-72">
                     <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
@@ -323,24 +334,38 @@ const TopNavbar = () => {
             </div>
             
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/feed" className="flex items-center px-3 py-2 text-white rounded-md hover:bg-white/10">
+              <Link 
+                to="/feed" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/feed') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiHome className="mr-3 text-lg" />
                 <span>Feed</span>
-                <span className="ml-auto bg-white text-[#4937ce] rounded-full py-0.5 px-2 text-xs font-bold">10</span>
               </Link>
               
-              <Link to="/learning-plans" className="flex items-center px-3 py-2 text-white rounded-md hover:bg-white/10">
+              <Link 
+                to="/learning-plans" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/learning-plans') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiBook className="mr-3 text-lg" />
                 <span>Learn Plans</span>
               </Link>
               
-              <Link to="/friends" className="flex items-center px-3 py-2 text-white rounded-md hover:bg-white/10">
-                <FiUsers className="mr-3 text-lg" />
-                <span>Friends</span>
-                <span className="ml-auto bg-white text-[#4937ce] rounded-full py-0.5 px-2 text-xs font-bold">2</span>
-              </Link>
-              
-              <Link to="/notifications" className="flex items-center px-3 py-2 text-white rounded-md hover:bg-white/10">
+              <Link 
+                to="/notifications" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/notifications') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiBell className="mr-3 text-lg" />
                 <span>Notifications</span>
                 {unreadNotificationCount > 0 && (
@@ -348,25 +373,29 @@ const TopNavbar = () => {
                 )}
               </Link>
               
-              <Link to="/subscription" className="flex items-center px-3 py-2 text-white rounded-md hover:bg-white/10">
-                <FiCreditCard className="mr-3 text-lg" />
-                <span>Subscription</span>
-              </Link>
-              
-              <Link to="/settings" className="flex items-center px-3 py-2 text-white rounded-md hover:bg-white/10">
+              <Link 
+                to="/settings" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/settings') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiSettings className="mr-3 text-lg" />
                 <span>Settings</span>
               </Link>
               
-              <Link to="/help" className="flex items-center px-3 py-2 text-white rounded-md hover:bg-white/10">
+              <Link 
+                to="/help" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/help') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiHelpCircle className="mr-3 text-lg" />
                 <span>Help & Support</span>
               </Link>
-              
-              <div className="flex items-center justify-between p-4 mx-3 mt-4 rounded-lg bg-white/15">
-                <button className="p-0 font-bold text-white bg-transparent border-none cursor-pointer">Go Pro</button>
-                <FiStar className="text-lg" />
-              </div>
             </div>
           </div>
         )}
