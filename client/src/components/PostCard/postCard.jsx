@@ -1,14 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useStore } from '../../../store';
 import CommentInput from '../CommentInput/commentInput';
+import CommentsSection from '../CommentInput/CommentsSection';
 import { FiThumbsUp, FiMessageSquare, FiShare, FiBookmark, FiMoreVertical, FiEdit2, FiTrash2, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { getMediaUrl } from '../../services/apiClient';
 import SkillPostEditForm from '../CommentInput/SkillPostEditForm';
 import DeleteConfirmationModal from '../Modal/DeleteConfirmationModal';
 import Modal from '../Modal/Modal';
 import axiosInstance from '../../services/apiClient';
-import { useDeletePost, useLikePost, useUnlikePost, useSavePost, useUnsavePost } from '../../api/hooks/usePosts';
+import { useDeletePost, useSavePost, useUnsavePost } from '../../api/hooks/usePosts';
+import { likeService } from '../../services/likeService';
+import { useCommentCount } from '../../api/hooks/useComments';
 
 // Default user avatar as SVG data URL
 const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
@@ -21,7 +23,7 @@ const PostCard = ({
   content,
   image,
   mediaUrls,
-  likes,
+  likes: initialLikes,
   comments,
   shares,
   saves,
@@ -40,27 +42,47 @@ const PostCard = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [isSaved, setIsSaved] = useState(initialIsSaved);
-  const [likesCount, setLikesCount] = useState(likes || 0);
+  const [likesCount, setLikesCount] = useState(initialLikes || 0);
   const [savesCount, setSavesCount] = useState(saves || 0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [mediaTypes, setMediaTypes] = useState({});
-  const { user } = useStore();
-
-  // Update author information if it matches the current user
-  const [currentAuthorName, setCurrentAuthorName] = useState(authorName);
+  const [likeLoading, setLikeLoading] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const { data: commentCountData } = useCommentCount(id);
+  const [commentsCount, setCommentsCount] = useState(comments || 0);
   
-  useEffect(() => {
-    if (user && userId === user.id) {
-      setCurrentAuthorName(user.name || user.username);
-    }
-  }, [user, userId]);
-
   // React Query mutation hooks
   const deletePostMutation = useDeletePost();
-  const likePostMutation = useLikePost();
-  const unlikePostMutation = useUnlikePost();
   const savePostMutation = useSavePost();
   const unsavePostMutation = useUnsavePost();
+  
+  // Fetch like status and count when component mounts
+  useEffect(() => {
+    const fetchLikeData = async () => {
+      try {
+        const statusRes = await likeService.getLikeStatus(id);
+        if (!statusRes.error) {
+          setIsLiked(statusRes.data);
+        }
+        
+        const countRes = await likeService.getLikeCount(id);
+        if (!countRes.error) {
+          setLikesCount(countRes.data);
+        }
+      } catch (err) {
+        console.error('Error fetching like data:', err);
+      }
+    };
+    
+    fetchLikeData();
+  }, [id]);
+  
+  // Update useEffect to fetch comment count
+  useEffect(() => {
+    if (commentCountData && !isNaN(commentCountData.data)) {
+      setCommentsCount(commentCountData.data);
+    }
+  }, [commentCountData]);
   
   // Fetch media types for blob URLs when the component mounts
   useEffect(() => {
@@ -119,19 +141,30 @@ const PostCard = ({
     };
   }, []);
 
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+
   const handleLikeToggle = async () => {
+    if (likeLoading) return;
+    
+    setLikeLoading(true);
     try {
-      if (isLiked) {
-        await unlikePostMutation.mutateAsync(id);
+      const response = await likeService.toggleLike(id);
+      if (!response.error) {
+        // Toggle the like state
+        setIsLiked(!isLiked);
+        // Update the like count
+        setLikesCount(prev => isLiked ? prev - 1 : prev + 1);
       } else {
-        await likePostMutation.mutateAsync(id);
+        console.error(response.message);
+        // Handle error if needed but don't update UI
       }
-      
-      setIsLiked(!isLiked);
-      setLikesCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
     } catch (error) {
       console.error('Error toggling like:', error);
       // Handle error if needed but don't update UI
+    } finally {
+      setLikeLoading(false);
     }
   };
 
@@ -237,7 +270,7 @@ const PostCard = ({
               )}
             </div>
             <div className="flex flex-col">
-              <h4 className="m-0 text-base font-semibold group-hover:text-blue-600 transition-colors duration-200">{currentAuthorName}</h4>
+              <h4 className="m-0 text-base font-semibold group-hover:text-blue-600 transition-colors duration-200">{authorName}</h4>
               <p className="m-0 text-xs text-gray-500">{authorRole}</p>
             </div>
           </div>
@@ -413,16 +446,16 @@ const PostCard = ({
         <div className="flex flex-wrap justify-between py-1 px-4 border-t border-b border-gray-100">
           <div className="flex items-center space-x-4">
             <button 
-              className="flex items-center space-x-1 group py-2" 
+              className={`flex items-center space-x-1 group py-2`}
               onClick={handleLikeToggle}
-              disabled={likePostMutation.isPending || unlikePostMutation.isPending}
+              disabled={likeLoading}
             >
               <div
                 className={`p-1.5 rounded-full transition-colors duration-200 group-hover:bg-blue-50 ${
                   isLiked ? 'text-blue-500' : 'text-gray-500 group-hover:text-blue-500'
                 }`}
               >
-                <FiThumbsUp className="text-lg" />
+                <FiThumbsUp className={`text-lg ${isLiked ? 'fill-current' : ''}`} />
               </div>
               <span
                 className={`text-sm ${
@@ -433,12 +466,19 @@ const PostCard = ({
               </span>
             </button>
 
-            <button className="flex items-center space-x-1 group py-2">
-              <div className="p-1.5 rounded-full text-gray-500 group-hover:text-blue-500 group-hover:bg-blue-50 transition-colors duration-200">
+            <button 
+              className="flex items-center space-x-1 group py-2"
+              onClick={toggleComments}
+            >
+              <div className={`p-1.5 rounded-full transition-colors duration-200 group-hover:bg-blue-50 ${
+                showComments ? 'text-blue-500' : 'text-gray-500 group-hover:text-blue-500'
+              }`}>
                 <FiMessageSquare className="text-lg" />
               </div>
-              <span className="text-sm text-gray-500 group-hover:text-blue-500 transition-colors duration-200">
-                {comments || 0}
+              <span className={`text-sm ${
+                showComments ? 'text-blue-500' : 'text-gray-500 group-hover:text-blue-500'
+              } transition-colors duration-200`}>
+                {commentsCount}
               </span>
             </button>
 
@@ -473,6 +513,9 @@ const PostCard = ({
             </span>
           </button>
         </div>
+
+        {/* Comments Section - conditionally rendered */}
+        {showComments && <CommentsSection postId={id} currentUserId={currentUserId} />}
 
         {/* Comment Input */}
         <div className="px-3 pt-1 pb-2">
