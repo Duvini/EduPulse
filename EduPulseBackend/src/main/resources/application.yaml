@@ -4,7 +4,7 @@ spring:
     
   data:
     mongodb:
-      uri: mongodb+srv://dasunhimsara:dasun123@edupulse.oovinf0.mongodb.net/EduPulse?retryWrites=true&w=majority&appName=EduPulse
+      uri: mongodb+srv://sanduninavodya01:sanduni123@edupulse.oovinf0.mongodb.net/EduPulse?retryWrites=true&w=majority&appName=EduPulse
       
   security:
     oauth2:
