@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -328,17 +330,27 @@ public class NotificationController {
     // Helper method to extract user ID from authentication
     private String getUserIdFromAuth(Authentication authentication) {
         try {
-            // This would need to be adapted based on your authentication structure
-            org.springframework.security.core.userdetails.UserDetails userDetails = 
-                (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal();
+            if (authentication == null) {
+                authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication == null) {
+                    return null;
+                }
+            }
             
-            // Get user from username
-            return userDetails.getUsername();
+            Object principal = authentication.getPrincipal();
             
-            // In a real implementation, you would likely need to:
-            // 1. Get the username from authentication
-            // 2. Use a service to look up the user's ID by username
-            // 3. Return the user's ID
+            if (principal instanceof UserDetails) {
+                // If using UserDetails implementation
+                return ((UserDetails) principal).getUsername();
+            } else if (principal instanceof String) {
+                // If using simple String username
+                return (String) principal;
+            }
+            
+            // If we can't determine the user ID, log the issue
+            log.warn("Unable to extract user ID from authentication principal type: {}", 
+                     principal != null ? principal.getClass().getName() : "null");
+            return null;
         } catch (Exception e) {
             log.error("Error extracting user ID from authentication: {}", e.getMessage());
             return null;

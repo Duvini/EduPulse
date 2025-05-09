@@ -9,6 +9,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class CommentController {
     public ResponseEntity<EntityModel<ResponseDto>> createComment(
         @RequestParam String postId,
         @RequestParam String content,
-        Authentication authentication
+        @Nullable Authentication authentication
     ) {
         // Pass the authentication object directly to service layer
         ResponseDto response = commentService.addComment(authentication, postId, content);
@@ -42,8 +43,11 @@ public class CommentController {
         
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CommentController.class)
                 .getCommentsByPost(createdComment.getPostId())).withRel("post-comments"));
-        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CommentController.class)
-                .deleteComment(createdComment.getId(), authentication)).withRel("delete-comment"));
+        
+        if (authentication != null) {
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CommentController.class)
+                    .deleteComment(createdComment.getId(), authentication)).withRel("delete-comment"));
+        }
     
         return new ResponseEntity<>(resource, HttpStatus.CREATED);
     }

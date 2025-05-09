@@ -41,7 +41,7 @@ public interface NotificationRepository extends MongoRepository<Notification, St
     long countByRecipientIdAndType(String recipientId, NotificationType type);
     long countByRecipientIdAndTypeAndRead(String recipientId, NotificationType type, boolean read);
     
-    // Latest notifications
-    @Query(value="{ 'recipientId': ?0 }", sort="{ 'createdAt': -1 }", limit="?1")
+    // Latest notifications - fixed by removing invalid limit attribute
+    @Query(value="{ 'recipientId': ?0 }", sort="{ 'createdAt': -1 }")
     List<Notification> findTopByRecipientIdOrderByCreatedAtDesc(String recipientId, int limit);
 }

@@ -2,11 +2,8 @@ package com.example.edupulse_backend.controller;
 
 import com.example.edupulse_backend.model.Notification;
 import com.example.edupulse_backend.repository.NotificationRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -15,118 +12,81 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class WebSocketNotificationController {
-
+    
     private final SimpMessagingTemplate messagingTemplate;
-    // Use ConcurrentHashMap for thread safety
-    private final Map<String, String> connectedUsers = new ConcurrentHashMap<>();
     private final NotificationRepository notificationRepository;
     
-    // Constructor with @Lazy injection to avoid circular dependency
-    public WebSocketNotificationController(
-            SimpMessagingTemplate messagingTemplate, 
-            @Lazy NotificationRepository notificationRepository) {
-        this.messagingTemplate = messagingTemplate;
-        this.notificationRepository = notificationRepository;
-    }
-
-    @MessageMapping("/notifications.connect")
-    public void connect(@Payload Map<String, String> payload, SimpMessageHeaderAccessor headerAccessor) {
-        String userId = payload.get("userId");
-        String sessionId = headerAccessor != null ? headerAccessor.getSessionId() : null;
-        
-        if (userId == null || userId.isEmpty() || sessionId == null) {
-            log.warn("Received connect message without valid userId or sessionId");
-            return;
-        }
-        
-        log.info("User connected to notifications: {} (Session: {})", userId, sessionId);
-        connectedUsers.put(userId, sessionId);
-        
-        // Store userId in the WebSocket session for later use on disconnect
-        if (headerAccessor.getSessionAttributes() != null) {
-            headerAccessor.getSessionAttributes().put("USER_ID", userId);
-        }
-        
-        // Send connection confirmation
+    // Track connected users
+    private final Map<String, Boolean> connectedUsers = new ConcurrentHashMap<>();
+    
+    /**
+     * Send a notification to a specific user
+     * 
+     * @param userId the ID of the user to send the notification to
+     * @param notification the notification to send
+     */
+    public void sendNotification(String userId, Notification notification) {
+        log.debug("Sending notification to user: {}", userId);
         messagingTemplate.convertAndSendToUser(
-            userId, 
-            "/queue/notifications", 
-            Map.of("type", "CONNECTION_CONFIRMED", "message", "Successfully connected to notification service")
+                userId,
+                "/queue/notifications",
+                notification
         );
-        
-        // Send unread count immediately after connection
-        sendUnreadCount(userId);
     }
     
-    @MessageMapping("/notifications.disconnect")
-    public void manualDisconnect(@Payload Map<String, String> payload) {
-        String userId = payload.get("userId");
-        if (userId == null || userId.isEmpty()) {
-            log.warn("Received disconnect message without valid userId");
-            return;
-        }
-        
-        handleDisconnect(userId);
+    /**
+     * Send the updated unread notification count to a specific user
+     * 
+     * @param userId the ID of the user to send the count to
+     */
+    public void sendUnreadCount(String userId) {
+        log.debug("Sending unread count to user: {}", userId);
+        long unreadCount = notificationRepository.countByRecipientIdAndRead(userId, false);
+        messagingTemplate.convertAndSendToUser(
+                userId,
+                "/queue/notifications/count",
+                unreadCount
+        );
     }
     
-    // Public method for SessionDisconnectEvent handler in WebSocketEventListener
-    public void handleDisconnect(String userId) {
-        if (userId != null) {
-            log.info("User disconnected from notifications: {}", userId);
-            connectedUsers.remove(userId);
-        }
-    }
-    
-    // Check if a user is connected
+    /**
+     * Check if a user is connected via WebSocket
+     * 
+     * @param userId the ID of the user to check
+     * @return true if the user is connected, false otherwise
+     */
     public boolean isUserConnected(String userId) {
-        return connectedUsers.containsKey(userId);
+        return connectedUsers.getOrDefault(userId, false);
     }
     
-    // Get connected users count (for monitoring)
+    /**
+     * Mark a user as connected
+     * 
+     * @param userId the ID of the user to mark as connected
+     */
+    public void userConnected(String userId) {
+        connectedUsers.put(userId, true);
+        log.info("User connected: {}", userId);
+    }
+    
+    /**
+     * Mark a user as disconnected
+     * 
+     * @param userId the ID of the user to mark as disconnected
+     */
+    public void userDisconnected(String userId) {
+        connectedUsers.remove(userId);
+        log.info("User disconnected: {}", userId);
+    }
+    
+    /**
+     * Get the count of currently connected users
+     * 
+     * @return the number of connected users
+     */
     public int getConnectedUsersCount() {
         return connectedUsers.size();
-    }
-    
-    // Send a notification programmatically
-    public void sendNotification(String userId, Object notification) {
-        if (isUserConnected(userId)) {
-            try {
-                messagingTemplate.convertAndSendToUser(
-                    userId,
-                    "/queue/notifications",
-                    notification
-                );
-                log.debug("Notification sent to user: {}", userId);
-            } catch (Exception e) {
-                log.error("Error sending notification to user {}: {}", userId, e.getMessage());
-            }
-        } else {
-            log.debug("User not connected, notification not sent: {}", userId);
-        }
-    }
-    
-    // Send unread count
-    public void sendUnreadCount(String userId) {
-        if (isUserConnected(userId)) {
-            try {
-                // Get count directly from repository to avoid circular dependency
-                long unreadCount = notificationRepository.countByRecipientIdAndRead(userId, false);
-                
-                Map<String, Object> countUpdate = Map.of(
-                    "type", "UNREAD_COUNT_UPDATE",
-                    "unreadCount", unreadCount
-                );
-                
-                messagingTemplate.convertAndSendToUser(
-                    userId,
-                    "/queue/notifications/count",
-                    countUpdate
-                );
-                log.debug("Unread count update sent to user: {}", userId);
-            } catch (Exception e) {
-                log.error("Error sending unread count to user {}: {}", userId, e.getMessage());
-            }
-        }
     }
 }
