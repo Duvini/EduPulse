@@ -3,12 +3,11 @@ package com.example.edupulse_backend.service.impl;
 import com.example.edupulse_backend.exception.ResourceNotFoundException;
 import com.example.edupulse_backend.model.Follower;
 import com.example.edupulse_backend.model.User;
-import com.example.edupulse_backend.model.Notification;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.repository.FollowerRepository;
 import com.example.edupulse_backend.repository.UserRepository;
 import com.example.edupulse_backend.service.FollowerService;
-import com.example.edupulse_backend.service.NotificationService;
+import com.example.edupulse_backend.util.NotificationHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -27,7 +26,7 @@ public class FollowerServiceImpl implements FollowerService {
 
     private final FollowerRepository followerRepository;
     private final UserRepository userRepository;
-    private final NotificationService notificationService;
+    private final NotificationHandler notificationHandler;
 
     @Override
     public ResponseDto followUser(String followingId, Authentication auth) {
@@ -57,10 +56,10 @@ public class FollowerServiceImpl implements FollowerService {
             followerRepository.save(newFollower);
 
             // Send notification to the user being followed
-            notificationService.createFollowNotification(
-                follower.getId(),
-                follower.getName(),
-                followingId
+            notificationHandler.sendFollowNotification(
+                followingId,         // recipientId
+                follower.getId(),    // senderId
+                follower.getName()   // senderName
             );
 
             Map<String, Object> response = new HashMap<>();

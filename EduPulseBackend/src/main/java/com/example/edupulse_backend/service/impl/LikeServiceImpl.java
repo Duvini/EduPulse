@@ -9,7 +9,7 @@ import com.example.edupulse_backend.repository.LikeRepository;
 import com.example.edupulse_backend.repository.SkillPostRepository;
 import com.example.edupulse_backend.repository.UserRepository;
 import com.example.edupulse_backend.service.LikeService;
-import com.example.edupulse_backend.service.NotificationService;
+import com.example.edupulse_backend.util.NotificationHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -29,7 +29,7 @@ public class LikeServiceImpl implements LikeService {
     private final LikeRepository likeRepository;
     private final SkillPostRepository skillPostRepository;
     private final UserRepository userRepository;
-    private final NotificationService notificationService;
+    private final NotificationHandler notificationHandler;
 
     @Override
     public ResponseDto toggleLike(String postId, Authentication auth) {
@@ -85,11 +85,11 @@ public class LikeServiceImpl implements LikeService {
                 
                 // Create notification for post owner (if liker is not the post owner)
                 if (!userId.equals(post.getUserId())) {
-                    notificationService.createLikeNotification(
-                        postId,
-                        userId,
-                        userName,
-                        post.getUserId()
+                    notificationHandler.sendLikeNotification(
+                        post.getUserId(),  // recipientId
+                        userId,            // senderId
+                        userName,          // senderName
+                        postId             // postId
                     );
                 }
             }

@@ -1,222 +1,216 @@
 package com.example.edupulse_backend.service.impl;
 
-import com.example.edupulse_backend.controller.WebSocketNotificationController;
 import com.example.edupulse_backend.model.Notification;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.repository.NotificationRepository;
 import com.example.edupulse_backend.service.NotificationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Slf4j
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final WebSocketNotificationController webSocketController;
-
-    // Constructor with one @Lazy component to break circular dependency
-    public NotificationServiceImpl(
-            NotificationRepository notificationRepository,
-            @Lazy WebSocketNotificationController webSocketController) {
-        this.notificationRepository = notificationRepository;
-        this.webSocketController = webSocketController;
-    }
+    
+    // Map to track active pollers by user ID and their wait objects
+    private final Map<String, Set<NotificationPoller>> activePollers = new ConcurrentHashMap<>();
+    
+    // Polling timeout in milliseconds (30 seconds)
+    private static final int POLLING_TIMEOUT = 30000;
 
     @Override
     public ResponseDto getNotifications(String userId) {
-        log.info("Getting all notifications for user: {}", userId);
-        List<Notification> notifications = notificationRepository.findByRecipientIdOrderByCreatedAtDesc(userId);
-        return new ResponseDto(false, notifications);
+        try {
+            List<Notification> notifications = notificationRepository.findByRecipientIdOrderByCreatedAtDesc(userId);
+            return new ResponseDto(false, notifications);
+        } catch (Exception e) {
+            log.error("Error fetching notifications for user {}: {}", userId, e.getMessage());
+            return new ResponseDto(true, "Error fetching notifications: " + e.getMessage());
+        }
     }
 
     @Override
     public ResponseDto getUnreadNotifications(String userId) {
-        log.info("Getting unread notifications for user: {}", userId);
-        List<Notification> unreadNotifications = notificationRepository.findByRecipientIdAndReadOrderByCreatedAtDesc(userId, false);
-        return new ResponseDto(false, unreadNotifications);
-    }
-
-    @Override
-    @Transactional
-    public ResponseDto markAsRead(String notificationId) {
-        log.info("Marking notification as read: {}", notificationId);
-        Optional<Notification> notificationOpt = notificationRepository.findById(notificationId);
-        
-        if (notificationOpt.isPresent()) {
-            Notification notification = notificationOpt.get();
-            notification.setRead(true);
-            notificationRepository.save(notification);
-            
-            // Send updated unread count via WebSocket
-            webSocketController.sendUnreadCount(notification.getRecipientId());
-            
-            return new ResponseDto(false, "Notification marked as read");
+        try {
+            List<Notification> notifications = notificationRepository.findByRecipientIdAndReadOrderByCreatedAtDesc(userId, false);
+            return new ResponseDto(false, notifications);
+        } catch (Exception e) {
+            log.error("Error fetching unread notifications for user {}: {}", userId, e.getMessage());
+            return new ResponseDto(true, "Error fetching unread notifications: " + e.getMessage());
         }
-        
-        return new ResponseDto(true, "Notification not found");
-    }
-
-    @Override
-    @Transactional
-    public ResponseDto markAllAsRead(String userId) {
-        log.info("Marking all notifications as read for user: {}", userId);
-        
-        // Better approach - bulk update
-        List<Notification> notifications = notificationRepository.findByRecipientIdAndReadOrderByCreatedAtDesc(userId, false);
-        if (!notifications.isEmpty()) {
-            notifications.forEach(notification -> notification.setRead(true));
-            notificationRepository.saveAll(notifications);
-            
-            // Send updated unread count via WebSocket
-            webSocketController.sendUnreadCount(userId);
-        }
-        
-        return new ResponseDto(false, "All notifications marked as read");
     }
 
     @Override
     public ResponseDto getUnreadCount(String userId) {
-        log.info("Getting unread notification count for user: {}", userId);
-        long count = notificationRepository.countByRecipientIdAndRead(userId, false);
-        return new ResponseDto(false, count);
-    }
-
-    @Override
-    @Transactional
-    public void createLikeNotification(String postId, String likerId, String likerName, String postOwnerId) {
-        // Don't notify if user likes their own post
-        if (likerId.equals(postOwnerId)) {
-            return;
-        }
-        
-        log.info("Creating like notification: {} liked a post by {}", likerId, postOwnerId);
-        
-        // Check if similar notification exists recently to prevent spam
-        List<Notification> recentNotifications = notificationRepository.findByRecipientIdAndSenderIdAndTypeAndCreatedAtAfter(
-                postOwnerId, likerId, Notification.NotificationType.LIKE, 
-                LocalDateTime.now(ZoneOffset.UTC).minusMinutes(5)); // Check last 5 minutes with explicit UTC
-                
-        if (!recentNotifications.isEmpty()) {
-            log.info("Recent like notification already exists, skipping");
-            return;
-        }
-        
-        Notification notification = Notification.builder()
-                .recipientId(postOwnerId)
-                .senderId(likerId)
-                .senderName(likerName)
-                .postId(postId)
-                .type(Notification.NotificationType.LIKE)
-                .content(likerName + " liked your post")
-                .read(false)
-                .createdAt(LocalDateTime.now(ZoneOffset.UTC))
-                .build();
-        
-        notification = notificationRepository.save(notification);
-        
-        // Use the WebSocketController to send notification if user is connected
-        sendRealTimeNotification(postOwnerId, notification);
-    }
-
-    @Override
-    @Transactional
-    public void createCommentNotification(String postId, String commentId, String commenterId, String commenterName, String postOwnerId) {
-        // Don't notify if user comments on their own post
-        if (commenterId.equals(postOwnerId)) {
-            return;
-        }
-        
-        log.info("Creating comment notification: {} commented on a post by {}", commenterId, postOwnerId);
-        
-        // Check if similar notification exists recently to prevent spam
-        List<Notification> recentNotifications = notificationRepository.findByRecipientIdAndSenderIdAndTypeAndCreatedAtAfter(
-                postOwnerId, commenterId, Notification.NotificationType.COMMENT, 
-                LocalDateTime.now(ZoneOffset.UTC).minusMinutes(2)); // Check last 2 minutes with explicit UTC
-                
-        if (!recentNotifications.isEmpty()) {
-            log.info("Recent comment notification already exists, skipping");
-            return;
-        }
-        
-        Notification notification = Notification.builder()
-                .recipientId(postOwnerId)
-                .senderId(commenterId)
-                .senderName(commenterName)
-                .postId(postId)
-                .commentId(commentId)
-                .type(Notification.NotificationType.COMMENT)
-                .content(commenterName + " commented on your post")
-                .read(false)
-                .createdAt(LocalDateTime.now(ZoneOffset.UTC))
-                .build();
-        
-        notification = notificationRepository.save(notification);
-        
-        // Use the WebSocketController to send notification if user is connected
-        sendRealTimeNotification(postOwnerId, notification);
-    }
-
-    @Override
-    @Transactional
-    public void createFollowNotification(String followerId, String followerName, String followedUserId) {
-        // Don't notify if a user follows themselves (shouldn't happen, but just in case)
-        if (followerId.equals(followedUserId)) {
-            return;
-        }
-        
-        log.info("Creating follow notification: {} is now following {}", followerId, followedUserId);
-        
-        // Check if similar notification exists recently to prevent spam
-        List<Notification> recentNotifications = notificationRepository.findByRecipientIdAndSenderIdAndTypeAndCreatedAtAfter(
-                followedUserId, followerId, Notification.NotificationType.FOLLOW, 
-                LocalDateTime.now(ZoneOffset.UTC).minusMinutes(5)); // Check last 5 minutes with explicit UTC
-                
-        if (!recentNotifications.isEmpty()) {
-            log.info("Recent follow notification already exists, skipping");
-            return;
-        }
-        
-        Notification notification = Notification.builder()
-                .recipientId(followedUserId)
-                .senderId(followerId)
-                .senderName(followerName)
-                .type(Notification.NotificationType.FOLLOW)
-                .content(followerName + " started following you")
-                .read(false)
-                .createdAt(LocalDateTime.now(ZoneOffset.UTC))
-                .build();
-        
-        notification = notificationRepository.save(notification);
-        
-        // Use the WebSocketController to send notification if user is connected
-        sendRealTimeNotification(followedUserId, notification);
-    }
-    
-    // Helper method to send real-time notifications using WebSocketController
-    private void sendRealTimeNotification(String userId, Notification notification) {
         try {
-            // Check if user is connected before sending
-            if (webSocketController.isUserConnected(userId)) {
-                webSocketController.sendNotification(userId, notification);
-                log.debug("Real-time notification sent to user: {}", userId);
+            long count = notificationRepository.countByRecipientIdAndRead(userId, false);
+            Map<String, Object> result = new HashMap<>();
+            result.put("count", count);
+            return new ResponseDto(false, result);
+        } catch (Exception e) {
+            log.error("Error getting unread notification count for user {}: {}", userId, e.getMessage());
+            return new ResponseDto(true, "Error getting unread notification count: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseDto markAsRead(String notificationId) {
+        try {
+            Optional<Notification> notificationOpt = notificationRepository.findById(notificationId);
+            if (notificationOpt.isPresent()) {
+                Notification notification = notificationOpt.get();
+                notification.setRead(true);
+                notificationRepository.save(notification);
+                return new ResponseDto(false, "Notification marked as read");
             } else {
-                // User not connected, notification is saved to DB but no real-time send
-                log.debug("User not connected, real-time notification skipped: {}", userId);
+                return new ResponseDto(true, "Notification not found");
+            }
+        } catch (Exception e) {
+            log.error("Error marking notification as read {}: {}", notificationId, e.getMessage());
+            return new ResponseDto(true, "Error marking notification as read: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseDto markAllAsRead(String userId) {
+        try {
+            List<Notification> unreadNotifications = notificationRepository.findByRecipientIdAndReadOrderByCreatedAtDesc(userId, false);
+            for (Notification notification : unreadNotifications) {
+                notification.setRead(true);
+            }
+            notificationRepository.saveAll(unreadNotifications);
+            return new ResponseDto(false, "All notifications marked as read");
+        } catch (Exception e) {
+            log.error("Error marking all notifications as read for user {}: {}", userId, e.getMessage());
+            return new ResponseDto(true, "Error marking all notifications as read: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseDto pollNotifications(String userId, Long lastPolledTimestamp) {
+        try {
+            // Convert timestamp to LocalDateTime
+            LocalDateTime lastPollTime = LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(lastPolledTimestamp), 
+                    ZoneId.systemDefault());
+            
+            // Check for new notifications immediately
+            List<Notification> newNotifications = notificationRepository.findByRecipientIdAndCreatedAtAfterOrderByCreatedAtAsc(
+                    userId, lastPollTime);
+            
+            if (!newNotifications.isEmpty()) {
+                // Notifications are available immediately, return them
+                return new ResponseDto(false, newNotifications);
             }
             
-            // Also send updated count - this will only be received if user is connected
-            webSocketController.sendUnreadCount(userId);
+            // No immediate notifications, set up long polling
+            NotificationPoller poller = new NotificationPoller();
+            
+            // Register poller for this user
+            activePollers.computeIfAbsent(userId, k -> ConcurrentHashMap.newKeySet()).add(poller);
+            
+            try {
+                // Wait for notification or timeout
+                synchronized (poller) {
+                    poller.wait(POLLING_TIMEOUT);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.warn("Polling interrupted for user {}", userId);
+            } finally {
+                // Remove poller when done
+                Set<NotificationPoller> userPollers = activePollers.get(userId);
+                if (userPollers != null) {
+                    userPollers.remove(poller);
+                    if (userPollers.isEmpty()) {
+                        activePollers.remove(userId);
+                    }
+                }
+            }
+            
+            // Check again after wait (either got a notification or timed out)
+            newNotifications = notificationRepository.findByRecipientIdAndCreatedAtAfterOrderByCreatedAtAsc(
+                    userId, lastPollTime);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("notifications", newNotifications);
+            response.put("timestamp", System.currentTimeMillis());
+            
+            return new ResponseDto(false, response);
+            
         } catch (Exception e) {
-            log.error("Error sending real-time notification: {}", e.getMessage());
+            log.error("Error during notification polling for user {}: {}", userId, e.getMessage());
+            return new ResponseDto(true, "Error during notification polling: " + e.getMessage());
         }
+    }
+
+    @Override
+    public Notification createNotification(String recipientId, String senderId, String senderName,
+                                         Notification.NotificationType type, String content) {
+        return createDetailedNotification(recipientId, senderId, senderName, null, null, type, content);
+    }
+
+    @Override
+    public Notification createDetailedNotification(String recipientId, String senderId, String senderName,
+                                          String postId, String commentId,
+                                          Notification.NotificationType type, String content) {
+        try {
+            // Create notification
+            Notification notification = Notification.builder()
+                    .recipientId(recipientId)
+                    .senderId(senderId)
+                    .senderName(senderName)
+                    .postId(postId)
+                    .commentId(commentId)
+                    .type(type)
+                    .content(content)
+                    .read(false)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            
+            // Save to database
+            Notification savedNotification = notificationRepository.save(notification);
+            
+            // Notify any active pollers for this user
+            notifyActivePollers(recipientId);
+            
+            return savedNotification;
+        } catch (Exception e) {
+            log.error("Error creating notification for user {}: {}", recipientId, e.getMessage());
+            throw new RuntimeException("Failed to create notification", e);
+        }
+    }
+    
+    /**
+     * Notifies all active pollers for a specific user
+     */
+    @Async
+    protected void notifyActivePollers(String userId) {
+        Set<NotificationPoller> pollers = activePollers.get(userId);
+        if (pollers != null && !pollers.isEmpty()) {
+            for (NotificationPoller poller : pollers) {
+                synchronized (poller) {
+                    poller.notify();
+                }
+            }
+            log.debug("Notified {} active pollers for user {}", pollers.size(), userId);
+        }
+    }
+    
+    /**
+     * Simple class to act as a wait/notify object for long polling
+     */
+    private static class NotificationPoller {
+        // This is just a marker class to use as a monitor for wait/notify
     }
 }

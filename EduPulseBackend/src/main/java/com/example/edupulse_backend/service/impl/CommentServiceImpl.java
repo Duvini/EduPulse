@@ -9,7 +9,7 @@ import com.example.edupulse_backend.repository.CommentRepository;
 import com.example.edupulse_backend.repository.SkillPostRepository;
 import com.example.edupulse_backend.repository.UserRepository;
 import com.example.edupulse_backend.service.CommentService;
-import com.example.edupulse_backend.service.NotificationService;
+import com.example.edupulse_backend.util.NotificationHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -29,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final SkillPostRepository skillPostRepository;
     private final UserRepository userRepository;
-    private final NotificationService notificationService;
+    private final NotificationHandler notificationHandler;
 
     @Override
     public ResponseDto addComment(Authentication auth, String postId, String content) {
@@ -81,12 +81,13 @@ public class CommentServiceImpl implements CommentService {
             
             // Create notification for post owner (if commenter is not the post owner)
             if (!userId.equals(post.getUserId())) {
-                notificationService.createCommentNotification(
-                    postId,
-                    savedComment.getId(),
-                    userId,
-                    userName,
-                    post.getUserId()
+                notificationHandler.sendCommentNotification(
+                    post.getUserId(),      // recipientId
+                    userId,                // senderId
+                    userName,              // senderName
+                    postId,                // postId
+                    savedComment.getId(),  // commentId
+                    content                // commentText
                 );
             }
             

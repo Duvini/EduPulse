@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
 
     private final NotificationService notificationService;
-    private final WebSocketNotificationController webSocketController;
 
     @GetMapping
     public ResponseEntity<ResponseDto> getNotifications(Authentication authentication) {
@@ -101,14 +100,31 @@ public class NotificationController {
         return ResponseEntity.ok(response);
     }
     
-    @GetMapping("/connected-users")
-    public ResponseEntity<ResponseDto> getConnectedUsersCount(Authentication authentication) {
+    /**
+     * Long polling endpoint for real-time notifications
+     * The client will hold the connection open until new notifications arrive or timeout occurs
+     */
+    @GetMapping("/poll")
+    public ResponseEntity<ResponseDto> pollNotifications(
+            @RequestParam(required = false) Long lastTimestamp,
+            Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
+            log.warn("Authentication is missing or invalid");
             return ResponseEntity.status(401).body(new ResponseDto(true, "Authentication required"));
         }
         
-        int count = webSocketController.getConnectedUsersCount();
-        return ResponseEntity.ok(new ResponseDto(false, count));
+        String userId = getUserIdFromAuth(authentication);
+        if (userId == null) {
+            return ResponseEntity.status(401).body(new ResponseDto(true, "Invalid authentication"));
+        }
+        
+        // Default to current time if no timestamp provided
+        if (lastTimestamp == null) {
+            lastTimestamp = System.currentTimeMillis();
+        }
+        
+        ResponseDto response = notificationService.pollNotifications(userId, lastTimestamp);
+        return ResponseEntity.ok(response);
     }
     
     // Helper method to extract user ID from authentication
