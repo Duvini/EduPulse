@@ -4,29 +4,117 @@ const API_URL = '/api/auth';
 
 export const authService = {
     login: async (username, password) => {
-        const response = await axiosInstance.post(`${API_URL}/login`, {
-            username,
-            password
-        });
-        if (response.data?.data?.token) {
-            localStorage.setItem('token', response.data.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.data));
+        try {
+            // Client-side validation
+            if (!username?.trim() || !password?.trim()) {
+                return { 
+                    error: true, 
+                    data: "Username and password are required",
+                    status: 400
+                };
+            }
+
+            const response = await axiosInstance.post(`${API_URL}/login`, {
+                username,
+                password
+            });
+
+            if (response.data?.data?.token) {
+                localStorage.setItem('token', response.data.data.token);
+                localStorage.setItem('user', JSON.stringify(response.data.data));
+                return response.data;
+            }
+
+            return {
+                error: true,
+                data: "Invalid server response",
+                status: 500
+            };
+        } catch (error) {
+            console.error('Login error:', error);
+            return {
+                error: true,
+                data: error.response?.data?.message || 'An unexpected error occurred during login',
+                status: error.response?.status || 500
+            };
         }
-        return response.data;
     },
 
     register: async (username, email, password, name) => {
-        const response = await axiosInstance.post(`${API_URL}/register`, {
-            username,
-            email,
-            password,
-            name
-        });
-        if (response.data?.data?.token) {
-            localStorage.setItem('token', response.data.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.data));
+        try {
+            // Client-side validation
+            if (!username?.trim() || !email?.trim() || !password?.trim() || !name?.trim()) {
+                return { 
+                    error: true, 
+                    data: "All fields are required",
+                    status: 400
+                };
+            }
+
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return {
+                    error: true,
+                    data: "Please enter a valid email address",
+                    status: 400
+                };
+            }
+
+            // Password strength validation
+            if (password.length < 6) {
+                return {
+                    error: true,
+                    data: "Password must be at least 6 characters long",
+                    status: 400
+                };
+            }
+
+            const response = await axiosInstance.post(`${API_URL}/register`, {
+                username,
+                email,
+                password,
+                name
+            });
+
+            if (response.data?.data?.token) {
+                localStorage.setItem('token', response.data.data.token);
+                localStorage.setItem('user', JSON.stringify(response.data.data));
+                return response.data;
+            }
+
+            return {
+                error: true,
+                data: "Invalid server response",
+                status: 500
+            };
+        } catch (error) {
+            console.error('Registration error:', error);
+            return {
+                error: true,
+                data: error.response?.data?.message || 'An unexpected error occurred during registration',
+                status: error.response?.status || 500
+            };
         }
-        return response.data;
+    },
+
+    searchUsers: async (query) => {
+        try {
+            if (!query?.trim()) {
+                return { error: true, data: [], message: "Search query is required" };
+            }
+            
+            const response = await axiosInstance.get(`${API_URL}/users/search?username=${encodeURIComponent(query)}`);
+            return { error: false, data: response.data?.data || [] };
+        } catch (error) {
+            console.error('Error searching users:', error);
+            return { 
+                error: true, 
+                data: [], 
+                message: error.response?.data?.message || 'Failed to search users',
+                status: error.response?.status || 500
+            };
+        }
     },
 
     logout: () => {
@@ -36,104 +124,164 @@ export const authService = {
 
     getCurrentUser: () => {
         const userStr = localStorage.getItem('user');
-        return userStr ? JSON.parse(userStr) : null;
+        try {
+            return userStr ? JSON.parse(userStr) : null;
+        } catch (e) {
+            console.error('Error parsing user data:', e);
+            // Clear invalid data
+            localStorage.removeItem('user');
+            return null;
+        }
     },
 
     getToken: () => {
         return localStorage.getItem('token');
     },
 
-    updateUser: async (id, userData) => {
-        const response = await axiosInstance.put(`${API_URL}/users/${id}`, userData);
-        if (response.data?.data) {
-            // Update the stored user data
-            const currentUser = authService.getCurrentUser();
-            const updatedUser = { ...currentUser, ...response.data.data };
-            localStorage.setItem('user', JSON.stringify(updatedUser));
-        }
-        return response.data;
-    },
-
-    updateProfilePicture: async (id, formData) => {
-        const response = await axiosInstance.put(`${API_URL}/users/${id}/profile-picture`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-        if (response.data?.data) {
-            // Update the stored user data
-            const currentUser = authService.getCurrentUser();
-            const updatedUser = { ...currentUser, ...response.data.data };
-            localStorage.setItem('user', JSON.stringify(updatedUser));
-        }
-        return response.data;
-    },
-
-    deleteUser: async (id) => {
-        const response = await axiosInstance.delete(`${API_URL}/users/${id}`);
-        return response.data;
-    },
-
     validateToken: async () => {
         try {
             const token = authService.getToken();
             if (!token) {
-                return { error: true, data: 'No token found' };
+                return { error: true, data: 'No token found', status: 401 };
             }
             
-            // Try to validate the token with the backend
             const response = await axiosInstance.post(`${API_URL}/validate`);
             
             if (response.data?.data) {
-                // Update stored user data with fresh data from server
                 localStorage.setItem('user', JSON.stringify(response.data.data));
-                return response.data;
-            } else {
-                // If we get a response but no data, still consider it valid
-                // This prevents unnecessary logouts
-                const currentUser = authService.getCurrentUser();
-                if (currentUser) {
-                    return { error: false, data: currentUser };
-                }
-                return { error: true, data: 'Invalid user data' };
+                return { error: false, data: response.data.data };
             }
+
+            return { error: true, data: 'Invalid response from server', status: 500 };
         } catch (error) {
             console.error('Token validation failed:', error);
             
-            // If the server is unreachable or returns an error not related to auth,
-            // don't automatically invalidate the session
             if (!error.response || (error.response.status !== 401 && error.response.status !== 403)) {
                 const currentUser = authService.getCurrentUser();
                 if (currentUser) {
-                    // Keep using existing user data rather than logging out
                     return { error: false, data: currentUser };
                 }
             }
             
-            // Only return error for actual authentication issues
-            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-                return { error: true, data: 'Token validation failed' };
-            }
-            
-            // For network errors, keep session active
-            const currentUser = authService.getCurrentUser();
-            if (currentUser) {
-                return { error: false, data: currentUser };
-            }
-            
-            return { error: true, data: 'Token validation failed' };
+            return {
+                error: true,
+                data: error.response?.data?.message || 'Token validation failed',
+                status: error.response?.status || 500
+            };
         }
     },
 
-    searchUsers: async (username) => {
+    updateUser: async (id, userData) => {
         try {
-            const response = await axiosInstance.get(`${API_URL}/users/search`, {
-                params: { username }
+            if (!id?.trim()) {
+                return { error: true, data: "User ID is required", status: 400 };
+            }
+
+            const response = await axiosInstance.put(`${API_URL}/users/${id}`, userData);
+            
+            if (response.data?.data) {
+                const currentUser = authService.getCurrentUser();
+                const updatedUser = { ...currentUser, ...response.data.data };
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+            }
+            return { error: false, data: response.data.data };
+        } catch (error) {
+            return {
+                error: true,
+                data: error.response?.data?.message || 'Failed to update user profile',
+                status: error.response?.status || 500
+            };
+        }
+    },
+
+    updateProfilePicture: async (id, formData) => {
+        try {
+            if (!id?.trim()) {
+                return { error: true, data: "User ID is required", status: 400 };
+            }
+
+            if (!formData || !(formData instanceof FormData)) {
+                return { error: true, data: "Invalid profile picture data", status: 400 };
+            }
+
+            const response = await axiosInstance.put(`${API_URL}/users/${id}/profile-picture`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
+
+            if (response.data?.data) {
+                const currentUser = authService.getCurrentUser();
+                const updatedUser = { ...currentUser, ...response.data.data };
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                return { error: false, data: response.data.data };
+            }
+
+            return { error: true, data: "Invalid server response", status: 500 };
+        } catch (error) {
+            return {
+                error: true,
+                data: error.response?.data?.message || 'Failed to update profile picture',
+                status: error.response?.status || 500
+            };
+        }
+    },
+
+    deleteUser: async (id) => {
+        try {
+            if (!id?.trim()) {
+                return { error: true, data: "User ID is required", status: 400 };
+            }
+
+            const response = await axiosInstance.delete(`${API_URL}/users/${id}`);
+            
+            if (!response.data.error) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+            }
             return response.data;
         } catch (error) {
-            console.error('Error searching users:', error);
-            return { error: true, message: 'Error searching users' };
+            return {
+                error: true,
+                data: error.response?.data?.message || 'Failed to delete user',
+                status: error.response?.status || 500
+            };
+        }
+    },
+
+    verifyPassword: async (password) => {
+        try {
+            if (!password?.trim()) {
+                return { error: true, data: "Password is required", status: 400 };
+            }
+
+            const response = await axiosInstance.post(`${API_URL}/verify-password`, { password });
+            return { error: false, data: response.data };
+        } catch (error) {
+            return {
+                error: true,
+                data: error.response?.data?.message || 'Password verification failed',
+                status: error.response?.status || 500
+            };
+        }
+    },
+
+    getUserById: async (id) => {
+        try {
+            if (!id?.trim()) {
+                return { error: true, data: null, message: "User ID is required" };
+            }
+            
+            const response = await axiosInstance.get(`${API_URL}/users/${id}`);
+            return { error: false, data: response.data.data };
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+            return { 
+                error: true, 
+                data: null, 
+                message: error.response?.data?.message || 'Failed to fetch user profile',
+                status: error.response?.status || 500
+            };
         }
     }
 };

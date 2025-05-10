@@ -6,6 +6,10 @@ import SignUp from '../pages/Auth/SignUp';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import UserProfile from '../pages/Profile/UserProfile';
 import SearchUsers from '../components/SearchUsers/SearchUsers';
+import LearnPlanDisplay from '../pages/LearnPlanDisplay';
+import LearningPlanCreate from '../components/LearningPlan/LearningPlanCreate';
+import LearningPlanUpdate from '../components/LearningPlan/LearningPlanUpdate';
+import NotificationsPage from '../pages/Notifications/NotificationsPage';
 
 const AppRoutes = () => {
   return (
@@ -39,6 +43,25 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
       
+      {/* Learning Plan Routes */}
+      <Route path="/learning-plans" element={
+        <ProtectedRoute>
+          <LearnPlanDisplay />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/create-plan" element={
+        <ProtectedRoute>
+          <LearningPlanCreate />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/update-plan/:id" element={
+        <ProtectedRoute>
+          <LearningPlanUpdate />
+        </ProtectedRoute>
+      } />
+      
       {/* Other protected routes */}
       <Route path="/learn" element={
         <ProtectedRoute>
@@ -52,7 +75,7 @@ const AppRoutes = () => {
       } />
       <Route path="/notifications" element={
         <ProtectedRoute>
-          <div>Notifications Page (Coming Soon)</div>
+          <NotificationsPage />
         </ProtectedRoute>
       } />
       <Route path="/subscription" element={

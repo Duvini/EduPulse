@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { likesApi } from '../endpoints/likes';
+import { showSuccessToast, showErrorToast } from '../../utils/toastUtils';
 
 /**
  * Hook to get likes for a post
@@ -24,6 +25,10 @@ export const useLikePost = () => {
       queryClient.invalidateQueries({ queryKey: ['likes', postId] });
       queryClient.invalidateQueries({ queryKey: ['likeCount', postId] });
       queryClient.invalidateQueries({ queryKey: ['checkLiked', postId] });
+      showSuccessToast('Post liked');
+    },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to like post');
     }
   });
 };
@@ -40,6 +45,10 @@ export const useUnlikePost = () => {
       queryClient.invalidateQueries({ queryKey: ['likes', postId] });
       queryClient.invalidateQueries({ queryKey: ['likeCount', postId] });
       queryClient.invalidateQueries({ queryKey: ['checkLiked', postId] });
+      showSuccessToast('Post unliked');
+    },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to unlike post');
     }
   });
 };

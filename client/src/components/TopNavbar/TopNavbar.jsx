@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FiHome, FiBook, FiUsers, FiCreditCard, FiSettings, FiHelpCircle, FiSearch, FiStar, FiMenu, FiX, FiBell } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
+import { FiHome, FiBook, FiSettings, FiHelpCircle, FiSearch, FiMenu, FiX, FiBell, FiTrash2 } from 'react-icons/fi';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../../../store';
 import { getMediaUrl } from '../../services/axiosConfig';
+import { authService } from '../../services/authService';
+import Modal from '../Modal/Modal';
+import { formatDistanceToNow } from 'date-fns';
 
 const TopNavbar = () => {
+  const location = useLocation();
   const notificationRef = useRef(null);
   const userMenuRef = useRef(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -20,12 +24,38 @@ const TopNavbar = () => {
     closeNotificationsDropdown, 
     markAllNotificationsAsRead,
     markNotificationAsRead, 
+    deleteNotification,
+    fetchNotifications,
+    fetchUnreadCount,
     isMobileMenuOpen, 
     isSearchFocused, 
     setSearchFocused, 
     user, 
     logout
   } = useStore();
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [deletePassword, setDeletePassword] = useState('');
+
+  // Fetch notifications when component mounts
+  useEffect(() => {
+    if (user?.id) {
+      fetchNotifications(user.id);
+      fetchUnreadCount(user.id);
+    }
+    
+    // Set up polling for notifications (every 30 seconds)
+    const intervalId = setInterval(() => {
+      if (user?.id) {
+        fetchUnreadCount(user.id);
+      }
+    }, 30000);
+    
+    return () => clearInterval(intervalId);
+  }, [user?.id, fetchNotifications, fetchUnreadCount]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -80,6 +110,91 @@ const TopNavbar = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (!user?.id || !deletePassword) return;
+    
+    setIsDeleting(true);
+    setError('');
+    setSuccess('');
+    
+    try {
+      // First verify the password
+      const verifyResponse = await authService.verifyPassword(deletePassword);
+      if (verifyResponse.error) {
+        setError('Incorrect password. Please try again.');
+        setIsDeleting(false);
+        return;
+      }
+
+      // Then proceed with account deletion
+      const response = await authService.deleteUser(user.id);
+      if (!response.error) {
+        setIsDeleteModalOpen(false);
+        // Immediately logout and redirect
+        authService.logout();
+        navigate('/signin');
+      } else {
+        setError(response.message || 'Failed to delete account');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'An error occurred while deleting account');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const isActiveRoute = (path) => {
+    return location.pathname === path;
+  };
+
+  const handleNotificationClick = (notification) => {
+    markNotificationAsRead(notification.id);
+    
+    // Navigate based on notification type
+    if (notification.type === 'LIKE' && notification.postId) {
+      navigate(`/post/${notification.postId}`);
+    } else if (notification.type === 'COMMENT' && notification.postId) {
+      navigate(`/post/${notification.postId}`);
+    } else if (notification.type === 'FOLLOW' && notification.senderId) {
+      navigate(`/profile/${notification.senderId}`);
+    }
+    
+    closeNotificationsDropdown();
+  };
+
+  const handleDeleteNotification = (e, notificationId) => {
+    e.stopPropagation(); // Prevent triggering the parent notification click
+    deleteNotification(notificationId);
+  };
+
+  // Get sender avatar based on notification
+  const getSenderAvatar = (notification) => {
+    // Default avatar as SVG data URL
+    const defaultAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
+    
+    // For system notifications, use a system icon
+    if (notification.type === 'SYSTEM') {
+      return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234937ce"%3E%3Cpath d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm0-9a1 1 0 011 1v4a1 1 0 11-2 0v-4a1 1 0 011-1zm0-4a1 1 0 110 2 1 1 0 010-2z"%3E%3C/path%3E%3C/svg%3E';
+    }
+    
+    // For user-related notifications, try to get their profile picture if available
+    // Note: In a real app, you would store or fetch the sender's profile picture
+    return defaultAvatar;
+  };
+
+  // Format notification time
+  const formatNotificationTime = (createdAt) => {
+    if (!createdAt) return '';
+    
+    try {
+      const date = new Date(createdAt);
+      return formatDistanceToNow(date, { addSuffix: true });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
+  };
+
   // Default user avatar as SVG data URL
   const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
 
@@ -94,26 +209,26 @@ const TopNavbar = () => {
     <>
       {/* Top Navigation Bar */}
       <div className="w-full bg-[#4937ce] text-white shadow-lg z-10 fixed top-0 left-0">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="px-4 mx-auto max-w-7xl">
           {/* Desktop Navigation */}
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center">
               <span className="bg-white text-[#4937ce] w-7 h-7 rounded-md flex items-center justify-center font-bold mr-2">E</span>
-              <span className="text-lg font-bold hidden sm:block">EduPulse</span>
+              <span className="hidden text-lg font-bold sm:block">EduPulse</span>
             </div>
 
             {/* Search Bar */}
             <div className={`relative hidden md:block flex-1 mx-10 ${isSearchFocused ? 'max-w-md' : 'max-w-xs'} transition-all duration-200`}>
-              <form onSubmit={handleSearchSubmit} className="bg-white/20 rounded-full p-2 flex items-center">
-                <FiSearch className="text-white ml-1 mr-2" />
+              <form onSubmit={handleSearchSubmit} className="flex items-center p-2 rounded-full bg-white/20">
+                <FiSearch className="ml-1 mr-2 text-white" />
                 <input 
                   type="text" 
                   placeholder="Search users..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleSearchKeyPress}
-                  className="bg-transparent border-none text-white outline-none w-full placeholder-white/70"
+                  className="w-full text-white bg-transparent border-none outline-none placeholder-white/70"
                   onFocus={() => setSearchFocused(true)}
                   onBlur={() => setSearchFocused(false)}
                 />
@@ -121,23 +236,28 @@ const TopNavbar = () => {
             </div>
 
             {/* Desktop Menu Items */}
-            <div className="hidden md:flex items-center space-x-1">
-              <Link to="/feed" className="px-3 py-2 rounded-md flex flex-col items-center text-white/90 hover:text-white hover:bg-white/10">
+            <div className="items-center hidden space-x-1 md:flex">
+              <Link 
+                to="/feed" 
+                className={`flex flex-col items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/feed') 
+                    ? 'text-white bg-white/20' 
+                    : 'text-white/90 hover:text-white hover:bg-white/10'
+                }`}
+              >
                 <FiHome className="text-xl mb-0.5" />
                 <span className="text-xs">Feed</span>
               </Link>
-              <Link to="/learn" className="px-3 py-2 rounded-md flex flex-col items-center text-white/90 hover:text-white hover:bg-white/10">
+              <Link 
+                to="/learning-plans" 
+                className={`flex flex-col items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/learning-plans') 
+                    ? 'text-white bg-white/20' 
+                    : 'text-white/90 hover:text-white hover:bg-white/10'
+                }`}
+              >
                 <FiBook className="text-xl mb-0.5" />
                 <span className="text-xs">Learn</span>
-              </Link>
-              <Link to="/friends" className="px-3 py-2 rounded-md flex flex-col items-center text-white/90 hover:text-white hover:bg-white/10 relative">
-                <FiUsers className="text-xl mb-0.5" />
-                <span className="text-xs">Friends</span>
-                <span className="absolute top-0 right-0 bg-white text-[#4937ce] rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
-              </Link>
-              <Link to="/subscription" className="px-3 py-2 rounded-md flex flex-col items-center text-white/90 hover:text-white hover:bg-white/10">
-                <FiCreditCard className="text-xl mb-0.5" />
-                <span className="text-xs">Pro</span>
               </Link>
             </div>
 
@@ -146,7 +266,9 @@ const TopNavbar = () => {
               {/* Notifications */}
               <div className="relative ml-2" ref={notificationRef}>
                 <button 
-                  className="p-1.5 rounded-full hover:bg-white/10 flex items-center justify-center relative"
+                  className={`p-1.5 rounded-full transition-colors duration-200 flex items-center justify-center relative ${
+                    isNotificationsOpen ? 'bg-white/20' : 'hover:bg-white/10'
+                  }`}
                   onClick={toggleNotificationsDropdown}
                 >
                   <FiBell className="text-xl" />
@@ -157,46 +279,53 @@ const TopNavbar = () => {
                   )}
                 </button>
                 
-                {/* Notifications Dropdown */}
                 {isNotificationsOpen && (
-                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg overflow-hidden z-20">
-                    <div className="px-4 py-2 border-b border-gray-200 flex justify-between items-center">
+                  <div className="absolute right-0 z-20 mt-2 overflow-hidden bg-white rounded-md shadow-lg w-72">
+                    <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
                       <h3 className="font-semibold text-gray-800">Notifications</h3>
                       {unreadNotificationCount > 0 && (
                         <button 
                           className="text-xs text-blue-600 hover:text-blue-800"
-                          onClick={markAllNotificationsAsRead}
+                          onClick={() => user?.id && markAllNotificationsAsRead(user.id)}
                         >
                           Mark all as read
                         </button>
                       )}
                     </div>
                     
-                    <div className="max-h-80 overflow-y-auto">
-                      {notifications.length === 0 ? (
-                        <div className="text-center py-6 text-gray-500">No notifications</div>
+                    <div className="overflow-y-auto max-h-80">
+                      {notifications && notifications.length === 0 ? (
+                        <div className="py-6 text-center text-gray-500">No notifications</div>
                       ) : (
-                        notifications.map(notification => (
+                        notifications && notifications.map(notification => (
                           <div 
                             key={notification.id}
                             className={`px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 ${notification.read ? 'bg-white' : 'bg-blue-50'}`}
-                            onClick={() => markNotificationAsRead(notification.id)}
+                            onClick={() => handleNotificationClick(notification)}
                           >
                             <div className="flex items-start">
                               <img 
-                                src={notification.avatar} 
+                                src={getSenderAvatar(notification)} 
                                 alt="User" 
-                                className="w-8 h-8 rounded-full mr-3 object-cover"
+                                className="object-cover w-8 h-8 mr-3 rounded-full"
                               />
-                              <div>
-                                <p className="text-sm text-gray-800">{notification.text}</p>
-                                <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
+                              <div className="flex-1">
+                                <p className="text-sm text-gray-800">{notification.content}</p>
+                                <p className="mt-1 text-xs text-gray-500">{formatNotificationTime(notification.createdAt)}</p>
                               </div>
-                              {!notification.read && (
-                                <div className="ml-auto">
-                                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                </div>
-                              )}
+                              <div className="flex items-center">
+                                {!notification.read && (
+                                  <div className="mr-2">
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                  </div>
+                                )}
+                                <button 
+                                  onClick={(e) => handleDeleteNotification(e, notification.id)}
+                                  className="p-1 text-gray-400 hover:text-red-500"
+                                >
+                                  <FiTrash2 size={14} />
+                                </button>
+                              </div>
                             </div>
                           </div>
                         ))
@@ -204,7 +333,7 @@ const TopNavbar = () => {
                     </div>
                     
                     <div className="px-4 py-2 text-center border-t border-gray-200">
-                      <Link to="/notifications" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                      <Link to="/notifications" className="text-sm font-medium text-blue-600 hover:text-blue-800" onClick={closeNotificationsDropdown}>
                         See all notifications
                       </Link>
                     </div>
@@ -215,14 +344,14 @@ const TopNavbar = () => {
               {/* User Profile */}
               <div className="relative ml-2" ref={userMenuRef}>
                 <button 
-                  className="flex items-center focus:outline-none p-1 rounded-full hover:bg-white/10"
+                  className="flex items-center p-1 rounded-full focus:outline-none hover:bg-white/10"
                   onClick={toggleUserMenu}
                 >
                   <div className="relative w-8 h-8">
                     <img 
                       src={user?.profilePicture ? getMediaUrl(user.profilePicture) : defaultUserAvatar}
                       alt="User avatar" 
-                      className="w-8 h-8 rounded-full object-cover bg-gray-100"
+                      className="object-cover w-8 h-8 bg-gray-100 rounded-full"
                       onError={(e) => {
                         e.target.src = defaultUserAvatar;
                       }}
@@ -230,18 +359,24 @@ const TopNavbar = () => {
                   </div>
                 </button>
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden z-20">
+                  <div className="absolute right-0 z-20 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-lg">
                     <div className="px-4 py-3 text-sm text-gray-800 border-b border-gray-200">
                       <div className="font-bold truncate">{userProfile.name}</div>
                       <div className="text-xs text-gray-500 truncate">{userProfile.role}</div>
                     </div>
                     <div className="py-1">
-                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">Profile</Link>
-                      <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">Settings</Link>
-                      <Link to="/help" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">Help & Support</Link>
+                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100">Profile</Link>
+                      <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100">Settings</Link>
+                      <Link to="/help" className="block px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-gray-100">Help & Support</Link>
+                      <button 
+                        className="block w-full px-4 py-2 text-sm text-left text-red-600 transition-colors duration-150 hover:bg-red-50"
+                        onClick={() => setIsDeleteModalOpen(true)}
+                      >
+                        Delete Account
+                      </button>
                       <button 
                         onClick={handleSignOut} 
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                        className="w-full px-4 py-2 text-sm text-left text-gray-700 transition-colors duration-150 hover:bg-gray-100"
                       >
                         Sign out
                       </button>
@@ -252,7 +387,7 @@ const TopNavbar = () => {
 
               {/* Mobile menu button */}
               <button 
-                className="md:hidden ml-2 text-white focus:outline-none"
+                className="ml-2 text-white md:hidden focus:outline-none"
                 onClick={toggleMobileMenu}
               >
                 {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
@@ -265,35 +400,49 @@ const TopNavbar = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden bg-[#4937ce]">
             <div className="px-4 pt-2 pb-3">
-              <div className="bg-white/20 rounded-full p-2 flex items-center">
-                <FiSearch className="text-white ml-1 mr-2" />
+              <div className="flex items-center p-2 rounded-full bg-white/20">
+                <FiSearch className="ml-1 mr-2 text-white" />
                 <input 
                   type="text" 
                   placeholder="Search" 
-                  className="bg-transparent border-none text-white outline-none w-full placeholder-white/70"
+                  className="w-full text-white bg-transparent border-none outline-none placeholder-white/70"
                 />
               </div>
             </div>
             
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/feed" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
+              <Link 
+                to="/feed" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/feed') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiHome className="mr-3 text-lg" />
                 <span>Feed</span>
-                <span className="ml-auto bg-white text-[#4937ce] rounded-full py-0.5 px-2 text-xs font-bold">10</span>
               </Link>
               
-              <Link to="/learn" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
+              <Link 
+                to="/learning-plans" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/learning-plans') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiBook className="mr-3 text-lg" />
                 <span>Learn Plans</span>
               </Link>
               
-              <Link to="/friends" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
-                <FiUsers className="mr-3 text-lg" />
-                <span>Friends</span>
-                <span className="ml-auto bg-white text-[#4937ce] rounded-full py-0.5 px-2 text-xs font-bold">2</span>
-              </Link>
-              
-              <Link to="/notifications" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
+              <Link 
+                to="/notifications" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/notifications') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiBell className="mr-3 text-lg" />
                 <span>Notifications</span>
                 {unreadNotificationCount > 0 && (
@@ -301,31 +450,69 @@ const TopNavbar = () => {
                 )}
               </Link>
               
-              <Link to="/subscription" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
-                <FiCreditCard className="mr-3 text-lg" />
-                <span>Subscription</span>
-              </Link>
-              
-              <Link to="/settings" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
+              <Link 
+                to="/settings" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/settings') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiSettings className="mr-3 text-lg" />
                 <span>Settings</span>
               </Link>
               
-              <Link to="/help" className="flex items-center px-3 py-2 rounded-md text-white hover:bg-white/10">
+              <Link 
+                to="/help" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  isActiveRoute('/help') 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
                 <FiHelpCircle className="mr-3 text-lg" />
                 <span>Help & Support</span>
               </Link>
-              
-              <div className="bg-white/15 rounded-lg p-4 flex justify-between items-center mt-4 mx-3">
-                <button className="bg-transparent border-none text-white font-bold cursor-pointer p-0">Go Pro</button>
-                <FiStar className="text-lg" />
-              </div>
             </div>
           </div>
         )}
       </div>
 
       <div className="h-16"></div>
+
+      {/* Delete Account Modal */}
+      {isDeleteModalOpen && (
+        <Modal onClose={() => setIsDeleteModalOpen(false)}>
+          <div className="p-4">
+            <h2 className="mb-4 text-lg font-bold">Delete Account</h2>
+            <p className="mb-4 text-sm text-gray-600">Please enter your password to confirm account deletion. This action cannot be undone.</p>
+            {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
+            {success && <p className="mb-2 text-sm text-green-600">{success}</p>}
+            <input 
+              type="password" 
+              placeholder="Enter your password" 
+              value={deletePassword}
+              onChange={(e) => setDeletePassword(e.target.value)}
+              className="w-full px-3 py-2 mb-4 border rounded-md"
+            />
+            <div className="flex justify-end space-x-2">
+              <button 
+                onClick={() => setIsDeleteModalOpen(false)} 
+                className="px-4 py-2 text-gray-800 bg-gray-200 rounded-md"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleDeleteAccount} 
+                className="px-4 py-2 text-white bg-red-600 rounded-md"
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

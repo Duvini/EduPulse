@@ -96,42 +96,26 @@ const ProfileCard = () => {
           )}
         </div>
         
-        {/* LinkedIn-style Connection Stats */}
+        {/* Profile Stats */}
         <div className="border-t border-gray-200 pt-3 mt-3">
           <div className="flex items-center justify-between text-sm mb-1">
-            <span className="text-gray-600">Connections</span>
-            <Link to="/network" className="text-blue-600 font-medium hover:underline">{stats.followersCount}</Link>
-          </div>
-          <div className="flex items-center justify-between text-sm mb-1">
-            <span className="text-gray-600">Following</span>
-            <Link to="/network/following" className="text-blue-600 font-medium hover:underline">{stats.followingCount}</Link>
-          </div>
-          <div className="flex items-center justify-between text-sm">
             <span className="text-gray-600">Posts</span>
             <Link to="/profile" className="text-blue-600 font-medium hover:underline">{stats.postsCount}</Link>
           </div>
+          <div className="flex items-center justify-between text-sm mb-1">
+            <span className="text-gray-600">Followers</span>
+            <Link to="/profile?tab=followers" className="text-blue-600 font-medium hover:underline">{stats.followersCount}</Link>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-600">Following</span>
+            <Link to="/profile?tab=following" className="text-blue-600 font-medium hover:underline">{stats.followingCount}</Link>
+          </div>
         </div>
         
-        {/* LinkedIn-style Actions */}
+        {/* View Profile Button */}
         <div className="border-t border-gray-200 pt-3 mt-3">
           <Link to="/profile" className="block w-full py-2 bg-blue-600 text-white rounded text-center text-sm font-medium hover:bg-blue-700 transition-colors">
             View Profile
-          </Link>
-        </div>
-        
-        {/* LinkedIn-style Premium Features */}
-        <div className="border-t border-gray-200 pt-3 mt-3">
-          <Link to="/premium" className="flex items-center py-1.5 group">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clipRule="evenodd" />
-            </svg>
-            <span className="text-sm text-gray-800 group-hover:text-blue-600 font-medium transition-colors">Upgrade to Premium</span>
-          </Link>
-          <Link to="/bookmarks" className="flex items-center py-1.5 group mt-1">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-            </svg>
-            <span className="text-sm text-gray-800 group-hover:text-blue-600 font-medium transition-colors">My Bookmarks</span>
           </Link>
         </div>
       </div>

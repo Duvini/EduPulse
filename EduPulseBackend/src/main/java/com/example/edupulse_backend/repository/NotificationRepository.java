@@ -4,16 +4,16 @@ import com.example.edupulse_backend.model.Notification;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface NotificationRepository extends MongoRepository<Notification, String> {
-    List<Notification> findByRecipientIdOrderByCreatedAtDesc(String recipientId);
-    List<Notification> findByRecipientIdAndReadOrderByCreatedAtDesc(String recipientId, boolean read);
-    long countByRecipientIdAndRead(String recipientId, boolean read);
+    // Find all notifications for a specific recipient
+    List<Notification> findByRecipientId(String recipientId);
     
-    // New method to find recent notifications of a specific type from a specific sender
-    List<Notification> findByRecipientIdAndSenderIdAndTypeAndCreatedAtAfter(
-            String recipientId, String senderId, Notification.NotificationType type, LocalDateTime since);
+    // Find all unread notifications for a recipient
+    List<Notification> findByRecipientIdAndReadFalse(String recipientId);
+    
+    // Count unread notifications for a recipient
+    long countByRecipientIdAndReadFalse(String recipientId);
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiTrash2, FiEdit2 } from 'react-icons/fi';
 import { getMediaUrl } from '../../services/apiClient';
 import { useDeleteComment, useUpdateComment } from '../../api/hooks/useComments';
+import { showErrorToast } from '../../utils/toastUtils';
 
 const Comment = ({ 
   id, 
@@ -76,13 +77,19 @@ const Comment = ({
   const wasEdited = updatedAt && createdAt && 
     new Date(updatedAt).getTime() > (new Date(createdAt).getTime() + 2000);
 
+  // Handle delete without using window.confirm
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this comment?')) {
-      deleteCommentMutation.mutate({ commentId: id, postId });
-    }
+    // No window.confirm, directly delete the comment
+    deleteCommentMutation.mutate(
+      { commentId: id, postId },
+      {
+        // onError is handled by the mutation hook itself
+      }
+    );
   };
 
   const handleEdit = () => setIsEditing(true);
+  
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditedContent(content);
@@ -90,11 +97,14 @@ const Comment = ({
 
   const handleSaveEdit = () => {
     if (editedContent.trim() === '') return;
+    
     updateCommentMutation.mutate(
       { commentId: id, content: editedContent.trim(), postId },
       {
         onSuccess: () => setIsEditing(false),
-        onError: (error) => console.error("Failed to update comment:", error)
+        onError: (error) => {
+          showErrorToast(error?.response?.data?.message || 'Failed to update comment');
+        }
       }
     );
   };
@@ -169,12 +179,8 @@ const Comment = ({
           ) : (
             <p className="text-sm text-gray-800 break-words">{content}</p>
           )}
-
-          {(deleteCommentMutation.isError || updateCommentMutation.isError) && (
-            <div className="mt-1 text-xs text-red-500">
-              An error occurred. Please try again.
-            </div>
-          )}
+          
+          {/* Error messages are now handled by toast notifications */}
         </div>
       </div>
     </div>

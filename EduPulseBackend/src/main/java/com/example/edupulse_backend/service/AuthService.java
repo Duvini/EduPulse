@@ -110,38 +110,61 @@ public class AuthService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         
         // Check if username is being changed and already exists
-        if (!existingUser.getUsername().equals(registerDTO.getUsername()) && 
+        if (registerDTO.getUsername() != null && !registerDTO.getUsername().equals(existingUser.getUsername()) && 
                 userRepository.existsByUsername(registerDTO.getUsername())) {
             return new ResponseDto(true, "Username is already taken!");
         }
         
         // Check if email is being changed and already exists
-        if (!existingUser.getEmail().equals(registerDTO.getEmail()) && 
+        if (registerDTO.getEmail() != null && !registerDTO.getEmail().equals(existingUser.getEmail()) && 
                 userRepository.existsByEmail(registerDTO.getEmail())) {
             return new ResponseDto(true, "Email is already in use!");
         }
 
-        existingUser.setUsername(registerDTO.getUsername());
-        existingUser.setEmail(registerDTO.getEmail());
-        existingUser.setName(registerDTO.getName());
-        existingUser.setUpdatedAt(LocalDateTime.now());
+        // Update basic info if provided
+        if (registerDTO.getUsername() != null) existingUser.setUsername(registerDTO.getUsername());
+        if (registerDTO.getEmail() != null) existingUser.setEmail(registerDTO.getEmail());
+        if (registerDTO.getName() != null) existingUser.setName(registerDTO.getName());
         
-        // Only update password if one is provided
-        if (registerDTO.getPassword() != null && !registerDTO.getPassword().isBlank()) {
+        // Handle password change if requested
+        if (registerDTO.getCurrentPassword() != null && registerDTO.getPassword() != null) {
+            // Verify current password
+            if (!passwordEncoder.matches(registerDTO.getCurrentPassword(), existingUser.getPassword())) {
+                return new ResponseDto(true, "Current password is incorrect");
+            }
+            
+            // Update to new password
             existingUser.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         }
         
+        existingUser.setUpdatedAt(LocalDateTime.now());
         User updatedUser = userRepository.save(existingUser);
         return new ResponseDto(false, updatedUser);
     }
 
     public ResponseDto deleteUser(String id) {
-        if (!userRepository.existsById(id)) {
-            return new ResponseDto(true, "User not found with ID: " + id);
+        try {
+            // Get current user from security context
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return new ResponseDto(true, "Not authenticated");
+            }
+
+            String username = authentication.getName();
+            User currentUser = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            // Check if the user is trying to delete their own account
+            if (!currentUser.getId().equals(id)) {
+                return new ResponseDto(true, "You can only delete your own account");
+            }
+
+            userRepository.deleteById(id);
+            return new ResponseDto(false, "User deleted successfully");
+        } catch (Exception e) {
+            log.error("Error deleting user: {}", e.getMessage());
+            return new ResponseDto(true, "Error deleting user: " + e.getMessage());
         }
-        
-        userRepository.deleteById(id);
-        return new ResponseDto(false, "User deleted successfully");
     }
 
     public ResponseDto validateToken(String token) {
@@ -198,6 +221,30 @@ public class AuthService {
         } catch (Exception e) {
             log.error("Error searching users: {}", e.getMessage());
             return new ResponseDto(true, "Error searching users");
+        }
+    }
+
+    public ResponseDto verifyPassword(String password) {
+        try {
+            // Get current user from security context
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return new ResponseDto(true, "Not authenticated");
+            }
+
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            // Verify password
+            if (!passwordEncoder.matches(password, user.getPassword())) {
+                return new ResponseDto(true, "Incorrect password");
+            }
+
+            return new ResponseDto(false, "Password verified");
+        } catch (Exception e) {
+            log.error("Error verifying password: {}", e.getMessage());
+            return new ResponseDto(true, "Error verifying password");
         }
     }
 }

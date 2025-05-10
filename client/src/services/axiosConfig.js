@@ -1,15 +1,7 @@
 import axios from 'axios';
 import { authService } from './authService';
 
-const BASE_URL = 'http://localhost:8080';
-
-// Create axios instance with default config
-const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
 // Utility function to get full media URL
 export const getMediaUrl = (url) => {
@@ -40,65 +32,118 @@ export const getMediaUrl = (url) => {
   return `${BASE_URL}${cleanUrl}`;
 };
 
+const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Always get fresh token from storage before each request
-    const token = authService.getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    try {
+      const token = authService.getToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      // Validate request body for POST/PUT requests
+      if ((config.method === 'post' || config.method === 'put') && config.data) {
+        if (!(config.data instanceof FormData)) {
+          try {
+            JSON.stringify(config.data);
+          } catch {
+            return Promise.reject(new Error('Invalid request format'));
+          }
+        }
+      }
+
+      return config;
+    } catch (error) {
+      return Promise.reject(error);
     }
-    return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Add a response interceptor
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     // Don't process errors for requests that are still retrying
     if (error.config && error.config.__isRetryRequest) {
       return Promise.reject(error);
     }
 
-    // Check if network error (offline)
+    // Handle network errors
     if (!error.response) {
-      console.warn('Network error detected, application will continue with cached data');
-      return Promise.reject(error);
+      console.warn('Network error:', error.message);
+      return Promise.reject({
+        response: {
+          data: {
+            error: true,
+            message: 'Network error: Please check your connection'
+          }
+        }
+      });
     }
 
-    const isValidateEndpoint = error.config?.url?.includes('/api/auth/validate');
-    
-    if (error.response?.status === 401 && !isValidateEndpoint) {
-      // Check if we should really log out or just show an error
-      const isProfilePage = window.location.pathname.includes('/profile');
-      
-      // Be more selective about when to logout
-      if (!isProfilePage) {
-        // Only logout for true authentication errors, not network issues
-        const specificAuthErrors = [
-          'Invalid token',
-          'Token expired', 
-          'Token validation failed',
-          'User not found'
-        ];
-        
-        // Check if error message is a specific auth error
-        const isAuthError = specificAuthErrors.some(msg => 
-          error.response.data?.message?.includes(msg) || 
-          error.response.data?.error?.includes(msg)
-        );
-        
-        if (isAuthError) {
-          // Only logout for specific authentication errors
-          authService.logout();
-          window.location.href = '/signin';
+    // Handle different error status codes
+    switch (error.response.status) {
+      case 400:
+        // Bad Request - Validation errors
+        console.error('Validation error:', error.response.data);
+        return Promise.reject({
+          response: {
+            status: 400,
+            data: {
+              error: true,
+              message: error.response.data?.message || 'Invalid request format'
+            }
+          }
+        });
+
+      case 401:
+        // Only handle auth errors for non-validation endpoints
+        if (!error.config.url.includes('/api/auth/validate')) {
+          const message = error.response.data?.message || 'Authentication required';
+          
+          // Only logout for specific auth errors
+          if (message.includes('invalid token') || 
+              message.includes('token expired') || 
+              message.includes('authentication failed')) {
+            authService.logout();
+            window.location.href = '/signin';
+          }
         }
-      }
+        break;
+
+      case 403:
+        console.error('Forbidden:', error.response.data);
+        return Promise.reject({
+          response: {
+            status: 403,
+            data: {
+              error: true,
+              message: 'You do not have permission to perform this action'
+            }
+          }
+        });
+
+      case 404:
+        console.error('Not found:', error.response.data);
+        return Promise.reject({
+          response: {
+            status: 404,
+            data: {
+              error: true,
+              message: error.response.data?.message || 'Resource not found'
+            }
+          }
+        });
     }
+
     return Promise.reject(error);
   }
 );
