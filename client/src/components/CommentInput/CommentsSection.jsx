@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGetComments } from '../../api/hooks/useComments';
 import Comment from './Comment';
+import { showErrorToast } from '../../utils/toastUtils';
 
 const CommentsSection = ({ postId, currentUserId }) => {
   const [showAllComments, setShowAllComments] = useState(false);
-  const { data: commentsResponse, isLoading, isError } = useGetComments(postId);
+  const { data: commentsResponse, isLoading, isError, error } = useGetComments(postId);
+  
+  // Handle errors - both from API error responses and request failures
+  useEffect(() => {
+    // Handle request error through isError flag
+    if (isError) {
+      showErrorToast(error?.response?.data?.message || 'Failed to load comments');
+    }
+    
+    // Handle API response with error: true
+    if (commentsResponse && commentsResponse.error === true) {
+      showErrorToast(commentsResponse.message || 'An unexpected error occurred');
+    }
+  }, [isError, error, commentsResponse]);
   
   if (isLoading) {
     return (
       <div className="p-3 text-center text-sm text-gray-500">
         Loading comments...
-      </div>
-    );
-  }
-  
-  if (isError) {
-    return (
-      <div className="p-3 text-center text-sm text-red-500">
-        Failed to load comments. Please try again.
       </div>
     );
   }
@@ -36,7 +42,7 @@ const CommentsSection = ({ postId, currentUserId }) => {
   if (comments.length === 0) {
     return (
       <div className="p-3 text-center text-sm text-gray-500">
-        No comments yet. Be the first to comment!
+        {isError ? 'Unable to load comments' : 'No comments yet. Be the first to comment!'}
       </div>
     );
   }

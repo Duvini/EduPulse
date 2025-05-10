@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { authService } from './authService';
+import { showErrorToast } from '../utils/toastUtils';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
@@ -28,7 +29,15 @@ apiClient.interceptors.request.use(
 
 // Add a response interceptor
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Check for API responses with error:true format
+    if (response.data && response.data.error === true) {
+      // Display error toast for API responses with error:true
+      showErrorToast(response.data.message || 'An unexpected error occurred');
+      // Still return the response so components can handle it themselves if needed
+    }
+    return response;
+  },
   (error) => {
     // Don't process errors for requests that are still retrying
     if (error.config && error.config.__isRetryRequest) {

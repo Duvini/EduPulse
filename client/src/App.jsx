@@ -6,6 +6,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { queryClient } from './utils/queryClient';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Configure React Router future flags
 import { UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom';
@@ -35,6 +37,7 @@ function App() {
         <AuthProvider>
           <Layout />
         </AuthProvider>
+        <ToastContainer />
       </BrowserRouter>
       {/* Only include DevTools in development */}
       {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}

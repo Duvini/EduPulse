@@ -4,6 +4,7 @@ import com.example.edupulse_backend.dto.LoginDTO;
 import com.example.edupulse_backend.dto.RegisterDTO;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.service.AuthService;
+import com.example.edupulse_backend.validation.AuthRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> register(@RequestBody RegisterDTO registerDTO) {
         log.info("Registration request received for username: {}", registerDTO.getUsername());
+        
+        // Validate request using the validator
+        AuthRequestValidator.validateRegisterRequest(registerDTO);
+        
         ResponseDto response = authService.register(registerDTO);
         
         if (response.isError()) {
@@ -37,6 +42,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ResponseDto> login(@RequestBody LoginDTO loginDTO) {
         log.info("Login request received for username: {}", loginDTO.getUsername());
+        
+        // Validate request using the validator
+        AuthRequestValidator.validateLoginRequest(loginDTO);
+        
         ResponseDto response = authService.login(loginDTO);
         
         if (response.isError()) {
@@ -55,12 +64,19 @@ public class AuthController {
     @GetMapping("/users/{id}")
     public ResponseEntity<ResponseDto> getUserById(@PathVariable String id) {
         log.info("Request to get user with ID: {}", id);
+        if (id == null || id.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseDto(true, "User ID is required"));
+        }
         return ResponseEntity.ok(authService.getUserById(id));
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<ResponseDto> updateUser(@PathVariable String id, @RequestBody RegisterDTO registerDTO) {
         log.info("Request to update user with ID: {}", id);
+        if (id == null || id.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseDto(true, "User ID is required"));
+        }
+        
         ResponseDto response = authService.updateUser(id, registerDTO);
         
         if (response.isError()) {
@@ -73,6 +89,10 @@ public class AuthController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<ResponseDto> deleteUser(@PathVariable String id) {
         log.info("Request to delete user with ID: {}", id);
+        if (id == null || id.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseDto(true, "User ID is required"));
+        }
+        
         ResponseDto response = authService.deleteUser(id);
         
         if (response.isError()) {
@@ -85,6 +105,10 @@ public class AuthController {
     @PostMapping("/validate")
     public ResponseEntity<ResponseDto> validateToken(@RequestHeader("Authorization") String authHeader) {
         log.info("Token validation request received");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body(new ResponseDto(true, "Invalid Authorization header"));
+        }
+        
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         ResponseDto response = authService.validateToken(token);
         
@@ -100,6 +124,15 @@ public class AuthController {
             @PathVariable String id,
             @RequestParam("profilePicture") MultipartFile file) {
         log.info("Request to update profile picture for user with ID: {}", id);
+        
+        if (id == null || id.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseDto(true, "User ID is required"));
+        }
+        
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseDto(true, "Profile picture file is required"));
+        }
+        
         ResponseDto response = authService.updateProfilePicture(id, file);
         
         if (response.isError()) {
@@ -112,6 +145,10 @@ public class AuthController {
     @GetMapping("/users/search")
     public ResponseEntity<ResponseDto> searchUsers(@RequestParam String username) {
         log.info("Search request received for username pattern: {}", username);
+        if (username == null || username.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseDto(true, "Username search parameter is required"));
+        }
+        
         ResponseDto response = authService.searchUsers(username);
         return ResponseEntity.ok(response);
     }
@@ -119,7 +156,13 @@ public class AuthController {
     @PostMapping("/verify-password")
     public ResponseEntity<ResponseDto> verifyPassword(@RequestBody Map<String, String> credentials) {
         log.info("Password verification request received");
-        ResponseDto response = authService.verifyPassword(credentials.get("password"));
+        String password = credentials.get("password");
+        
+        if (password == null || password.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseDto(true, "Password is required"));
+        }
+        
+        ResponseDto response = authService.verifyPassword(password);
         return ResponseEntity.ok(response);
     }
 }

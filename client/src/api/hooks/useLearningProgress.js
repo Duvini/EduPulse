@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { learningProgressApi } from '../endpoints/learningProgress';
+import { showSuccessAlert, showErrorAlert } from '../../utils/sweetAlertUtils';
 
 /**
  * React Query key factory for learning progress
@@ -59,10 +60,13 @@ export const useCreateLearningItem = () => {
   return useMutation({
     mutationFn: learningProgressApi.createLearningItem,
     onSuccess: () => {
-      // Invalidate learning progress lists to refresh data
+      showSuccessAlert('Learning item created successfully');
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.currentUser() });
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.stats() });
     },
+    onError: (error) => {
+      showErrorAlert(error.response?.data?.message || 'Failed to create learning item');
+    }
   });
 };
 
@@ -75,11 +79,14 @@ export const useUpdateLearningItem = () => {
   return useMutation({
     mutationFn: learningProgressApi.updateLearningItem,
     onSuccess: (_, variables) => {
-      // Invalidate specific learning item and lists
+      showSuccessAlert('Learning item updated successfully');
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.detail(variables.id) });
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.currentUser() });
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.stats() });
     },
+    onError: (error) => {
+      showErrorAlert(error.response?.data?.message || 'Failed to update learning item');
+    }
   });
 };
 
@@ -92,11 +99,14 @@ export const useDeleteLearningItem = () => {
   return useMutation({
     mutationFn: learningProgressApi.deleteLearningItem,
     onSuccess: (_, id) => {
-      // Remove item from cache and invalidate lists
+      showSuccessAlert('Learning item deleted successfully');
       queryClient.removeQueries({ queryKey: learningProgressKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.currentUser() });
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.stats() });
     },
+    onError: (error) => {
+      showErrorAlert(error.response?.data?.message || 'Failed to delete learning item');
+    }
   });
 };
 
@@ -109,11 +119,14 @@ export const useUpdateProgressStatus = () => {
   return useMutation({
     mutationFn: learningProgressApi.updateProgressStatus,
     onSuccess: (_, variables) => {
-      // Invalidate specific learning item and lists
+      showSuccessAlert('Progress status updated successfully');
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.detail(variables.id) });
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.currentUser() });
       queryClient.invalidateQueries({ queryKey: learningProgressKeys.stats() });
     },
+    onError: (error) => {
+      showErrorAlert(error.response?.data?.message || 'Failed to update progress status');
+    }
   });
 };
 
