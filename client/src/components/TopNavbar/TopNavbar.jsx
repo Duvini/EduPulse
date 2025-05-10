@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FiHome, FiBook, FiSettings, FiHelpCircle, FiSearch, FiMenu, FiX, FiBell } from 'react-icons/fi';
+import { FiHome, FiBook, FiSettings, FiHelpCircle, FiSearch, FiMenu, FiX, FiBell, FiTrash2 } from 'react-icons/fi';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../../../store';
 import { getMediaUrl } from '../../services/axiosConfig';
 import { authService } from '../../services/authService';
 import Modal from '../Modal/Modal';
+import { formatDistanceToNow } from 'date-fns';
 
 const TopNavbar = () => {
   const location = useLocation();
@@ -23,6 +24,9 @@ const TopNavbar = () => {
     closeNotificationsDropdown, 
     markAllNotificationsAsRead,
     markNotificationAsRead, 
+    deleteNotification,
+    fetchNotifications,
+    fetchUnreadCount,
     isMobileMenuOpen, 
     isSearchFocused, 
     setSearchFocused, 
@@ -35,6 +39,23 @@ const TopNavbar = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [deletePassword, setDeletePassword] = useState('');
+
+  // Fetch notifications when component mounts
+  useEffect(() => {
+    if (user?.id) {
+      fetchNotifications(user.id);
+      fetchUnreadCount(user.id);
+    }
+    
+    // Set up polling for notifications (every 30 seconds)
+    const intervalId = setInterval(() => {
+      if (user?.id) {
+        fetchUnreadCount(user.id);
+      }
+    }, 30000);
+    
+    return () => clearInterval(intervalId);
+  }, [user?.id, fetchNotifications, fetchUnreadCount]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -124,6 +145,54 @@ const TopNavbar = () => {
 
   const isActiveRoute = (path) => {
     return location.pathname === path;
+  };
+
+  const handleNotificationClick = (notification) => {
+    markNotificationAsRead(notification.id);
+    
+    // Navigate based on notification type
+    if (notification.type === 'LIKE' && notification.postId) {
+      navigate(`/post/${notification.postId}`);
+    } else if (notification.type === 'COMMENT' && notification.postId) {
+      navigate(`/post/${notification.postId}`);
+    } else if (notification.type === 'FOLLOW' && notification.senderId) {
+      navigate(`/profile/${notification.senderId}`);
+    }
+    
+    closeNotificationsDropdown();
+  };
+
+  const handleDeleteNotification = (e, notificationId) => {
+    e.stopPropagation(); // Prevent triggering the parent notification click
+    deleteNotification(notificationId);
+  };
+
+  // Get sender avatar based on notification
+  const getSenderAvatar = (notification) => {
+    // Default avatar as SVG data URL
+    const defaultAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
+    
+    // For system notifications, use a system icon
+    if (notification.type === 'SYSTEM') {
+      return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234937ce"%3E%3Cpath d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm0-9a1 1 0 011 1v4a1 1 0 11-2 0v-4a1 1 0 011-1zm0-4a1 1 0 110 2 1 1 0 010-2z"%3E%3C/path%3E%3C/svg%3E';
+    }
+    
+    // For user-related notifications, try to get their profile picture if available
+    // Note: In a real app, you would store or fetch the sender's profile picture
+    return defaultAvatar;
+  };
+
+  // Format notification time
+  const formatNotificationTime = (createdAt) => {
+    if (!createdAt) return '';
+    
+    try {
+      const date = new Date(createdAt);
+      return formatDistanceToNow(date, { addSuffix: true });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
   };
 
   // Default user avatar as SVG data URL
@@ -217,7 +286,7 @@ const TopNavbar = () => {
                       {unreadNotificationCount > 0 && (
                         <button 
                           className="text-xs text-blue-600 hover:text-blue-800"
-                          onClick={markAllNotificationsAsRead}
+                          onClick={() => user?.id && markAllNotificationsAsRead(user.id)}
                         >
                           Mark all as read
                         </button>
@@ -225,30 +294,38 @@ const TopNavbar = () => {
                     </div>
                     
                     <div className="overflow-y-auto max-h-80">
-                      {notifications.length === 0 ? (
+                      {notifications && notifications.length === 0 ? (
                         <div className="py-6 text-center text-gray-500">No notifications</div>
                       ) : (
-                        notifications.map(notification => (
+                        notifications && notifications.map(notification => (
                           <div 
                             key={notification.id}
                             className={`px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 ${notification.read ? 'bg-white' : 'bg-blue-50'}`}
-                            onClick={() => markNotificationAsRead(notification.id)}
+                            onClick={() => handleNotificationClick(notification)}
                           >
                             <div className="flex items-start">
                               <img 
-                                src={notification.avatar} 
+                                src={getSenderAvatar(notification)} 
                                 alt="User" 
                                 className="object-cover w-8 h-8 mr-3 rounded-full"
                               />
-                              <div>
-                                <p className="text-sm text-gray-800">{notification.text}</p>
-                                <p className="mt-1 text-xs text-gray-500">{notification.time}</p>
+                              <div className="flex-1">
+                                <p className="text-sm text-gray-800">{notification.content}</p>
+                                <p className="mt-1 text-xs text-gray-500">{formatNotificationTime(notification.createdAt)}</p>
                               </div>
-                              {!notification.read && (
-                                <div className="ml-auto">
-                                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                </div>
-                              )}
+                              <div className="flex items-center">
+                                {!notification.read && (
+                                  <div className="mr-2">
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                  </div>
+                                )}
+                                <button 
+                                  onClick={(e) => handleDeleteNotification(e, notification.id)}
+                                  className="p-1 text-gray-400 hover:text-red-500"
+                                >
+                                  <FiTrash2 size={14} />
+                                </button>
+                              </div>
                             </div>
                           </div>
                         ))
@@ -256,7 +333,7 @@ const TopNavbar = () => {
                     </div>
                     
                     <div className="px-4 py-2 text-center border-t border-gray-200">
-                      <Link to="/notifications" className="text-sm font-medium text-blue-600 hover:text-blue-800">
+                      <Link to="/notifications" className="text-sm font-medium text-blue-600 hover:text-blue-800" onClick={closeNotificationsDropdown}>
                         See all notifications
                       </Link>
                     </div>

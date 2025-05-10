@@ -9,6 +9,7 @@ import SearchUsers from '../components/SearchUsers/SearchUsers';
 import LearnPlanDisplay from '../pages/LearnPlanDisplay';
 import LearningPlanCreate from '../components/LearningPlan/LearningPlanCreate';
 import LearningPlanUpdate from '../components/LearningPlan/LearningPlanUpdate';
+import NotificationsPage from '../pages/Notifications/NotificationsPage';
 
 const AppRoutes = () => {
   return (
@@ -74,7 +75,7 @@ const AppRoutes = () => {
       } />
       <Route path="/notifications" element={
         <ProtectedRoute>
-          <div>Notifications Page (Coming Soon)</div>
+          <NotificationsPage />
         </ProtectedRoute>
       } />
       <Route path="/subscription" element={

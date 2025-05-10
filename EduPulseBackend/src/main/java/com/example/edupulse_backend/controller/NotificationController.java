@@ -1,9 +1,11 @@
 package com.example.edupulse_backend.controller;
 
+import com.example.edupulse_backend.model.Notification;
 import com.example.edupulse_backend.payload.response.ResponseDto;
 import com.example.edupulse_backend.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -16,118 +18,83 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
 
     private final NotificationService notificationService;
-    private final WebSocketNotificationController webSocketController;
 
-    @GetMapping
-    public ResponseEntity<ResponseDto> getNotifications(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            log.warn("Authentication is missing or invalid");
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Authentication required"));
-        }
-        
-        // Extract user ID from authentication
-        String userId = getUserIdFromAuth(authentication);
-        if (userId == null) {
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Invalid authentication"));
-        }
-        
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ResponseDto> getNotificationsByUser(@PathVariable String userId) {
+        log.info("Request to get notifications for user: {}", userId);
         ResponseDto response = notificationService.getNotifications(userId);
+        
+        if (response.isError()) {
+            return ResponseEntity.badRequest().body(response);
+        }
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/unread")
-    public ResponseEntity<ResponseDto> getUnreadNotifications(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            log.warn("Authentication is missing or invalid");
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Authentication required"));
-        }
-        
-        String userId = getUserIdFromAuth(authentication);
-        if (userId == null) {
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Invalid authentication"));
-        }
-        
+    @GetMapping("/unread/{userId}")
+    public ResponseEntity<ResponseDto> getUnreadNotifications(@PathVariable String userId) {
+        log.info("Request to get unread notifications for user: {}", userId);
         ResponseDto response = notificationService.getUnreadNotifications(userId);
+        
+        if (response.isError()) {
+            return ResponseEntity.badRequest().body(response);
+        }
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<ResponseDto> getUnreadCount(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            log.warn("Authentication is missing or invalid");
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Authentication required"));
-        }
-        
-        String userId = getUserIdFromAuth(authentication);
-        if (userId == null) {
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Invalid authentication"));
-        }
-        
+    @GetMapping("/count/{userId}")
+    public ResponseEntity<ResponseDto> getUnreadCount(@PathVariable String userId) {
+        log.info("Request to get unread notification count for user: {}", userId);
         ResponseDto response = notificationService.getUnreadCount(userId);
+        
+        if (response.isError()) {
+            return ResponseEntity.badRequest().body(response);
+        }
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/read/{notificationId}")
-    public ResponseEntity<ResponseDto> markAsRead(
-            @PathVariable String notificationId,
-            Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            log.warn("Authentication is missing or invalid");
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Authentication required"));
-        }
-        
-        if (notificationId == null || notificationId.trim().isEmpty()) {
-            log.warn("Invalid notification ID provided");
-            return ResponseEntity.badRequest().body(new ResponseDto(true, "Notification ID cannot be empty"));
-        }
-        
+    public ResponseEntity<ResponseDto> markAsRead(@PathVariable String notificationId) {
+        log.info("Request to mark notification as read: {}", notificationId);
         ResponseDto response = notificationService.markAsRead(notificationId);
+        
+        if (response.isError()) {
+            String message = response.getMessage();
+            if (message != null && message.contains("not found")) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.badRequest().body(response);
+        }
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/read-all")
-    public ResponseEntity<ResponseDto> markAllAsRead(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            log.warn("Authentication is missing or invalid");
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Authentication required"));
-        }
-        
-        String userId = getUserIdFromAuth(authentication);
-        if (userId == null) {
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Invalid authentication"));
-        }
-        
+    @PutMapping("/read-all/{userId}")
+    public ResponseEntity<ResponseDto> markAllAsRead(@PathVariable String userId) {
+        log.info("Request to mark all notifications as read for user: {}", userId);
         ResponseDto response = notificationService.markAllAsRead(userId);
+        
+        if (response.isError()) {
+            return ResponseEntity.badRequest().body(response);
+        }
         return ResponseEntity.ok(response);
     }
-    
-    @GetMapping("/connected-users")
-    public ResponseEntity<ResponseDto> getConnectedUsersCount(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).body(new ResponseDto(true, "Authentication required"));
-        }
+
+    @DeleteMapping("/{notificationId}")
+    public ResponseEntity<ResponseDto> deleteNotification(
+        @PathVariable String notificationId,
+        Authentication authentication
+    ) {
+        log.info("Request to delete notification: {}", notificationId);
+        ResponseDto response = notificationService.deleteNotification(notificationId, authentication);
         
-        int count = webSocketController.getConnectedUsersCount();
-        return ResponseEntity.ok(new ResponseDto(false, count));
-    }
-    
-    // Helper method to extract user ID from authentication
-    private String getUserIdFromAuth(Authentication authentication) {
-        try {
-            // This would need to be adapted based on your authentication structure
-            org.springframework.security.core.userdetails.UserDetails userDetails = 
-                (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal();
-            
-            // Get user from username
-            return userDetails.getUsername();
-            
-            // In a real implementation, you would likely need to:
-            // 1. Get the username from authentication
-            // 2. Use a service to look up the user's ID by username
-            // 3. Return the user's ID
-        } catch (Exception e) {
-            log.error("Error extracting user ID from authentication: {}", e.getMessage());
-            return null;
+        if (response.isError()) {
+            String message = response.getMessage();
+            if (message != null && message.contains("not found")) {
+                return ResponseEntity.notFound().build();
+            } else if (message != null && message.contains("not authorized")) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            }
+            return ResponseEntity.badRequest().body(response);
         }
+        return ResponseEntity.ok(response);
     }
 }

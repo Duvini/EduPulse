@@ -49,6 +49,8 @@ public class SecurityConfig {
                     .requestMatchers("/ws/**").permitAll() // WebSocket endpoints
                     .requestMatchers("/api/v1/skillposts/user/**").permitAll() // Public user posts
                     .requestMatchers("/api/v1/skillposts/followed").permitAll() // Public followed posts
+                    .requestMatchers("/api/v1/notifications/count/**").permitAll() // Public access to notification count
+                    .requestMatchers("/api/v1/notifications/**").authenticated() // Secure notification endpoints
                     .requestMatchers("/api/v1/plans/**").authenticated() // Secure learning plan endpoints
                     .anyRequest().authenticated()
             )
