@@ -98,6 +98,25 @@ export const authService = {
         }
     },
 
+    searchUsers: async (query) => {
+        try {
+            if (!query?.trim()) {
+                return { error: true, data: [], message: "Search query is required" };
+            }
+            
+            const response = await axiosInstance.get(`${API_URL}/users/search?username=${encodeURIComponent(query)}`);
+            return { error: false, data: response.data?.data || [] };
+        } catch (error) {
+            console.error('Error searching users:', error);
+            return { 
+                error: true, 
+                data: [], 
+                message: error.response?.data?.message || 'Failed to search users',
+                status: error.response?.status || 500
+            };
+        }
+    },
+
     logout: () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -242,6 +261,25 @@ export const authService = {
             return {
                 error: true,
                 data: error.response?.data?.message || 'Password verification failed',
+                status: error.response?.status || 500
+            };
+        }
+    },
+
+    getUserById: async (id) => {
+        try {
+            if (!id?.trim()) {
+                return { error: true, data: null, message: "User ID is required" };
+            }
+            
+            const response = await axiosInstance.get(`${API_URL}/users/${id}`);
+            return { error: false, data: response.data.data };
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+            return { 
+                error: true, 
+                data: null, 
+                message: error.response?.data?.message || 'Failed to fetch user profile',
                 status: error.response?.status || 500
             };
         }
