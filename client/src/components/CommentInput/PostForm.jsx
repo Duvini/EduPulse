@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import Swal from 'sweetalert2';
 import { FiImage, FiVideo, FiX, FiInfo, FiSmile } from 'react-icons/fi';
 import { useStore } from '../../../store';
 import { getMediaUrl } from '../../services/axiosConfig';
+import { useCreatePost, useUpdatePost } from '../../api/hooks/usePosts';
 
 const MAX_IMAGES = 3;
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -23,13 +23,17 @@ const postValidationSchema = Yup.object().shape({
     .matches(/^[a-zA-Z0-9\s,]*$/, 'Tags can only contain letters, numbers, and commas')
 });
 
-const PostForm = ({ onSubmit, onCancel, isEdit, initialValues }) => {
+const PostForm = ({ onCancel, isEdit, initialValues }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileError, setFileError] = useState(null);
   const [previews, setPreviews] = useState([]);
   const [avatarError, setAvatarError] = useState(false);
   const { user } = useStore();
-  const fileInputRef = React.useRef();
+  const fileInputRef = useRef();
+  
+  // Initialize React Query hooks
+  const createPost = useCreatePost();
+  const updatePost = useUpdatePost();
 
   // Cleanup effect for file previews
   useEffect(() => {
@@ -159,43 +163,48 @@ const PostForm = ({ onSubmit, onCancel, isEdit, initialValues }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      if (typeof onSubmit === 'function') {
-        const result = await onSubmit({
-          ...values,
-          files: selectedFiles
-        });
-        
-        if (result?.error) {
-          await Swal.fire({
-            title: 'Error',
-            text: result.message || 'Failed to submit post',
-            icon: 'error',
-            confirmButtonColor: '#0a66c2'
-          });
-          return;
-        }
+      // Parse tags string into array if needed
+      let tagsArray = [];
+      if (values.tags) {
+        tagsArray = values.tags
+          .split(',')
+          .map(tag => tag.trim())
+          .filter(tag => tag !== '');
+      }
 
-        await Swal.fire({
-          title: 'Success',
-          text: 'Post created successfully',
-          icon: 'success',
-          confirmButtonColor: '#0a66c2'
-        });
+      const postData = {
+        description: values.description,
+        tags: tagsArray,
+        // Change 'files' to 'mediaFiles' to match API expectations
+        mediaFiles: selectedFiles
+      };
 
-        if (!isEdit) {
-          setSelectedFiles([]);
-          setPreviews([]);
-        }
-        setFileError(null);
+      console.log('Submitting post data:', postData);
+
+      // Use the appropriate mutation based on whether we're editing or creating
+      if (isEdit && initialValues?.id) {
+        await updatePost.mutateAsync({
+          id: initialValues.id,
+          ...postData
+        });
+      } else {
+        await createPost.mutateAsync(postData);
+      }
+
+      // Reset form after successful submission
+      if (!isEdit) {
+        setSelectedFiles([]);
+        setPreviews([]);
+      }
+      setFileError(null);
+      
+      // Close the form if there's a cancel handler (usually means it's in a modal)
+      if (typeof onCancel === 'function') {
+        onCancel();
       }
     } catch (error) {
+      // Error handling is already done in the mutation hooks
       console.error('Error submitting post:', error);
-      await Swal.fire({
-        title: 'Error',
-        text: 'Failed to submit post. Please try again.',
-        icon: 'error',
-        confirmButtonColor: '#0a66c2'
-      });
     } finally {
       setSubmitting(false);
     }

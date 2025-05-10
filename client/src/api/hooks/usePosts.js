@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { postsApi } from '../endpoints/posts';
+import { showSuccessToast, showErrorToast } from '../../utils/toastUtils';
 
 /**
  * React Query key factory for posts
@@ -56,10 +57,19 @@ export const useCreatePost = () => {
   
   return useMutation({
     mutationFn: postsApi.create,
-    onSuccess: () => {
-      // Invalidate posts lists to refresh data
+    onSuccess: (response) => {
+      // Check if the response indicates an error with exact error flag matching
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to create post');
+        return;
+      }
+      
       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+      showSuccessToast('Post created successfully');
     },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to create post');
+    }
   });
 };
 
@@ -71,11 +81,20 @@ export const useUpdatePost = () => {
   
   return useMutation({
     mutationFn: postsApi.update,
-    onSuccess: (data, variables) => {
-      // Invalidate specific post and lists
+    onSuccess: (response, variables) => {
+      // Check if the response indicates an error with exact error flag matching
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to update post');
+        return;
+      }
+      
       queryClient.invalidateQueries({ queryKey: postKeys.detail(variables.id) });
       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+      showSuccessToast('Post updated successfully');
     },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to update post');
+    }
   });
 };
 
@@ -87,11 +106,20 @@ export const useDeletePost = () => {
   
   return useMutation({
     mutationFn: postsApi.remove,
-    onSuccess: (_, id) => {
-      // Remove post from cache and invalidate lists
+    onSuccess: (response, id) => {
+      // Check if the response indicates an error with exact error flag matching
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to delete post');
+        return;
+      }
+      
       queryClient.removeQueries({ queryKey: postKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+      showSuccessToast('Post deleted successfully');
     },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to delete post');
+    }
   });
 };
 
@@ -103,7 +131,13 @@ export const useLikePost = () => {
   
   return useMutation({
     mutationFn: postsApi.like,
-    onSuccess: (_, id) => {
+    onSuccess: (response, id) => {
+      // Check if the response indicates an error with exact error flag matching
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to like post');
+        return;
+      }
+      
       queryClient.invalidateQueries({ queryKey: postKeys.detail(id) });
     },
   });
@@ -117,7 +151,13 @@ export const useUnlikePost = () => {
   
   return useMutation({
     mutationFn: postsApi.unlike,
-    onSuccess: (_, id) => {
+    onSuccess: (response, id) => {
+      // Check if the response indicates an error with exact error flag matching
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to unlike post');
+        return;
+      }
+      
       queryClient.invalidateQueries({ queryKey: postKeys.detail(id) });
     },
   });
@@ -131,9 +171,19 @@ export const useSavePost = () => {
   
   return useMutation({
     mutationFn: postsApi.save,
-    onSuccess: (_, id) => {
+    onSuccess: (response, id) => {
+      // Check if the response indicates an error with exact error flag matching
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to save post');
+        return;
+      }
+      
       queryClient.invalidateQueries({ queryKey: postKeys.detail(id) });
+      showSuccessToast('Post saved successfully');
     },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to save post');
+    }
   });
 };
 
@@ -145,8 +195,18 @@ export const useUnsavePost = () => {
   
   return useMutation({
     mutationFn: postsApi.unsave,
-    onSuccess: (_, id) => {
+    onSuccess: (response, id) => {
+      // Check if the response indicates an error with exact error flag matching
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to unsave post');
+        return;
+      }
+      
       queryClient.invalidateQueries({ queryKey: postKeys.detail(id) });
+      showSuccessToast('Post unsaved successfully');
     },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to unsave post');
+    }
   });
 };

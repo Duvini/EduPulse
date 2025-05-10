@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '../endpoints/auth';
 import { authService } from '../../services/authService';
+import { showSuccessAlert, showErrorAlert } from '../../utils/sweetAlertUtils';
 
 /**
  * React Query key factory for auth
@@ -20,6 +21,7 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
+      showSuccessAlert('Logged in successfully');
       // Store token in authService
       if (data.token) {
         authService.setToken(data.token);
@@ -29,6 +31,9 @@ export const useLogin = () => {
       // Invalidate user-related queries
       queryClient.invalidateQueries({ queryKey: authKeys.user() });
     },
+    onError: (error) => {
+      showErrorAlert(error.response?.data?.message || 'Login failed');
+    }
   });
 };
 
@@ -41,6 +46,7 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: authApi.register,
     onSuccess: (data) => {
+      showSuccessAlert('Registration successful');
       // Store token in authService if registration also logs in the user
       if (data.token) {
         authService.setToken(data.token);
@@ -50,6 +56,9 @@ export const useRegister = () => {
         queryClient.setQueryData(authKeys.user(), data.user);
       }
     },
+    onError: (error) => {
+      showErrorAlert(error.response?.data?.message || 'Registration failed');
+    }
   });
 };
 
@@ -82,6 +91,12 @@ export const useValidateToken = (options = {}) => {
 export const useRequestPasswordReset = () => {
   return useMutation({
     mutationFn: (email) => authApi.requestPasswordReset(email),
+    onSuccess: () => {
+      showSuccessAlert('Password reset instructions sent to your email');
+    },
+    onError: (error) => {
+      showErrorAlert(error.response?.data?.message || 'Failed to request password reset');
+    }
   });
 };
 
@@ -103,6 +118,12 @@ export const useValidateResetToken = (token) => {
 export const useResetPassword = () => {
   return useMutation({
     mutationFn: authApi.resetPassword,
+    onSuccess: () => {
+      showSuccessAlert('Password reset successful');
+    },
+    onError: (error) => {
+      showErrorAlert(error.response?.data?.message || 'Failed to reset password');
+    }
   });
 };
 
@@ -121,34 +142,11 @@ export const useLogout = () => {
     
     // Invalidate all auth queries to trigger refetches
     queryClient.invalidateQueries({ queryKey: authKeys.all });
+
+    showSuccessAlert('Logged out successfully');
     
     return true;
   };
   
   return { logout };
-};
-
-/**
- * Hook for OAuth2 login
- */
-export const useOAuthLogin = () => {
-  const queryClient = useQueryClient();
-  
-  return useMutation({
-    mutationFn: ({ provider, code }) => authApi.oauthLogin(provider, code),
-    onSuccess: (data) => {
-      // Store token in authService
-      if (data.token) {
-        authService.setToken(data.token);
-      }
-      
-      // Update user data in query cache
-      if (data.user) {
-        queryClient.setQueryData(authKeys.user(), data.user);
-      }
-      
-      // Invalidate user-related queries
-      queryClient.invalidateQueries({ queryKey: authKeys.user() });
-    },
-  });
 };
