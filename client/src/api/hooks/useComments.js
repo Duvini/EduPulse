@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { commentsApi } from '../endpoints/comments';
+import { showSuccessToast, showErrorToast } from '../../utils/toastUtils';
 
 /**
  * Hook to get comments for a post
@@ -20,13 +21,20 @@ export const useAddComment = () => {
   
   return useMutation({
     mutationFn: ({ postId, content }) => commentsApi.addComment(postId, content),
-    onSuccess: (_, variables) => {
-      // Invalidate both comments list and count queries to trigger refetch
+    onSuccess: (response, variables) => {
+      // Check for error flag in the response structure
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to add comment');
+        return;
+      }
+      
       queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
       queryClient.invalidateQueries({ queryKey: ['commentCount', variables.postId] });
-      
-      // Update posts query data to refresh UI elements
       queryClient.invalidateQueries({ queryKey: ['posts'] });
+      showSuccessToast('Comment added successfully');
+    },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to add comment');
     }
   });
 };
@@ -38,11 +46,21 @@ export const useUpdateComment = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ commentId, content, postId }) => commentsApi.updateComment(commentId, content),
-    onSuccess: (_, variables) => {
+    mutationFn: ({ commentId, content }) => commentsApi.updateComment(commentId, content),
+    onSuccess: (response, variables) => {
+      // Check for error flag in the response structure
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to update comment');
+        return;
+      }
+      
       if (variables.postId) {
         queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
       }
+      showSuccessToast('Comment updated successfully');
+    },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to update comment');
     }
   });
 };
@@ -54,13 +72,23 @@ export const useDeleteComment = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ commentId, postId }) => commentsApi.deleteComment(commentId),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
-      queryClient.invalidateQueries({ queryKey: ['commentCount', variables.postId] });
+    mutationFn: ({ commentId }) => commentsApi.deleteComment(commentId),
+    onSuccess: (response, variables) => {
+      // Check for error flag in the response structure
+      if (response?.error === true) {
+        showErrorToast(response.message || 'Failed to delete comment');
+        return;
+      }
       
-      // Update posts query data to refresh UI elements
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      if (variables.postId) {
+        queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
+        queryClient.invalidateQueries({ queryKey: ['commentCount', variables.postId] });
+        queryClient.invalidateQueries({ queryKey: ['posts'] });
+      }
+      showSuccessToast('Comment deleted successfully');
+    },
+    onError: (error) => {
+      showErrorToast(error.response?.data?.message || 'Failed to delete comment');
     }
   });
 };
