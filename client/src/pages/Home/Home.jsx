@@ -21,6 +21,18 @@ const Home = () => {
   const { user } = useStore();
   const navigate = useNavigate();
 
+  // Helper function to sort posts by creation time (newest first)
+  const sortPostsByNewest = (postsToSort) => {
+    return [...postsToSort].sort((a, b) => {
+      // If posts have timestamps, sort by them
+      if (a.createdAt && b.createdAt) {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      // Otherwise, assume newer posts are at the beginning of the array
+      return -1;
+    });
+  };
+
   const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
@@ -33,7 +45,9 @@ const Home = () => {
         }
         return;
       }
-      setPosts(response.data || []);
+      // Sort posts with newest first before setting state
+      const sortedPosts = sortPostsByNewest(response.data || []);
+      setPosts(sortedPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
       setError('Failed to fetch posts. Please try again.');
@@ -79,9 +93,17 @@ const Home = () => {
         return;
       }
       
+      // Add the new post to the top of the list without refetching everything
+      if (response.data && response.data.data) {
+        const newPost = response.data.data;
+        setPosts(prevPosts => [newPost, ...prevPosts]);
+      } else {
+        // Fallback to fetching all posts if we didn't get the created post data
+        fetchPosts();
+      }
+      
       setIsModalOpen(false);
       setError(null);
-      fetchPosts(); // Refresh posts after creating a new one
     } catch (error) {
       console.error('Error creating post:', error);
       if (error.response?.status === 401) {
@@ -92,8 +114,19 @@ const Home = () => {
     }
   };
 
-  const handlePostUpdate = useCallback(() => {
-    fetchPosts();
+  const handlePostUpdate = useCallback((updatedPost) => {
+    // If a post was updated, update it in the current list
+    if (updatedPost) {
+      setPosts(prevPosts => {
+        const updatedPosts = prevPosts.map(post => 
+          post.id === updatedPost.id ? updatedPost : post
+        );
+        return updatedPosts;
+      });
+    } else {
+      // Otherwise, just refresh all posts
+      fetchPosts();
+    }
   }, [fetchPosts]);
 
   return (
