@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { useStore } from '../../../store';
 import { FiUser, FiLock } from 'react-icons/fi';
+import { FcGoogle } from 'react-icons/fc';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -106,9 +107,7 @@ const SignIn = () => {
                   />
                 </div>
               </div>
-            </div>
-
-            <button
+            </div>            <button
               type="submit"
               disabled={loading}
               className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#4937ce] hover:bg-[#3c2ba7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4937ce] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -125,6 +124,26 @@ const SignIn = () => {
                 'Sign in'
               )}
             </button>
+
+            <div className="mt-4">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                </div>
+              </div>
+
+              <div className="mt-4">                <a
+                  href={`http://localhost:8080/oauth2/authorization/google`}
+                  className="w-full flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4937ce] transition-colors duration-200"
+                >
+                  <FcGoogle className="h-5 w-5 mr-2" />
+                  Sign in with Google
+                </a>
+              </div>
+            </div>
           </form>
         </div>
 

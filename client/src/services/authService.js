@@ -39,6 +39,47 @@ export const authService = {
             };
         }
     },
+    
+    // Handle OAuth2 login process
+    processOAuth2Login: (userData) => {
+        try {
+            if (!userData || !userData.token || !userData.id || !userData.username) {
+                console.error('Invalid OAuth2 user data');
+                return {
+                    error: true,
+                    data: 'Missing required authentication data',
+                    status: 400
+                };
+            }
+            
+            // Store token in localStorage
+            localStorage.setItem('token', userData.token);
+            
+            // Create a user object
+            const user = {
+                id: userData.id,
+                username: userData.username,
+                email: userData.email,
+                name: userData.name,
+                provider: 'google'
+            };
+            
+            // Store user in localStorage
+            localStorage.setItem('user', JSON.stringify(user));
+            
+            return {
+                error: false,
+                data: user
+            };
+        } catch (error) {
+            console.error('OAuth2 login processing error:', error);
+            return {
+                error: true,
+                data: 'Failed to process authentication',
+                status: 500
+            };
+        }
+    },
 
     register: async (username, email, password, name) => {
         try {
@@ -150,9 +191,7 @@ export const authService = {
                 status: error.response?.status || 500
             };
         }
-    },
-
-    updateUser: async (id, userData) => {
+    },    updateUser: async (id, userData) => {
         try {
             if (!id?.trim()) {
                 return { error: true, data: "User ID is required", status: 400 };
@@ -171,6 +210,44 @@ export const authService = {
                 error: true,
                 data: error.response?.data?.message || 'Failed to update user profile',
                 status: error.response?.status || 500
+            };
+        }
+    },
+    
+    // Process OAuth2 authentication result
+    processOAuth2Login: (userData) => {
+        try {
+            if (!userData || !userData.token || !userData.id || !userData.username) {
+                console.error('Invalid OAuth2 user data', userData);
+                return { 
+                    error: true, 
+                    data: "Missing required OAuth2 user data", 
+                    status: 400 
+                };
+            }
+            
+            // Store the token
+            localStorage.setItem('token', userData.token);
+            
+            // Create a user object with provider info
+            const user = {
+                id: userData.id,
+                username: userData.username,
+                email: userData.email,
+                name: userData.name,
+                provider: 'google'
+            };
+            
+            // Store in localStorage
+            localStorage.setItem('user', JSON.stringify(user));
+            
+            return { error: false, data: user };
+        } catch (error) {
+            console.error('Error processing OAuth2 login:', error);
+            return {
+                error: true,
+                data: 'Failed to process OAuth2 authentication',
+                status: 500
             };
         }
     },

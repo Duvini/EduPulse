@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from '../pages/Home/Home';
 import SignIn from '../pages/Auth/SignIn';
 import SignUp from '../pages/Auth/SignUp';
+import OAuth2Callback from '../pages/Auth/OAuth2Callback';
+import AuthTestPage from '../pages/Auth/AuthTestPage';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import UserProfile from '../pages/Profile/UserProfile';
 import SearchUsers from '../components/SearchUsers/SearchUsers';
@@ -12,10 +14,10 @@ import LearningPlanUpdate from '../components/LearningPlan/LearningPlanUpdate';
 
 const AppRoutes = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/feed" replace />} />
-      <Route path="/signin" element={<SignIn />} />
+    <Routes>      <Route path="/" element={<Navigate to="/feed" replace />} />      <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/oauth2/callback/google" element={<OAuth2Callback />} />
+      <Route path="/auth-test" element={<AuthTestPage />} />
       
       {/* Protected Routes */}
       <Route path="/feed" element={
