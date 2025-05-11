@@ -1,53 +1,52 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PostCard from '../../components/PostCard/postCard';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import LearningProgress from '../../components/LearningProgress/LearningProgress';
 import PostForm from '../../components/CommentInput/PostForm';
 import Modal from '../../components/Modal/Modal';
-import { skillPostService } from '../../services/skillPostService';
 import { getMediaUrl } from '../../services/axiosConfig';
 import { useStore } from '../../../store';
 import { FiPlus, FiImage, FiVideo, FiFileText } from 'react-icons/fi';
+import { useGetPosts } from '../../api/hooks/usePosts';
 
 // Default user avatar as SVG data URL
 const defaultUserAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23CBD5E1"%3E%3Cpath d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"%3E%3C/path%3E%3C/svg%3E';
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useStore();
   const navigate = useNavigate();
 
-  const fetchPosts = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await skillPostService.getAllPosts();
-      if (response.error) {
-        setError(response.message || 'Failed to fetch posts');
-        if (response.message?.toLowerCase().includes('sign in')) {
-          navigate('/signin');
-        }
-        return;
-      }
-      setPosts(response.data || []);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-      setError('Failed to fetch posts. Please try again.');
-      if (error.response?.status === 401) {
+  // Use React Query hook to fetch and manage posts
+  const { 
+    data: posts = [], 
+    isLoading: loading, 
+    isError, 
+    error: queryError,
+    refetch: refetchPosts
+  } = useGetPosts({
+    onError: (err) => {
+      console.error('Error fetching posts:', err);
+      if (err.response?.status === 401) {
         navigate('/signin');
       }
-    } finally {
-      setLoading(false);
+      setError('Failed to fetch posts. Please try again.');
     }
-  }, [navigate]);
+  });
 
+  // Set error message from query if needed
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
+    if (isError && queryError) {
+      setError(queryError.message || 'Failed to fetch posts');
+      if (queryError.response?.status === 401) {
+        navigate('/signin');
+      }
+    } else {
+      setError(null);
+    }
+  }, [isError, queryError, navigate]);
 
   const handleAddPostClick = () => {
     if (!user) {
@@ -61,40 +60,12 @@ const Home = () => {
     setIsModalOpen(false);
   };
 
-  const handlePostSubmitSuccess = async (values) => {
-    try {
-      const { description, tags, files } = values;
-      const tagArray = tags ? tags.split(',').map(tag => tag.trim()).filter(Boolean) : [];
-      
-      const response = await skillPostService.createPost(description, tagArray, files);
-      
-      if (response.error) {
-        if (response.message?.toLowerCase().includes('sign in') || 
-            response.message?.toLowerCase().includes('unauthorized') || 
-            response.message?.toLowerCase().includes('expired')) {
-          navigate('/signin');
-        } else {
-          setError(response.message || 'Failed to create post. Please try again.');
-        }
-        return;
-      }
-      
-      setIsModalOpen(false);
-      setError(null);
-      fetchPosts(); // Refresh posts after creating a new one
-    } catch (error) {
-      console.error('Error creating post:', error);
-      if (error.response?.status === 401) {
-        navigate('/signin');
-      } else {
-        setError('Failed to create post. Please try again.');
-      }
-    }
+  // This function is called after a successful post submission
+  // The post is already added to the React Query cache by the mutation
+  const handlePostSubmitSuccess = () => {
+    setIsModalOpen(false);
+    setError(null);
   };
-
-  const handlePostUpdate = useCallback(() => {
-    fetchPosts();
-  }, [fetchPosts]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -190,7 +161,7 @@ const Home = () => {
                   hashtags={post.tags}
                   userId={post.userId}
                   currentUserId={user?.id}
-                  onPostUpdated={handlePostUpdate}
+                  onPostUpdated={refetchPosts}
                 />
               ))}
             </div>

@@ -64,6 +64,20 @@ export const useCreatePost = () => {
         return;
       }
       
+      // Add the new post to the posts cache
+      const newPost = response.data;
+      if (newPost) {
+        // Update the posts list in the cache by prepending the new post
+        queryClient.setQueryData(postKeys.lists(), (oldData) => {
+          // If there's no previous data, create a new array
+          if (!oldData) return [newPost];
+          
+          // Otherwise, add the new post to the beginning of the list
+          return [newPost, ...oldData];
+        });
+      }
+      
+      // Still invalidate to ensure consistency
       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
       showSuccessToast('Post created successfully');
     },

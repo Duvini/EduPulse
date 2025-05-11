@@ -175,11 +175,8 @@ const PostForm = ({ onCancel, isEdit, initialValues }) => {
       const postData = {
         description: values.description,
         tags: tagsArray,
-        // Change 'files' to 'mediaFiles' to match API expectations
         mediaFiles: selectedFiles
       };
-
-      console.log('Submitting post data:', postData);
 
       // Use the appropriate mutation based on whether we're editing or creating
       if (isEdit && initialValues?.id) {
@@ -188,7 +185,9 @@ const PostForm = ({ onCancel, isEdit, initialValues }) => {
           ...postData
         });
       } else {
-        await createPost.mutateAsync(postData);
+        // Direct use of mutateAsync for post creation
+        const response = await createPost.mutateAsync(postData);
+        // The React Query cache is already updated in the mutation hook
       }
 
       // Reset form after successful submission
@@ -202,8 +201,12 @@ const PostForm = ({ onCancel, isEdit, initialValues }) => {
       if (typeof onCancel === 'function') {
         onCancel();
       }
+      
+      // Notify the parent component about the successful submission
+      if (typeof onSubmit === 'function') {
+        onSubmit();
+      }
     } catch (error) {
-      // Error handling is already done in the mutation hooks
       console.error('Error submitting post:', error);
     } finally {
       setSubmitting(false);
