@@ -20,5 +20,11 @@ export default defineConfig({
         ws: true
       }
     }
+  },
+  optimizeDeps: {
+    include: [
+      'react-markdown', 
+      'date-fns'
+    ]
   }
 })

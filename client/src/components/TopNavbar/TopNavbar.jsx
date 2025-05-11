@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FiHome, FiBook, FiSettings, FiHelpCircle, FiSearch, FiMenu, FiX, FiBell } from 'react-icons/fi';
+import { FiHome, FiBook, FiSettings, FiHelpCircle, FiSearch, FiMenu, FiX, FiBell, FiMessageCircle } from 'react-icons/fi';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../../../store';
 import { getMediaUrl } from '../../services/axiosConfig';
@@ -190,6 +190,17 @@ const TopNavbar = () => {
                 <FiBook className="text-xl mb-0.5" />
                 <span className="text-xs">Learn</span>
               </Link>
+              <Link 
+                to="/ai-assistant" 
+                className={`flex flex-col items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  location.pathname.startsWith('/ai-assistant')
+                    ? 'text-white bg-white/20' 
+                    : 'text-white/90 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <FiMessageCircle className="text-xl mb-0.5" />
+                <span className="text-xs">AI Assistant</span>
+              </Link>
             </div>
 
             {/* User Menu, Notifications & Mobile Toggle */}
@@ -356,6 +367,18 @@ const TopNavbar = () => {
               >
                 <FiBook className="mr-3 text-lg" />
                 <span>Learn Plans</span>
+              </Link>
+              
+              <Link 
+                to="/ai-assistant" 
+                className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
+                  location.pathname.startsWith('/ai-assistant')
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+              >
+                <FiMessageCircle className="mr-3 text-lg" />
+                <span>AI Assistant</span>
               </Link>
               
               <Link 

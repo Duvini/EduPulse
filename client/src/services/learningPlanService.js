@@ -73,3 +73,6 @@ export const learningPlanService = {
     }
   }
 };
+
+// Add default export
+export default learningPlanService;

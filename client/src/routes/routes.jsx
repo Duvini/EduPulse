@@ -9,6 +9,7 @@ import SearchUsers from '../components/SearchUsers/SearchUsers';
 import LearnPlanDisplay from '../pages/LearnPlanDisplay';
 import LearningPlanCreate from '../components/LearningPlan/LearningPlanCreate';
 import LearningPlanUpdate from '../components/LearningPlan/LearningPlanUpdate';
+import AIAssistantPage from '../pages/AIAssistant/AIAssistantPage';
 
 const AppRoutes = () => {
   return (
@@ -58,6 +59,19 @@ const AppRoutes = () => {
       <Route path="/update-plan/:id" element={
         <ProtectedRoute>
           <LearningPlanUpdate />
+        </ProtectedRoute>
+      } />
+      
+      {/* AI Learning Assistant Routes */}
+      <Route path="/ai-assistant" element={
+        <ProtectedRoute>
+          <AIAssistantPage />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/ai-assistant/:conversationId" element={
+        <ProtectedRoute>
+          <AIAssistantPage />
         </ProtectedRoute>
       } />
       
