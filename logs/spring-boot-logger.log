@@ -4278,3 +4278,1671 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
 2025-05-11 08:56:08,841 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Found 0 likes for post 682018bfe15cc338244bdcb4
 2025-05-11 08:56:09,438 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeCount: Counting likes for postId 682018bfe15cc338244bdcb4
 2025-05-11 08:56:09,642 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeCount: Found 0 likes for post 682018bfe15cc338244bdcb4
+2025-05-11 08:59:13,251 INFO c.e.e.s.i.LearningPlanServiceImpl [http-nio-8080-exec-12] Retrieved all learning plans of user
+2025-05-11 08:59:13,492 INFO c.e.e.s.i.LearningPlanServiceImpl [http-nio-8080-exec-10] Retrieved all learning plans of user
+2025-05-11 08:59:14,813 INFO c.e.e.s.i.LearningPlanServiceImpl [http-nio-8080-exec-6] Retrieved all learning plans of user
+2025-05-11 08:59:15,022 INFO c.e.e.s.i.LearningPlanServiceImpl [http-nio-8080-exec-8] Retrieved all learning plans of user
+2025-05-11 08:59:16,517 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-15] getAllSkillPosts: Fetching all skill posts
+2025-05-11 08:59:16,525 ERROR c.e.e.e.GlobalExceptionHandler [http-nio-8080-exec-2] Unexpected error occurred: No static resource api/v1/followers/stats/68179138d38d996e5cee6ea7.
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/followers/stats/68179138d38d996e5cee6ea7.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-05-11 08:59:16,610 INFO c.e.e.s.i.LearningPlanServiceImpl [http-nio-8080-exec-3] Retrieved all learning plans of user
+2025-05-11 08:59:16,813 INFO c.e.e.s.i.LearningPlanServiceImpl [http-nio-8080-exec-14] Retrieved all learning plans of user
+2025-05-11 08:59:17,517 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-15] getAllSkillPosts: Found 8 posts
+2025-05-11 08:59:17,641 ERROR c.e.e.e.GlobalExceptionHandler [http-nio-8080-exec-10] Unexpected error occurred: No static resource api/v1/followers/stats/68179138d38d996e5cee6ea7.
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/followers/stats/68179138d38d996e5cee6ea7.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-05-11 08:59:17,658 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-12] getAllSkillPosts: Fetching all skill posts
+2025-05-11 08:59:17,808 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeStatus: Checking like status for postId 6818d077f91dbe505c8b5ed1 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:17,821 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeStatus: Checking like status for postId 6818d66b0457c14f89d2fe2e and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:17,852 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: Checking like status for postId 6818d6d40457c14f89d2fe33 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:18,023 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d077f91dbe505c8b5ed1
+2025-05-11 08:59:18,060 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d66b0457c14f89d2fe2e
+2025-05-11 08:59:18,077 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d6d40457c14f89d2fe33
+2025-05-11 08:59:18,524 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 6818d7110457c14f89d2fe35 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:18,554 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeStatus: Checking like status for postId 6818d7890457c14f89d2fe37 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:18,796 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has liked post 6818d7110457c14f89d2fe35
+2025-05-11 08:59:18,903 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d7890457c14f89d2fe37
+2025-05-11 08:59:19,026 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-12] getAllSkillPosts: Found 8 posts
+2025-05-11 08:59:19,160 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: Checking like status for postId 6818e4c10457c14f89d2fe3d and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:19,160 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: Checking like status for postId 681fb9fbe088910a890f7f43 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:19,332 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 682018bfe15cc338244bdcb4 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:19,372 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 681fb9fbe088910a890f7f43
+2025-05-11 08:59:19,371 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818e4c10457c14f89d2fe3d
+2025-05-11 08:59:19,489 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-15] getLikeCount: Counting likes for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 08:59:19,530 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 682018bfe15cc338244bdcb4
+2025-05-11 08:59:19,540 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeCount: Counting likes for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 08:59:19,590 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: Checking like status for postId 6818d66b0457c14f89d2fe2e and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:19,594 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: Checking like status for postId 6818d077f91dbe505c8b5ed1 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:19,665 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Counting likes for postId 6818d6d40457c14f89d2fe33
+2025-05-11 08:59:19,704 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-15] getLikeCount: Found 4 likes for post 6818d077f91dbe505c8b5ed1
+2025-05-11 08:59:19,740 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeCount: Found 5 likes for post 6818d66b0457c14f89d2fe2e
+2025-05-11 08:59:19,746 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 6818d6d40457c14f89d2fe33 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:19,791 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d66b0457c14f89d2fe2e
+2025-05-11 08:59:19,806 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d077f91dbe505c8b5ed1
+2025-05-11 08:59:19,875 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Found 2 likes for post 6818d6d40457c14f89d2fe33
+2025-05-11 08:59:19,921 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Counting likes for postId 6818d7110457c14f89d2fe35
+2025-05-11 08:59:19,943 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d6d40457c14f89d2fe33
+2025-05-11 08:59:19,948 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: Checking like status for postId 6818d7110457c14f89d2fe35 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:20,049 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeCount: Counting likes for postId 6818d7890457c14f89d2fe37
+2025-05-11 08:59:20,080 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-15] getLikeStatus: Checking like status for postId 6818d7890457c14f89d2fe37 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:20,134 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Found 2 likes for post 6818d7110457c14f89d2fe35
+2025-05-11 08:59:20,148 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: User 68179138d38d996e5cee6ea7 has liked post 6818d7110457c14f89d2fe35
+2025-05-11 08:59:20,247 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeCount: Found 1 likes for post 6818d7890457c14f89d2fe37
+2025-05-11 08:59:20,297 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-15] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d7890457c14f89d2fe37
+2025-05-11 08:59:20,622 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeCount: Counting likes for postId 681fb9fbe088910a890f7f43
+2025-05-11 08:59:20,664 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: Checking like status for postId 681fb9fbe088910a890f7f43 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:20,664 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: Checking like status for postId 6818e4c10457c14f89d2fe3d and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:20,751 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-15] getLikeCount: Counting likes for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 08:59:20,857 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeCount: Found 2 likes for post 681fb9fbe088910a890f7f43
+2025-05-11 08:59:20,865 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818e4c10457c14f89d2fe3d
+2025-05-11 08:59:20,873 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 681fb9fbe088910a890f7f43
+2025-05-11 08:59:20,970 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-15] getLikeCount: Found 1 likes for post 6818e4c10457c14f89d2fe3d
+2025-05-11 08:59:20,997 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Counting likes for postId 682018bfe15cc338244bdcb4
+2025-05-11 08:59:21,083 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Counting likes for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 08:59:21,139 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 682018bfe15cc338244bdcb4 and userId 68179138d38d996e5cee6ea7
+2025-05-11 08:59:21,146 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeCount: Counting likes for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 08:59:21,249 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Found 0 likes for post 682018bfe15cc338244bdcb4
+2025-05-11 08:59:21,255 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeCount: Counting likes for postId 6818d6d40457c14f89d2fe33
+2025-05-11 08:59:21,283 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Found 5 likes for post 6818d66b0457c14f89d2fe2e
+2025-05-11 08:59:21,342 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 682018bfe15cc338244bdcb4
+2025-05-11 08:59:21,345 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-14] getLikeCount: Found 4 likes for post 6818d077f91dbe505c8b5ed1
+2025-05-11 08:59:21,447 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Counting likes for postId 6818d7110457c14f89d2fe35
+2025-05-11 08:59:21,466 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeCount: Found 2 likes for post 6818d6d40457c14f89d2fe33
+2025-05-11 08:59:21,581 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Counting likes for postId 6818d7890457c14f89d2fe37
+2025-05-11 08:59:21,663 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Found 2 likes for post 6818d7110457c14f89d2fe35
+2025-05-11 08:59:21,791 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Found 1 likes for post 6818d7890457c14f89d2fe37
+2025-05-11 08:59:21,856 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-15] getLikeCount: Counting likes for postId 681fb9fbe088910a890f7f43
+2025-05-11 08:59:21,897 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Counting likes for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 08:59:21,999 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Counting likes for postId 682018bfe15cc338244bdcb4
+2025-05-11 08:59:22,096 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-15] getLikeCount: Found 2 likes for post 681fb9fbe088910a890f7f43
+2025-05-11 08:59:22,102 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Found 1 likes for post 6818e4c10457c14f89d2fe3d
+2025-05-11 08:59:22,201 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Found 0 likes for post 682018bfe15cc338244bdcb4
+2025-05-11 09:01:14,467 INFO o.s.w.s.c.WebSocketMessageBrokerStats [MessageBroker-1] WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2025-05-11 09:02:55,451 INFO o.s.b.w.e.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-11 09:02:55,464 INFO o.s.b.w.e.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2025-05-11 09:02:55,472 INFO o.s.c.l.CompositeLog [SpringApplicationShutdownHook] Stopping...
+2025-05-11 09:02:55,472 INFO o.s.c.l.CompositeLog [SpringApplicationShutdownHook] BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4f0c1409]]
+2025-05-11 09:02:55,473 INFO o.s.c.l.CompositeLog [SpringApplicationShutdownHook] Stopped.
+2025-05-11 09:02:59,743 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.2.Final
+2025-05-11 09:02:59,763 INFO o.s.b.StartupInfoLogger [main] Starting EduPulseBackendApplication using Java 23.0.2 with PID 99646 (/Users/duviniranaweera/Documents/EduPulse/EduPulseBackend/target/classes started by duviniranaweera in /Users/duviniranaweera/Documents/EduPulse)
+2025-05-11 09:02:59,763 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
+2025-05-11 09:03:00,224 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-05-11 09:03:00,265 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 35 ms. Found 11 MongoDB repository interfaces.
+2025-05-11 09:03:00,515 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port 8080 (http)
+2025-05-11 09:03:00,521 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8080"]
+2025-05-11 09:03:00,522 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2025-05-11 09:03:00,522 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-11 09:03:00,547 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2025-05-11 09:03:00,547 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 761 ms
+2025-05-11 09:03:00,691 INFO c.m.i.d.l.SLF4JLogger [main] MongoClient with metadata {"application": {"name": "EduPulse"}, "driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.2.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "aarch64", "version": "15.0"}, "platform": "Java/Homebrew/23.0.2"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=majority, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='dasunhimsara', source='admin', password=<hidden>, mechanismProperties=<hidden>}, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@44dd0d38, com.mongodb.Jep395RecordCodecProvider@7e94e331, com.mongodb.KotlinCodecProvider@539fc5d1]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[127.0.0.1:27017], srvHost=edupulse.oovinf0.mongodb.net, srvServiceName=mongodb, mode=MULTIPLE, requiredClusterType=REPLICA_SET, requiredReplicaSetName='atlas-xlsmv9-shard-0', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=true, invalidHostNameAllowed=false, context=null}, applicationName='EduPulse', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-05-11 09:03:00,779 INFO c.m.i.d.l.SLF4JLogger [cluster-ClusterId{value='68201a6cdc9735779b8cf651', description='EduPulse'}-srv-edupulse.oovinf0.mongodb.net] Adding discovered server ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017 to client view of cluster
+2025-05-11 09:03:00,792 INFO c.m.i.d.l.SLF4JLogger [cluster-ClusterId{value='68201a6cdc9735779b8cf651', description='EduPulse'}-srv-edupulse.oovinf0.mongodb.net] Adding discovered server ac-dyxxkav-shard-00-00.oovinf0.mongodb.net:27017 to client view of cluster
+2025-05-11 09:03:00,793 INFO c.m.i.d.l.SLF4JLogger [cluster-ClusterId{value='68201a6cdc9735779b8cf651', description='EduPulse'}-srv-edupulse.oovinf0.mongodb.net] Adding discovered server ac-dyxxkav-shard-00-02.oovinf0.mongodb.net:27017 to client view of cluster
+2025-05-11 09:03:01,103 INFO o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-05-11 09:03:01,437 INFO o.s.c.l.CompositeLog [main] Starting...
+2025-05-11 09:03:01,437 INFO o.s.c.l.CompositeLog [main] BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@39b95a80]]
+2025-05-11 09:03:01,437 INFO o.s.c.l.CompositeLog [main] Started.
+2025-05-11 09:03:01,438 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8080"]
+2025-05-11 09:03:01,442 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port 8080 (http) with context path '/'
+2025-05-11 09:03:01,446 INFO o.s.b.StartupInfoLogger [main] Started EduPulseBackendApplication in 1.964 seconds (process running for 2.335)
+2025-05-11 09:03:01,448 INFO c.m.i.d.l.SLF4JLogger [cluster-ClusterId{value='68201a6cdc9735779b8cf651', description='EduPulse'}-ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017] Monitor thread successfully connected to server with description ServerDescription{address=ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017, type=REPLICA_SET_PRIMARY, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=347793625, minRoundTripTimeNanos=0, setName='atlas-xlsmv9-shard-0', canonicalAddress=ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017, hosts=[ac-dyxxkav-shard-00-02.oovinf0.mongodb.net:27017, ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017, ac-dyxxkav-shard-00-00.oovinf0.mongodb.net:27017], passives=[], arbiters=[], primary='ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az3'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff000000000000010d, setVersion=307, topologyVersion=TopologyVersion{processId=681ffc4056ac3896b090fabd, counter=6}, lastWriteDate=Sun May 11 09:03:01 IST 2025, lastUpdateTimeNanos=864924487578625}
+2025-05-11 09:03:01,448 INFO c.m.i.d.l.SLF4JLogger [cluster-ClusterId{value='68201a6cdc9735779b8cf651', description='EduPulse'}-ac-dyxxkav-shard-00-02.oovinf0.mongodb.net:27017] Monitor thread successfully connected to server with description ServerDescription{address=ac-dyxxkav-shard-00-02.oovinf0.mongodb.net:27017, type=REPLICA_SET_SECONDARY, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=318750041, minRoundTripTimeNanos=0, setName='atlas-xlsmv9-shard-0', canonicalAddress=ac-dyxxkav-shard-00-02.oovinf0.mongodb.net:27017, hosts=[ac-dyxxkav-shard-00-02.oovinf0.mongodb.net:27017, ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017, ac-dyxxkav-shard-00-00.oovinf0.mongodb.net:27017], passives=[], arbiters=[], primary='ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az2'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=307, topologyVersion=TopologyVersion{processId=681ffe67c4c564b1081035df, counter=3}, lastWriteDate=Sun May 11 09:03:01 IST 2025, lastUpdateTimeNanos=864924487578625}
+2025-05-11 09:03:01,449 INFO c.m.i.d.l.SLF4JLogger [cluster-ClusterId{value='68201a6cdc9735779b8cf651', description='EduPulse'}-ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017] Discovered replica set primary ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017 with max election id 7fffffff000000000000010d and max set version 307
+2025-05-11 09:03:01,523 INFO c.m.i.d.l.SLF4JLogger [cluster-ClusterId{value='68201a6cdc9735779b8cf651', description='EduPulse'}-ac-dyxxkav-shard-00-00.oovinf0.mongodb.net:27017] Monitor thread successfully connected to server with description ServerDescription{address=ac-dyxxkav-shard-00-00.oovinf0.mongodb.net:27017, type=REPLICA_SET_SECONDARY, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=230745541, minRoundTripTimeNanos=0, setName='atlas-xlsmv9-shard-0', canonicalAddress=ac-dyxxkav-shard-00-00.oovinf0.mongodb.net:27017, hosts=[ac-dyxxkav-shard-00-02.oovinf0.mongodb.net:27017, ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017, ac-dyxxkav-shard-00-00.oovinf0.mongodb.net:27017], passives=[], arbiters=[], primary='ac-dyxxkav-shard-00-01.oovinf0.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az1'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=307, topologyVersion=TopologyVersion{processId=681ffcfb6ec7cf85beb571a6, counter=4}, lastWriteDate=Sun May 11 09:03:01 IST 2025, lastUpdateTimeNanos=864924563928041}
+2025-05-11 09:03:10,837 INFO o.a.j.l.DirectJDKLog [http-nio-8080-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-11 09:03:10,853 INFO o.s.w.s.FrameworkServlet [http-nio-8080-exec-1] Initializing Servlet 'dispatcherServlet'
+2025-05-11 09:03:10,861 INFO o.s.w.s.FrameworkServlet [http-nio-8080-exec-1] Completed initialization in 8 ms
+2025-05-11 09:03:26,987 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-3] createSkillPost: Creating post for userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:27,376 INFO c.e.e.s.i.MediaStorageServiceImpl [http-nio-8080-exec-3] Media file saved as BLOB with ID: 68201a87dc9735779b8cf652
+2025-05-11 09:03:27,491 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-3] createSkillPost: Saved post with ID 68201a87dc9735779b8cf653 for user 68179138d38d996e5cee6ea7
+2025-05-11 09:03:35,774 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-6] getPostsByUserId: Fetching posts for userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:35,886 ERROR c.e.e.e.GlobalExceptionHandler [http-nio-8080-exec-5] Unexpected error occurred: No static resource api/v1/followers/stats/68179138d38d996e5cee6ea7.
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/followers/stats/68179138d38d996e5cee6ea7.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-05-11 09:03:35,985 ERROR c.e.e.e.GlobalExceptionHandler [http-nio-8080-exec-9] Unexpected error occurred: No static resource api/v1/auth/validate.
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/auth/validate.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-05-11 09:03:36,311 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-8] getAllSkillPosts: Fetching all skill posts
+2025-05-11 09:03:36,400 INFO c.e.e.s.i.LearningPlanServiceImpl [http-nio-8080-exec-7] Retrieved all learning plans of user
+2025-05-11 09:03:36,572 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-6] getPostsByUserId: Found 5 posts for user 68179138d38d996e5cee6ea7
+2025-05-11 09:03:36,613 INFO c.e.e.s.i.LearningPlanServiceImpl [http-nio-8080-exec-10] Retrieved all learning plans of user
+2025-05-11 09:03:37,019 ERROR c.e.e.e.GlobalExceptionHandler [http-nio-8080-exec-1] Unexpected error occurred: No static resource api/v1/followers/stats/68179138d38d996e5cee6ea7.
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/followers/stats/68179138d38d996e5cee6ea7.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-05-11 09:03:37,292 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-8] getAllSkillPosts: Found 9 posts
+2025-05-11 09:03:37,393 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-2] getAllSkillPosts: Fetching all skill posts
+2025-05-11 09:03:37,558 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-6] getCommentsByPost: Fetching comments for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:37,760 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-8] getCommentsByPost: Fetching comments for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:38,052 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: Checking like status for postId 6818d66b0457c14f89d2fe2e and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:38,156 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-6] getCommentsByPost: Found 1 comments for post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:38,368 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-4] getCommentsByPost: Fetching comments for postId 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:38,587 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: Checking like status for postId 6818d077f91dbe505c8b5ed1 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:38,983 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-4] getCommentsByPost: Found 0 comments for post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:39,034 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-8] getCommentsByPost: Found 4 comments for post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:39,079 ERROR c.e.e.e.GlobalExceptionHandler [http-nio-8080-exec-5] Unexpected error occurred: ServletOutputStream failed to write: java.io.IOException: Broken pipe
+org.springframework.web.context.request.async.AsyncRequestNotUsableException: ServletOutputStream failed to write: java.io.IOException: Broken pipe
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleHttpServletResponse.handleIOException(StandardServletAsyncWebRequest.java:346)
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleServletOutputStream.write(StandardServletAsyncWebRequest.java:404)
+	at java.base/java.io.OutputStream.write(OutputStream.java:124)
+	at org.springframework.util.StreamUtils.copy(StreamUtils.java:118)
+	at org.springframework.http.converter.ByteArrayHttpMessageConverter.writeInternal(ByteArrayHttpMessageConverter.java:67)
+	at org.springframework.http.converter.ByteArrayHttpMessageConverter.writeInternal(ByteArrayHttpMessageConverter.java:38)
+	at org.springframework.http.converter.AbstractHttpMessageConverter.write(AbstractHttpMessageConverter.java:235)
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:344)
+	at org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:263)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.hateoas.server.mvc.RepresentationModelProcessorHandlerMethodReturnValueHandler.handleReturnValue(RepresentationModelProcessorHandlerMethodReturnValueHandler.java:108)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+Caused by: org.apache.catalina.connector.ClientAbortException: java.io.IOException: Broken pipe
+	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:346)
+	at org.apache.catalina.connector.OutputBuffer.appendByteArray(OutputBuffer.java:751)
+	at org.apache.catalina.connector.OutputBuffer.append(OutputBuffer.java:672)
+	at org.apache.catalina.connector.OutputBuffer.writeBytes(OutputBuffer.java:381)
+	at org.apache.catalina.connector.OutputBuffer.write(OutputBuffer.java:359)
+	at org.apache.catalina.connector.CoyoteOutputStream.write(CoyoteOutputStream.java:102)
+	at org.springframework.security.web.util.OnCommittedResponseWrapper$SaveContextServletOutputStream.write(OnCommittedResponseWrapper.java:639)
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleServletOutputStream.write(StandardServletAsyncWebRequest.java:401)
+	... 117 common frames omitted
+Caused by: java.io.IOException: Broken pipe
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:62)
+	at java.base/sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:137)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:102)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:58)
+	at java.base/sun.nio.ch.SocketChannelImpl.implWrite(SocketChannelImpl.java:566)
+	at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:618)
+	at org.apache.tomcat.util.net.NioChannel.write(NioChannel.java:122)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.doWrite(NioEndpoint.java:1380)
+	at org.apache.tomcat.util.net.SocketWrapperBase.doWrite(SocketWrapperBase.java:764)
+	at org.apache.tomcat.util.net.SocketWrapperBase.writeBlocking(SocketWrapperBase.java:589)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:533)
+	at org.apache.coyote.http11.Http11OutputBuffer$SocketOutputBuffer.doWrite(Http11OutputBuffer.java:548)
+	at org.apache.coyote.http11.filters.IdentityOutputFilter.doWrite(IdentityOutputFilter.java:73)
+	at org.apache.coyote.http11.Http11OutputBuffer.doWrite(Http11OutputBuffer.java:193)
+	at org.apache.coyote.Response.doWrite(Response.java:631)
+	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:334)
+	... 124 common frames omitted
+2025-05-11 09:03:39,080 WARN o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver [http-nio-8080-exec-5] Failure in @ExceptionHandler com.example.edupulse_backend.exception.GlobalExceptionHandler#handleGenericError(Exception)
+org.springframework.http.converter.HttpMessageNotWritableException: No converter for [class com.example.edupulse_backend.payload.response.ResponseDto] with preset Content-Type 'video/mp4'
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:365)
+	at org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:263)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver.doResolveHandlerMethodException(ExceptionHandlerExceptionResolver.java:471)
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodExceptionResolver.doResolveException(AbstractHandlerMethodExceptionResolver.java:73)
+	at org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver.resolveException(AbstractHandlerExceptionResolver.java:182)
+	at org.springframework.web.servlet.handler.HandlerExceptionResolverComposite.resolveException(HandlerExceptionResolverComposite.java:80)
+	at org.springframework.web.servlet.DispatcherServlet.processHandlerException(DispatcherServlet.java:1359)
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1161)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1106)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-05-11 09:03:39,101 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:39,209 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-1] getCommentsByPost: Fetching comments for postId 6818d7110457c14f89d2fe35
+2025-05-11 09:03:39,214 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:39,214 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: Checking like status for postId 6818d6d40457c14f89d2fe33 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:39,405 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-2] getAllSkillPosts: Found 9 posts
+2025-05-11 09:03:39,411 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:39,412 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-1] getCommentsByPost: Found 2 comments for post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:39,423 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeStatus: Checking like status for postId 6818d7110457c14f89d2fe35 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:39,538 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-5] getCommentsByPost: Fetching comments for postId 6818d7890457c14f89d2fe37
+2025-05-11 09:03:39,568 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-11] getCommentsByPost: Fetching comments for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:39,634 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeStatus: User 68179138d38d996e5cee6ea7 has liked post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:39,637 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: Checking like status for postId 6818d7890457c14f89d2fe37 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:39,728 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeStatus: Checking like status for postId 6818e4c10457c14f89d2fe3d and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:39,736 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-5] getCommentsByPost: Found 1 comments for post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:39,745 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-2] getCommentsByPost: Fetching comments for postId 681fb9fbe088910a890f7f43
+2025-05-11 09:03:39,759 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-11] getCommentsByPost: Found 2 comments for post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:39,834 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:39,926 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:39,947 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: Checking like status for postId 681fb9fbe088910a890f7f43 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:39,947 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-2] getCommentsByPost: Found 1 comments for post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:39,948 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-9] getCommentsByPost: Fetching comments for postId 682018bfe15cc338244bdcb4
+2025-05-11 09:03:40,077 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeStatus: Checking like status for postId 682018bfe15cc338244bdcb4 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:40,157 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-9] getCommentsByPost: Found 0 comments for post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:40,157 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:40,186 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeStatus: Checking like status for postId 6818d077f91dbe505c8b5ed1 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:40,270 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Counting likes for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:40,273 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:40,281 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Counting likes for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:40,368 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: Checking like status for postId 6818d66b0457c14f89d2fe2e and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:40,384 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:40,473 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Found 4 likes for post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:40,485 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Found 5 likes for post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:40,577 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:40,581 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeCount: Counting likes for postId 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:40,593 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 6818d6d40457c14f89d2fe33 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:40,764 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Counting likes for postId 6818d7110457c14f89d2fe35
+2025-05-11 09:03:40,781 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeCount: Found 2 likes for post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:40,783 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeStatus: Checking like status for postId 6818d7110457c14f89d2fe35 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:40,810 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:40,917 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Counting likes for postId 6818d7890457c14f89d2fe37
+2025-05-11 09:03:41,003 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Found 2 likes for post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:41,018 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeStatus: User 68179138d38d996e5cee6ea7 has liked post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:41,020 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: Checking like status for postId 6818d7890457c14f89d2fe37 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:41,120 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Found 1 likes for post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:41,271 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:41,278 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Counting likes for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:41,282 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: Checking like status for postId 6818e4c10457c14f89d2fe3d and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:41,429 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-1] getCommentsByPost: Fetching comments for postId 68201a87dc9735779b8cf653
+2025-05-11 09:03:41,524 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:41,547 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Found 1 likes for post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:41,548 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 68201a87dc9735779b8cf653 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:41,648 INFO c.e.e.s.i.CommentServiceImpl [http-nio-8080-exec-1] getCommentsByPost: Found 0 comments for post 68201a87dc9735779b8cf653
+2025-05-11 09:03:41,654 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Counting likes for postId 681fb9fbe088910a890f7f43
+2025-05-11 09:03:41,749 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 68201a87dc9735779b8cf653
+2025-05-11 09:03:41,754 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeStatus: Checking like status for postId 681fb9fbe088910a890f7f43 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:41,852 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: Checking like status for postId 682018bfe15cc338244bdcb4 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:41,853 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Counting likes for postId 682018bfe15cc338244bdcb4
+2025-05-11 09:03:41,855 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Found 2 likes for post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:41,891 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Counting likes for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:41,949 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:42,088 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:42,090 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Found 0 likes for post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:42,092 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeCount: Counting likes for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:42,101 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Found 4 likes for post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:42,209 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Counting likes for postId 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:42,289 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeCount: Found 5 likes for post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:42,327 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Counting likes for postId 6818d7110457c14f89d2fe35
+2025-05-11 09:03:42,409 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeCount: Counting likes for postId 6818d7890457c14f89d2fe37
+2025-05-11 09:03:42,422 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Found 2 likes for post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:42,523 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Found 2 likes for post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:42,536 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Counting likes for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:42,621 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeCount: Found 1 likes for post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:42,729 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Counting likes for postId 681fb9fbe088910a890f7f43
+2025-05-11 09:03:42,778 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 68201a87dc9735779b8cf653 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:42,778 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Found 1 likes for post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:42,886 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Counting likes for postId 682018bfe15cc338244bdcb4
+2025-05-11 09:03:42,979 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Found 2 likes for post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:42,985 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 68201a87dc9735779b8cf653
+2025-05-11 09:03:43,112 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Found 0 likes for post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:43,117 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Counting likes for postId 68201a87dc9735779b8cf653
+2025-05-11 09:03:43,243 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-5] deleteSkillPost: Deleting post with id 68201a87dc9735779b8cf653
+2025-05-11 09:03:43,346 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Found 0 likes for post 68201a87dc9735779b8cf653
+2025-05-11 09:03:43,465 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeCount: Counting likes for postId 68201a87dc9735779b8cf653
+2025-05-11 09:03:43,585 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-5] deleteSkillPost: Successfully deleted post with id 68201a87dc9735779b8cf653
+2025-05-11 09:03:43,668 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeCount: Found 0 likes for post 68201a87dc9735779b8cf653
+2025-05-11 09:03:43,718 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-7] getAllSkillPosts: Fetching all skill posts
+2025-05-11 09:03:44,688 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-7] getAllSkillPosts: Found 8 posts
+2025-05-11 09:03:45,067 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: Checking like status for postId 6818d077f91dbe505c8b5ed1 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:45,074 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 6818d66b0457c14f89d2fe2e and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:45,314 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:45,314 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:45,318 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeStatus: Checking like status for postId 6818d7110457c14f89d2fe35 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:45,564 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeStatus: User 68179138d38d996e5cee6ea7 has liked post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:45,608 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: Checking like status for postId 6818d7890457c14f89d2fe37 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:45,788 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: Checking like status for postId 6818d6d40457c14f89d2fe33 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:45,895 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:45,902 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 6818e4c10457c14f89d2fe3d and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:46,014 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:46,081 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeStatus: Checking like status for postId 681fb9fbe088910a890f7f43 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:46,177 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:46,272 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeStatus: Checking like status for postId 682018bfe15cc338244bdcb4 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:46,289 ERROR c.e.e.e.GlobalExceptionHandler [http-nio-8080-exec-6] Unexpected error occurred: ServletOutputStream failed to write: java.io.IOException: Connection reset by peer
+org.springframework.web.context.request.async.AsyncRequestNotUsableException: ServletOutputStream failed to write: java.io.IOException: Connection reset by peer
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleHttpServletResponse.handleIOException(StandardServletAsyncWebRequest.java:346)
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleServletOutputStream.write(StandardServletAsyncWebRequest.java:404)
+	at java.base/java.io.OutputStream.write(OutputStream.java:124)
+	at org.springframework.util.StreamUtils.copy(StreamUtils.java:118)
+	at org.springframework.http.converter.ByteArrayHttpMessageConverter.writeInternal(ByteArrayHttpMessageConverter.java:67)
+	at org.springframework.http.converter.ByteArrayHttpMessageConverter.writeInternal(ByteArrayHttpMessageConverter.java:38)
+	at org.springframework.http.converter.AbstractHttpMessageConverter.write(AbstractHttpMessageConverter.java:235)
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:344)
+	at org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:263)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.hateoas.server.mvc.RepresentationModelProcessorHandlerMethodReturnValueHandler.handleReturnValue(RepresentationModelProcessorHandlerMethodReturnValueHandler.java:108)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+Caused by: org.apache.catalina.connector.ClientAbortException: java.io.IOException: Connection reset by peer
+	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:346)
+	at org.apache.catalina.connector.OutputBuffer.appendByteArray(OutputBuffer.java:751)
+	at org.apache.catalina.connector.OutputBuffer.append(OutputBuffer.java:672)
+	at org.apache.catalina.connector.OutputBuffer.writeBytes(OutputBuffer.java:381)
+	at org.apache.catalina.connector.OutputBuffer.write(OutputBuffer.java:359)
+	at org.apache.catalina.connector.CoyoteOutputStream.write(CoyoteOutputStream.java:102)
+	at org.springframework.security.web.util.OnCommittedResponseWrapper$SaveContextServletOutputStream.write(OnCommittedResponseWrapper.java:639)
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleServletOutputStream.write(StandardServletAsyncWebRequest.java:401)
+	... 117 common frames omitted
+Caused by: java.io.IOException: Connection reset by peer
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:62)
+	at java.base/sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:137)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:102)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:58)
+	at java.base/sun.nio.ch.SocketChannelImpl.implWrite(SocketChannelImpl.java:566)
+	at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:618)
+	at org.apache.tomcat.util.net.NioChannel.write(NioChannel.java:122)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.doWrite(NioEndpoint.java:1380)
+	at org.apache.tomcat.util.net.SocketWrapperBase.doWrite(SocketWrapperBase.java:764)
+	at org.apache.tomcat.util.net.SocketWrapperBase.writeBlocking(SocketWrapperBase.java:589)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:533)
+	at org.apache.coyote.http11.Http11OutputBuffer$SocketOutputBuffer.doWrite(Http11OutputBuffer.java:548)
+	at org.apache.coyote.http11.filters.IdentityOutputFilter.doWrite(IdentityOutputFilter.java:73)
+	at org.apache.coyote.http11.Http11OutputBuffer.doWrite(Http11OutputBuffer.java:193)
+	at org.apache.coyote.Response.doWrite(Response.java:631)
+	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:334)
+	... 124 common frames omitted
+2025-05-11 09:03:46,291 WARN o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver [http-nio-8080-exec-6] Failure in @ExceptionHandler com.example.edupulse_backend.exception.GlobalExceptionHandler#handleGenericError(Exception)
+org.springframework.http.converter.HttpMessageNotWritableException: No converter for [class com.example.edupulse_backend.payload.response.ResponseDto] with preset Content-Type 'video/mp4'
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:365)
+	at org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:263)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver.doResolveHandlerMethodException(ExceptionHandlerExceptionResolver.java:471)
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodExceptionResolver.doResolveException(AbstractHandlerMethodExceptionResolver.java:73)
+	at org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver.resolveException(AbstractHandlerExceptionResolver.java:182)
+	at org.springframework.web.servlet.handler.HandlerExceptionResolverComposite.resolveException(HandlerExceptionResolverComposite.java:80)
+	at org.springframework.web.servlet.DispatcherServlet.processHandlerException(DispatcherServlet.java:1359)
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1161)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1106)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-05-11 09:03:46,320 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:46,431 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Counting likes for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:46,475 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:46,503 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeStatus: Checking like status for postId 6818d66b0457c14f89d2fe2e and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:46,514 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeCount: Counting likes for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:46,515 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: Checking like status for postId 6818d077f91dbe505c8b5ed1 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:46,583 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeCount: Counting likes for postId 6818d7110457c14f89d2fe35
+2025-05-11 09:03:46,627 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: Checking like status for postId 6818d7110457c14f89d2fe35 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:46,628 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Found 5 likes for post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:46,705 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:46,713 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeCount: Found 4 likes for post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:46,728 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:46,783 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeCount: Found 2 likes for post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:46,835 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: User 68179138d38d996e5cee6ea7 has liked post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:46,973 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Counting likes for postId 6818d7890457c14f89d2fe37
+2025-05-11 09:03:46,987 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeStatus: Checking like status for postId 6818d7890457c14f89d2fe37 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:47,077 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Counting likes for postId 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:47,169 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeStatus: Checking like status for postId 6818d6d40457c14f89d2fe33 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:47,186 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Found 1 likes for post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:47,222 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:47,302 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Found 2 likes for post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:47,303 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeCount: Counting likes for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:47,329 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: Checking like status for postId 6818e4c10457c14f89d2fe3d and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:47,382 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:47,500 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeCount: Found 1 likes for post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:47,527 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:47,568 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Counting likes for postId 681fb9fbe088910a890f7f43
+2025-05-11 09:03:47,588 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: Checking like status for postId 681fb9fbe088910a890f7f43 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:47,675 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeCount: Counting likes for postId 682018bfe15cc338244bdcb4
+2025-05-11 09:03:47,742 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: Checking like status for postId 682018bfe15cc338244bdcb4 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:47,780 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Found 2 likes for post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:47,792 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:47,848 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Counting likes for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:47,885 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeCount: Found 0 likes for post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:47,889 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Counting likes for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:47,896 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Counting likes for postId 6818d7110457c14f89d2fe35
+2025-05-11 09:03:47,946 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:48,054 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeCount: Found 5 likes for post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:48,094 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Found 2 likes for post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:48,100 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Found 4 likes for post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:48,166 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Counting likes for postId 6818d7890457c14f89d2fe37
+2025-05-11 09:03:48,203 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Counting likes for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:48,208 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Counting likes for postId 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:48,264 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeCount: Counting likes for postId 681fb9fbe088910a890f7f43
+2025-05-11 09:03:48,360 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Found 1 likes for post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:48,400 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-5] getLikeCount: Found 1 likes for post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:48,438 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Found 2 likes for post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:48,528 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeCount: Found 2 likes for post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:48,529 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeCount: Counting likes for postId 682018bfe15cc338244bdcb4
+2025-05-11 09:03:48,547 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-3] deleteSkillPost: Deleting post with id 682018bfe15cc338244bdcb4
+2025-05-11 09:03:48,803 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeCount: Found 0 likes for post 682018bfe15cc338244bdcb4
+2025-05-11 09:03:48,918 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-3] deleteSkillPost: Successfully deleted post with id 682018bfe15cc338244bdcb4
+2025-05-11 09:03:49,029 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-4] getAllSkillPosts: Fetching all skill posts
+2025-05-11 09:03:49,874 INFO c.e.e.s.i.SkillPostServiceImpl [http-nio-8080-exec-4] getAllSkillPosts: Found 7 posts
+2025-05-11 09:03:50,140 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 6818d6d40457c14f89d2fe33 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:50,140 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: Checking like status for postId 6818d077f91dbe505c8b5ed1 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:50,140 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: Checking like status for postId 6818d66b0457c14f89d2fe2e and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:50,397 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:50,397 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:50,397 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:51,180 ERROR c.e.e.e.GlobalExceptionHandler [http-nio-8080-exec-10] Unexpected error occurred: ServletOutputStream failed to write: java.io.IOException: Broken pipe
+org.springframework.web.context.request.async.AsyncRequestNotUsableException: ServletOutputStream failed to write: java.io.IOException: Broken pipe
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleHttpServletResponse.handleIOException(StandardServletAsyncWebRequest.java:346)
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleServletOutputStream.write(StandardServletAsyncWebRequest.java:404)
+	at java.base/java.io.OutputStream.write(OutputStream.java:124)
+	at org.springframework.util.StreamUtils.copy(StreamUtils.java:118)
+	at org.springframework.http.converter.ByteArrayHttpMessageConverter.writeInternal(ByteArrayHttpMessageConverter.java:67)
+	at org.springframework.http.converter.ByteArrayHttpMessageConverter.writeInternal(ByteArrayHttpMessageConverter.java:38)
+	at org.springframework.http.converter.AbstractHttpMessageConverter.write(AbstractHttpMessageConverter.java:235)
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:344)
+	at org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:263)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.hateoas.server.mvc.RepresentationModelProcessorHandlerMethodReturnValueHandler.handleReturnValue(RepresentationModelProcessorHandlerMethodReturnValueHandler.java:108)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+Caused by: org.apache.catalina.connector.ClientAbortException: java.io.IOException: Broken pipe
+	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:346)
+	at org.apache.catalina.connector.OutputBuffer.appendByteArray(OutputBuffer.java:751)
+	at org.apache.catalina.connector.OutputBuffer.append(OutputBuffer.java:672)
+	at org.apache.catalina.connector.OutputBuffer.writeBytes(OutputBuffer.java:381)
+	at org.apache.catalina.connector.OutputBuffer.write(OutputBuffer.java:359)
+	at org.apache.catalina.connector.CoyoteOutputStream.write(CoyoteOutputStream.java:102)
+	at org.springframework.security.web.util.OnCommittedResponseWrapper$SaveContextServletOutputStream.write(OnCommittedResponseWrapper.java:639)
+	at org.springframework.web.context.request.async.StandardServletAsyncWebRequest$LifecycleServletOutputStream.write(StandardServletAsyncWebRequest.java:401)
+	... 117 common frames omitted
+Caused by: java.io.IOException: Broken pipe
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:62)
+	at java.base/sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:137)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:102)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:58)
+	at java.base/sun.nio.ch.SocketChannelImpl.implWrite(SocketChannelImpl.java:566)
+	at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:618)
+	at org.apache.tomcat.util.net.NioChannel.write(NioChannel.java:122)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.doWrite(NioEndpoint.java:1380)
+	at org.apache.tomcat.util.net.SocketWrapperBase.doWrite(SocketWrapperBase.java:764)
+	at org.apache.tomcat.util.net.SocketWrapperBase.writeBlocking(SocketWrapperBase.java:589)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:533)
+	at org.apache.coyote.http11.Http11OutputBuffer$SocketOutputBuffer.doWrite(Http11OutputBuffer.java:548)
+	at org.apache.coyote.http11.filters.IdentityOutputFilter.doWrite(IdentityOutputFilter.java:73)
+	at org.apache.coyote.http11.Http11OutputBuffer.doWrite(Http11OutputBuffer.java:193)
+	at org.apache.coyote.Response.doWrite(Response.java:631)
+	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:334)
+	... 124 common frames omitted
+2025-05-11 09:03:51,183 WARN o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver [http-nio-8080-exec-10] Failure in @ExceptionHandler com.example.edupulse_backend.exception.GlobalExceptionHandler#handleGenericError(Exception)
+org.springframework.http.converter.HttpMessageNotWritableException: No converter for [class com.example.edupulse_backend.payload.response.ResponseDto] with preset Content-Type 'video/mp4'
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:365)
+	at org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:263)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)
+	at org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver.doResolveHandlerMethodException(ExceptionHandlerExceptionResolver.java:471)
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodExceptionResolver.doResolveException(AbstractHandlerMethodExceptionResolver.java:73)
+	at org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver.resolveException(AbstractHandlerExceptionResolver.java:182)
+	at org.springframework.web.servlet.handler.HandlerExceptionResolverComposite.resolveException(HandlerExceptionResolverComposite.java:80)
+	at org.springframework.web.servlet.DispatcherServlet.processHandlerException(DispatcherServlet.java:1359)
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1161)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1106)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.example.edupulse_backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:57)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:198)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-05-11 09:03:51,231 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 6818d7890457c14f89d2fe37 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:51,231 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeStatus: Checking like status for postId 6818d7110457c14f89d2fe35 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:51,266 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: Checking like status for postId 6818e4c10457c14f89d2fe3d and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:51,431 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:51,431 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeStatus: User 68179138d38d996e5cee6ea7 has liked post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:51,457 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-11] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:51,485 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeStatus: Checking like status for postId 681fb9fbe088910a890f7f43 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:51,680 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: Checking like status for postId 6818d077f91dbe505c8b5ed1 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:51,680 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: Checking like status for postId 6818d66b0457c14f89d2fe2e and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:51,687 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:51,705 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Counting likes for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:51,811 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeCount: Counting likes for postId 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:51,812 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeStatus: Checking like status for postId 6818d6d40457c14f89d2fe33 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:51,816 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Counting likes for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:51,905 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:51,916 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:51,933 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Found 4 likes for post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:52,013 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:52,014 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-9] getLikeCount: Found 5 likes for post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:52,014 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeCount: Found 2 likes for post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:52,225 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeStatus: Checking like status for postId 6818d7890457c14f89d2fe37 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:52,249 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Counting likes for postId 6818d7890457c14f89d2fe37
+2025-05-11 09:03:52,270 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeCount: Counting likes for postId 6818d7110457c14f89d2fe35
+2025-05-11 09:03:52,344 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: Checking like status for postId 6818d7110457c14f89d2fe35 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:52,457 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:52,468 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Found 1 likes for post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:52,480 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-1] getLikeCount: Found 2 likes for post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:52,550 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeStatus: User 68179138d38d996e5cee6ea7 has liked post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:52,568 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Counting likes for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:52,675 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeStatus: Checking like status for postId 6818e4c10457c14f89d2fe3d and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:52,790 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Found 1 likes for post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:52,881 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Counting likes for postId 681fb9fbe088910a890f7f43
+2025-05-11 09:03:52,892 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:52,906 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeCount: Counting likes for postId 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:52,916 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeStatus: Checking like status for postId 681fb9fbe088910a890f7f43 and userId 68179138d38d996e5cee6ea7
+2025-05-11 09:03:52,935 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Counting likes for postId 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:53,006 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Counting likes for postId 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:53,081 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Found 2 likes for post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:53,104 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-4] getLikeCount: Found 4 likes for post 6818d077f91dbe505c8b5ed1
+2025-05-11 09:03:53,112 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-2] getLikeStatus: User 68179138d38d996e5cee6ea7 has not liked post 681fb9fbe088910a890f7f43
+2025-05-11 09:03:53,148 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-10] getLikeCount: Found 5 likes for post 6818d66b0457c14f89d2fe2e
+2025-05-11 09:03:53,202 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-6] getLikeCount: Found 2 likes for post 6818d6d40457c14f89d2fe33
+2025-05-11 09:03:53,221 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeCount: Counting likes for postId 6818d7890457c14f89d2fe37
+2025-05-11 09:03:53,262 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeCount: Counting likes for postId 6818d7110457c14f89d2fe35
+2025-05-11 09:03:53,415 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Counting likes for postId 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:53,422 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-3] getLikeCount: Found 1 likes for post 6818d7890457c14f89d2fe37
+2025-05-11 09:03:53,439 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Counting likes for postId 681fb9fbe088910a890f7f43
+2025-05-11 09:03:53,472 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-7] getLikeCount: Found 2 likes for post 6818d7110457c14f89d2fe35
+2025-05-11 09:03:53,618 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-8] getLikeCount: Found 1 likes for post 6818e4c10457c14f89d2fe3d
+2025-05-11 09:03:53,638 INFO c.e.e.s.i.LikeServiceImpl [http-nio-8080-exec-12] getLikeCount: Found 2 likes for post 681fb9fbe088910a890f7f43
