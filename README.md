@@ -71,22 +71,6 @@ The platform supports:
 - Search and filtering capabilities
 - HTTPS & JWT security
 
----
-
-## 📈 Non-Functional Requirements
-
-### Client Web App
-- Responsive UI within 2s
-- 99.9% uptime
-- OAuth 2.0 security
-- Browser compatibility
-- Modular for easy maintenance
-
-### REST API
-- Response time < 1s
-- Secure (JWT, RBAC)
-- Reliable with logging
-- Scalable under traffic
 
 ---
 
